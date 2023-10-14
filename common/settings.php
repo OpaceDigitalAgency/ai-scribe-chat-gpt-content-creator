@@ -22,6 +22,7 @@
 		<form class="first_form" id="frmFirst" method="post">
 			<?php $getarr      = get_option( 'ab_gpt3_content_settings' );
 			$promptsContent    = get_option( 'ab_prompts_content' );
+			$instructionsPrompts      = isset( $promptsContent['instructions_prompts'] ) ? $promptsContent['instructions_prompts'] : '';
 			$titlePrompts      = isset( $promptsContent['title_prompts'] ) ? $promptsContent['title_prompts'] : '';
 			$KeywordsPrompts   = isset( $promptsContent['Keywords_prompts'] ) ? $promptsContent['Keywords_prompts'] : '';
 			$outlinePrompts    = isset( $promptsContent['outline_prompts'] ) ? $promptsContent['outline_prompts'] : '';
@@ -123,8 +124,6 @@
 			<div class="gform">
 				<label for="fname">Language:-</label>
 				<select name="language">
-
-
 					<option value="" disabled>Select Language</option>
 					<?php foreach ( $langArr as $langkey => $langvalue ) {
 						?>
@@ -200,6 +199,11 @@
 						<li>[Heading Tag]</li>
 						<li>[Keywords to Avoid]</li>
 					</ol>
+				</div>
+				<div class="gform">
+					<label>Custom Instructions:-</label>
+					<textarea
+						name="prompts_content[instructions_prompts]"><?php echo esc_textarea(stripslashes( $instructionsPrompts )); ?></textarea>
 				</div>
 				<div class="gform">
 					<label>Title:-</label>
@@ -285,7 +289,7 @@
 					<?php
 				} ?>
 			</div>
-			<input type="submit" name="submit" class="save-btn" value="save" id="submit_first">
+			<div class="savebar"><input type="submit" name="submit" class="save-btn" value="save" id="submit_first"></div>
 		</form>
 	</div>
 </div>
@@ -478,7 +482,7 @@
 				</div>
 
 			</div>
-			<input type="submit" name="submit" class="save-btn" value="save">
+			<div class="savebar"><input type="submit" name="submit" class="save-btn" value="save"></div>
 		</form>
 	</div>
 </div>

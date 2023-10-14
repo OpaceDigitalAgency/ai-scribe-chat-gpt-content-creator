@@ -1,4 +1,30 @@
-
+			.wp-admin .toplevel_page_ai_scribe_help li.wp-first-item {
+				display: none;
+			}
+			.wp-admin .rating {
+		      unicode-bidi: bidi-override;
+		      direction: rtl;
+		      text-align: center;
+		      display: inline-block;
+		    }
+			.wp-admin .rating > span:hover:before,
+			.wp-admin .rating > span:hover ~ span:before {
+			  content: "\2605" !important;
+			  position: relative !important;
+			  color: gold  !important;
+			}
+			.wp-admin .rating > span {
+			  position: relative;
+			  width: 1.1em !important;
+			}
+			.wp-admin .rating > span:before {
+			  content: "\2605" !important;
+			  position: relative !important;
+			  color: #999 !important;
+			}
+			.wp-admin div.rating:before{
+				display: none !important;
+			}
 
 @keyframes buzzing {
 	0% {

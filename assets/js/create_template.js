@@ -216,6 +216,8 @@ jQuery( document ).ready( function () {
 		var aiengine = ai_scribe.aiEngine;
 		var getcheckArray = ai_scribe.checkArr;
 		var autogenerateObj = "";
+		
+
 
 		if ( dataStep == 1 ) {
 			autogenerateObj = promptsData.title_prompts;
@@ -274,7 +276,7 @@ jQuery( document ).ready( function () {
 				aiengine.model.includes("gpt-3.5")  ||
 				aiengine.model.includes("gpt-4")
 			) {
-				autogenerateObj = autogenerateObj + " This needs to be for an article of no longer than 800 words."
+				//autogenerateObj = autogenerateObj + " This needs to be for an article of no longer than 800 words."
 			}
 		} else if ( dataStep == 4 ) {
 			autogenerateObj = promptsData.intro_prompts;
@@ -702,9 +704,15 @@ jQuery( document ).ready( function () {
 	}
 
 	function autoGenerateElement( currentObj ) {
-		var getAllCheckElement = allCheckElements();
+        var getAllCheckElement = allCheckElements();
 		var dataStep = jQuery( ".temp-progress-bar .active_step" ).attr( 'data-step' );
+        
 		var allinputs = jQuery( "#prompt_text" ).val();
+        //var promptsData = ai_scribe.promptsData;
+        //var instructions = promptsData.instructions_prompts;
+        //allinputs = allinputs + ' ' + instructions; 
+        
+        
 		var autogenerate = currentObj.attr( 'auto-generate' );
 		var generateMore = currentObj.attr( 'generate-more' );
 		var promptRegenerate = currentObj.attr( "prompt-regenerate" );
@@ -712,7 +720,7 @@ jQuery( document ).ready( function () {
 		var skipbtn = currentObj.attr( 'skip-btn' );
 		var linkaction = ai_scribe.ajaxUrl;
 		if ( autogenerate == 'cont_next_step' ) {
-			allinputs = allSiteInputs( currentObj );
+			allinputs = allSiteInputs( currentObj ); // + ' ' + instructions;
 		}
 		if ( skipbtn == 'skip' ) {
 			articleType = jQuery( '.at_temp_sec.active-skip' ).find( '.tab_generate_btn' ).attr( "data-action" );
@@ -725,7 +733,7 @@ jQuery( document ).ready( function () {
 		var keyVal = getAllCheckElement.keyword.join( ',' );
 		var tagline = getAllCheckElement.tagline.join( ',' );
 		var aboveBelowObj = jQuery( ".above_below:checked" ).val();
-
+		//alert(allinputs + ' ' + instructions);
 		jQuery.ajax( {
 			type: "post",
 			url: linkaction,

@@ -5,12 +5,12 @@
  * Description: 		AI Scribe: Free Plugin, ChatGPT, AI, SEO, Content Creator, Keyword Research, Title Suggestions, Editable Prompts, OpenAI, GPT, Auto Article Writer, SEO Analysis, Article Evaluation, GPT-3, GPT-4, 16K, 32K. Compatible with Yoast SEO, Rank Math, AIOSEO & SEOPress. Free Plugin - No hidden costs or paid add-ons.  
  * Plugin URI: 			https://www.opace.co.uk
  * Text Domain: 		ai-scribe-gpt-article-builder
- * Tags: 				AI, ChatGPT, SEO, Content Creator, Article Writer, Content Generator, OpenAI, GPT-3, GPT-4, GPT-3.5, GPT-3.5-Turbo, Text Creator, Blog Creator, Blog Builder, Content Marketing, Free, GPT, OpenAI, Keyword Research
+ * Tags: 				AI, ChatGPT, SEO, Content Creator, Article Writer, Content Generator, Content Writer, Blog Writer, OpenAI, GPT-3, GPT-4, GPT-3.5, GPT-3.5-Turbo, ChatGPT-3, ChatGPT-4, 16K, 32K, Text Creator, Blog Creator, Blog Builder, Content Marketing, Free, GPT, OpenAI, Keyword Research
  * Author URI: 			https://www.opace.co.uk
  * Author: 				Opace Web Design
  * Requires at least: 	4.4 or higher
- * Tested up to: 		6.2.2
- * Version: 			1.1.0
+ * Tested up to: 		6.3.1
+ * Version: 			1.2.2
  * License:          	GPL-3.0
  * License URI:      	http://www.gnu.org/licenses/gpl-3.0.txt
  *
@@ -33,12 +33,14 @@
 
 define( 'AI_SCRIBE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'AI_SCRIBE_URL', plugin_dir_url( __FILE__ ) );
-define( 'AI_SCRIBE_VER', '1.0.0' );
+define( 'AI_SCRIBE_VER', '1.2.3' );
 
 class AI_Scribe {
 	public function __construct() {
 		register_activation_hook( __FILE__, [ $this, 'activate' ] );
 		register_deactivation_hook( __FILE__, [ $this, 'deactivate' ] );
+
+
 
 		add_action( 'admin_enqueue_scripts', function ( $page ) {
 			if ( 'ai-scribe_page_ai_scribe_saved_shortcodes' == $page ) {
@@ -193,6 +195,10 @@ class AI_Scribe {
 		] );
 
 		add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), [ $this, 'add_settings_link' ] );
+
+		// Initialize autogenerateValue and actionInput with default values
+    		$this->autogenerateValue = '';
+    		$this->actionInput = '';
 	}
 
 	/*
@@ -252,8 +258,8 @@ class AI_Scribe {
 	private function set_default_options() {
 		$contentsetting = [
 			'language'          => 'English',
-			'writing_style'     => 'Creative',
-			'writing_tone'      => 'Dramatic',
+			'writing_style'     => 'Business',
+			'writing_tone'      => 'Professional',
 			'number_of_heading' => '5',
 			'Heading_tag'       => 'H2',
 			'check_Arr'         => [
@@ -276,22 +282,24 @@ class AI_Scribe {
 			'n'                => 1,
 		];
 		$promptssetting = [
+			'instructions_prompts'      =>
+				'Your name is AI-Scribe. Always write naturally and use the UK English spellings rather than US, e.g. words like "optimize" that contain a "z" near the end should be spelt as "optimise", "optimising", "optimised", etc. Respond using plain language. Do not provide any labels like "Section..." or "Sub-Section...". Do not provide any explanations, notes, other labelling or analysis. Follow my prompts carefully. Add variety and randomness to the length and structure of sentences and paragraphs. Avoid robotic ridged text structures. Ensure text is naturally flowing and creative. Use examples or anecdotes to illustrate the principles or concepts. Use genuine statistics or evidence to support claims. Use transitions or connectors to link the ideas or paragraphs more coherently. Use synonyms or paraphrasing to avoid repetition or redundancy. Always exclude these words: Testament, As A Professional, Previously Mentioned, Buckle Up, Dance, Delve, Digital Era, Dive In, Embark, Enable, Emphasise, Embracing, Enigma, Ensure, Essential, Even If, Even Though, Folks, Foster, Furthermore, Game Changer, Given That, Importantly, In Contrast, In Order To, World Of, Digital Era, In Today’s, Indeed, Indelible, Essential To, Imperative, Important To, Worth Noting, Journey, Labyrinth, Landscape, Look No Further, Moreover, Navigating, Nestled, Nonetheless, Notably, Other Hand, Overall, Pesky, Promptly, Realm, Remember That, Remnant, Revolutionize, Shed Light, Symphony, Dive Into, Tapestry, Testament, That Being Said, Crucial, Considerations, Exhaustive, Thus, Put It Simply, To Summarize, Unleashing, Ultimately, Underscore, Vibrant, Vital. ',
 			'title_prompts'      =>
 				'Provide 5 unique article titles for my blog based on "[Idea]". They need to be unique and catchy. Write them in the [Language] language using a [Style] writing style and a [Tone] writing tone.',
 			'Keywords_prompts'   =>
 				'For the title "[Title]", provide a list of 5 relevant keywords or phrases each on a new line. These need to be popular searches in Google and capable of driving traffic to the article. Capitsalise each word.',
 			'outline_prompts'    =>
-				'I need an outline of my article titled "[Title]". Create [No. Headings] sections and any relevant sub-sections for the body of my article but don\'t include an introduction, conclusion and don\'t add any commentary, notes or additional information. This needs to be a simple list. Please include the following SEO keywords [Selected Keywords] where appropriate in the headings. Write the outline in the [Language] language using a [Style] writing style and a [Tone] writing tone.',
+				'Write an article outline titled [Title]. Create [No. Headings] sections and no sub-sections for the body of my article. Don\'t include an introduction or conclusion. This needs to be a simple list of section headings. Do not add any commentary, notes or additional information such as section labels, "Section 1", "Section 2", etc. Please include the following SEO keywords following SEO keywords [Selected Keywords] where appropriate in the headings. Write the outline in the [Language] language using a [Style] writing style and a [Tone] writing tone.',
 			'intro_prompts'      =>
-				'Generate an introduction for my article as a single paragraph. Base the introduction on the "[Title]" title and the [Selected Keywords]. Write the introduction in the [Language] language using a [Style] writing style and a [Tone] writing tone.',
+				'Generate an introduction for my article as a single paragraph and within a single <span> tag. Do not include a separate heading. Base the introduction on the "[Title]" title and the [Selected Keywords]. Write the introduction in the [Language] language using a [Style] writing style and a [Tone] writing tone.',
 			'tagline_prompts'    =>
 				'Generate a tagline for my article. Base the tagline on the "[Title]" title and the [Selected Keywords]. Write the tagline in the [Language] language using a [Style] writing style and a [Tone] writing tone. Use persuasive power words.',
 			'article_prompts'    =>
 				'Write a HTML article to include an H1 tag for the "[Title]" main title. The following introduction should be at the top: "[Intro]". Add a tagline called "[The Tagline]" [above/below]. Then write the article and for each section, vary the word counts of each by at least 50%. This is my outline for you to write: [Heading]. Each section should provide a unique perspective on the topic and provide value over and above what\'s already available. Format each section heading as a [Heading Tag] tag. You must not include a conclusion heading or section. SEO optimise the article for the [Selected Keywords]. Don\'t include lists. Write the article in the [Language] language using a [Style] writing style and a [Tone] writing tone. Each section must be explored in detail and must include a minimum of 3 paragraphs. To achieve this, you must include all possible known features, benefits, arguments, analysis and whatever is needed to explore the topic to the best of your knowledge.',
 			'conclusion_prompts' =>
-				'Create a conclusion within a single html span tag. Based this on the "[Title]" and optimise for the [Selected Keywords]. Write in the [Language] language using a [Style] writing style and a [Tone] writing tone. Include a call to action to express a sense of urgency. Within the paragraph, include a [Heading Tag] tag for the heading to contain the word "conclusion. Don\'t use lists or LI tags.',
+				'Create a conclusion within a single html <span> tag and a maximum of one paragraph. Based this on the "[Title]" and optimise for the [Selected Keywords]. Write in the [Language] language using a [Style] writing style and a [Tone] writing tone. Include a call to action to express a sense of urgency. Within the paragraph, include a [Heading Tag] tag for the heading to contain the word "conclusion. Don\'t use <div> tags or <ul> tags.',
 			'qa_prompts'         =>
-				'Create [No. Headings] individual Questions and Answers, each in their own paragraph. Based these on the "[Title]" title and the [Selected Keywords]. Write in the [Language] language using a [Style] writing style and a [Tone] writing tone. Within each paragraph, include a [Heading Tag] tag for the question and a P tag for the answer. Ensure they provide additional useful information to supplement the main "[Title]" article. Don\'t use lists or LI tags.',
+				'Create [No. Headings] individual Questions and Answers, each in their own paragraph. Do not give each question a label, e.g. Question 1, Question2, etc. Based these on the "[Title]" title and the [Selected Keywords]. Write in the [Language] language using a [Style] writing style and a [Tone] writing tone. Within each paragraph, include a [Heading Tag] tag for the question and a P tag for the answer. Ensure they provide additional useful information to supplement the main "[Title]" article. Don\'t use lists or LI tags.',
 			'meta_prompts'       =>
 				'Create a single SEO friendly meta title and meta description. Based this on the "[Title]" article title and the [Selected Keywords]. Create the meta data in the [Language] language using a [Style] writing style and a [Tone] writing tone.  Follow SEO best practices and make the meta data catchy to attract clicks.',
 			'review_prompts'     =>
@@ -307,6 +315,7 @@ Does the article provide an original, interesting and engaging perspective on th
 		update_option( 'ab_gpt3_content_settings', $contentsetting );
 		update_option( 'ab_gpt3_ai_engine_settings', $enginesetting );
 		update_option( 'ab_prompts_content', $promptssetting );
+
 	}
 
 	/*
@@ -391,8 +400,8 @@ Does the article provide an original, interesting and engaging perspective on th
 	    $settings_link = '<a href="' . admin_url( 'admin.php?page=ai_scribe_settings' ) . '">' . __( 'Settings', 'article_builder' ) . '</a>';
 	    $help_link     = '<a href="' . admin_url( 'admin.php?page=ai_scribe_help' ) . '">' . __( 'Help', 'article_builder' ) . '</a>';
 	    $review_link   = '<a href="' . esc_url( 'https://wordpress.org/support/plugin/ai-scribe-the-chatgpt-powered-seo-content-creation-wizard/reviews/#new-post' ) . 
-	                    '" id="review-link" target="_blank">' . __( 'Leave a Review', 'article_builder' )  . 
-	                    ' <div class="rating"><span></span><span></span><span></span><span></span><span></span></div></a>';
+	                    '" id="review-link" target="_blank">' . __( 'Leave a Review', 'article_builder' );
+	                   // . ' <div class="rating"><span></span><span></span><span></span><span></span><span></span></div></a>';
 
 	    array_unshift( $links, $settings_link, $help_link, $review_link );
 
@@ -462,39 +471,6 @@ Does the article provide an original, interesting and engaging perspective on th
 			$menu_slug,
 			$function
 		);
-		?>
-
-		<style>
-			.wp-admin .toplevel_page_ai_scribe_help li.wp-first-item {
-				display: none;
-			}
-			.wp-admin .rating {
-		      unicode-bidi: bidi-override;
-		      direction: rtl;
-		      text-align: center;
-		      display: inline-block;
-		    }
-			.wp-admin .rating > span:hover:before,
-			.wp-admin .rating > span:hover ~ span:before {
-			  content: "\2605" !important;
-			  position: relative !important;
-			  color: gold  !important;
-			}
-			.wp-admin .rating > span {
-			  position: relative;
-			  width: 1.1em !important;
-			}
-			.wp-admin .rating > span:before {
-			  content: "\2605" !important;
-			  position: relative !important;
-			  color: #999 !important;
-			}
-			.wp-admin div.rating:before{
-				display: none !important;
-			}
-		</style>
-
-		<?php
 	}
 
 
@@ -770,6 +746,7 @@ Does the article provide an original, interesting and engaging perspective on th
 	* processes the response, and generates the output in the desired format based on the actionInput value.
 	*/
 	public function suggest_content() {
+		//$autogenerateValue = '';
 		$autogenerateValue = wp_kses_post( $_POST['autogenerateValue'] ?? '' );
 		$actionInput       = sanitize_text_field( $_POST['actionInput'] ?? '' );
 
@@ -785,6 +762,7 @@ Does the article provide an original, interesting and engaging perspective on th
 		$Presence_penalty = $getarr['Presence_penalty'] ?? '';
 		$max_tokens       = '';
 
+		if (strpos($model, '16K') === false || strpos($model, '32K') === false || strpos($model, 'gpt-4') === false) {
 		if ( $actionInput == 'evaluate' ) {
 			$max_tokens = '1500';
 		} elseif ( $actionInput == 'article' || $actionInput == 'review' ) {
@@ -793,6 +771,7 @@ Does the article provide an original, interesting and engaging perspective on th
 			$max_tokens = '750';
 		} else {
 			$max_tokens = '250';
+		}
 		}
 
 		$max_tokens = intval( $max_tokens );
@@ -810,17 +789,20 @@ Does the article provide an original, interesting and engaging perspective on th
 		$settings    = get_option( 'ab_gpt3_content_settings' );
 		$actualStyle = $settings['writing_style'] ?? '';
 		$actualTone  = $settings['writing_tone'] ?? '';
+		
+		$promptSettings    = get_option( 'ab_prompts_content' );
+		$instructions  = $promptSettings['instructions_prompts'] ?? '';
+
 
 		if ( strpos($model, 'gpt-3.5') !== false ) {
+			
 			$messages = [
 				[
 					"role"    => "system",
-					"content" =>
-						"You are a talented human copywriter in the year " .
-						date( 'Y' ) .
-						" following my instructions. Write in a " .
-						$actualTone .
-						" writing tone.",
+					"content" => 
+						$instructions .
+						" The current year is " . date( 'Y' ) .
+						" Write in a " . $actualTone . " writing tone.",
 				],
 				[
 					"role"    => "user",
@@ -832,19 +814,14 @@ Does the article provide an original, interesting and engaging perspective on th
 			$messages = [
 				[
 					"role"    => "system",
-					"content" =>
-						"When writing, you are a talented human copywriter in the year " . date( 'Y' ) .
-						"You will follow my prompts carefully. When asked to write the main article text, " .
-						"you will write a detailed and comprehensive answer ensuring that the text " .
-						"is more thorough than any other sources of information on the subject. " .
-						"Where keywords are supplied, follow SEO best practice and optimise the content for them naturally. " .
-						"You will write in a " .
+					"content" => 
+						$instructions .
+						" The year is " . date( 'Y' ) .
+						" Write in a " .
 						$actualStyle .
 						" writing style and a " .
 						$actualTone .
 						" writing tone.",
-						/*"When performing SEO activities, don't apply any kind of writing style or tone. " .
-						"You are an SEO expert, strictly analytical and always follow best practice."*/
 				],
 				[
 					"role"    => "user",
@@ -879,7 +856,7 @@ Does the article provide an original, interesting and engaging perspective on th
 			$send_arr['messages']    = $messages;
 			$send_arr['temperature'] = $send_arr['temperature'] * 2;
 			$send_arr['top_p']       = $send_arr['top_p'] * 2;
-			//$send_arr['max_tokens'] = $max_tokens;
+			$send_arr['max_tokens'] = $max_tokens;
 			$send_arr['presence_penalty']  = $send_arr['presence_penalty'] / 2;
 			$send_arr['frequency_penalty'] = $send_arr['frequency_penalty'] / 2;
 			$send_arr['stop']              = "\n\n\n"; // using a longer stop sequence
@@ -937,8 +914,18 @@ Does the article provide an original, interesting and engaging perspective on th
 					'<br/>';
 			}
 		}
-		$debug =
-			'style ' .
+		$debug = '';
+
+		/*foreach ($messages as $message) {
+		    if ($message["role"] === "system") {
+		        echo $message["content"] . '<br>';
+		    }
+		}*/
+
+
+		$debug .= 
+
+			'<br/>style ' .
 			$wrtStyle .
 			'<br/>tone ' .
 			$wrtStone .

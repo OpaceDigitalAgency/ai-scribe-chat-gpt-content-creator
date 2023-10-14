@@ -1,3 +1,10 @@
+.savebar{
+	padding: 15px;
+    position: sticky;
+    background-color: #808080a6;
+    bottom: 0; /* This will make it stick to the bottom of the screen */
+}
+
 .btn {
 	background-color: #0068b3;
 	border: 1px solid #46c0fd;
