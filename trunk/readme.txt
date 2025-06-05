@@ -1,14 +1,14 @@
 === AI Scribe - SEO AI Writer, Content Generator, Humanizer, Blog Writer, SEO Optimizer, DALLE-3, AI WordPress Plugin ChatGPT (GPT-4o 128K) ===
 Contributors: opacewebdesign
-Tags: AI, ChatGPT, Content Generator, AI Writer, SEO, Article Writer, Blog Writer, Content Creator, Content Writer, OpenAI, DALLE-3, GPT-4, GPT-4o, GPT-4o-mini, ChatGPT-4, 128K, Text Creator, Blog, Long Form Content, Creator, Blog Builder, Content Marketing, Free, GPT, OpenAI, Keyword Research, Humanizer, Human Writer
+Tags: AI, ChatGPT, SEO, Content Generator, OpenAI
 Requires at least: 4.4 or higher
-Tested up to: 6.7.1
-Stable tag: 2.5
+Tested up to: 6.8.1
+Stable tag: 2.5.1
 License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://opace.agency/get-in-touch
 
-AI Scribe: Free ChatGPT Plugin, AI SEO Content Creator, Auto Blog Article Writer. Keywords, Titles, Prompts, Humanizer, DALLE-3 Image, OpenAI, GPT-4o, 4o-mini, 128K. Long Form Content, Brainstorming, Custom Instructions, Human Writer, SEO Analysis, Article Evaluation. Compatible with Yoast , Rank Math, AIOSEO & SEOPress. No hidden costs.  
+AI Scribe: Free ChatGPT Plugin for WordPress. Create SEO-optimized content with GPT-4o. Includes keyword research, humanizer modes, and DALLE-3 images. Compatible with Yoast, Rank Math, AIOSEO & SEOPress.
 
 == Description ==
 
@@ -398,9 +398,14 @@ https://www.youtube.com/embed/KHY1pEM6fCo
 * Enhanced code checks for sanitising and validating user input.
 * Tested up to WordPress 6.7.1
 
+= 2.5.1 =
+* **Bug:** Fixed API key save success message displaying as "Error" instead of "Success"
+* **Compatibility:** Updated compatibility to WordPress 6.8.1
+* **Improvement:** Enhanced user experience for settings page
+
 = 2.5 =
 * **Security:** Fixed a potential SQL injection vulnerability in the send_shortcode_page_data() function.
-* **Bug:** Fixed issue causing shortcodes not to delete, this is now working. 
+* **Bug:** Fixed issue causing shortcodes not to delete, this is now working.
 
 == Additional Info ==
 

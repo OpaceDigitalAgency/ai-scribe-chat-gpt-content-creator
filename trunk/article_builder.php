@@ -9,8 +9,8 @@
  * Author URI: 			https://opace.agency
  * Author: 				Opace Digital Agency
  * Requires at least: 	4.4 or higher
- * Tested up to: 		6.7.1
- * Version: 			2.5
+ * Tested up to: 		6.8.1
+ * Version: 			2.5.1
  * License:          	GPL-3.0
  * License URI:      	http://www.gnu.org/licenses/gpl-3.0.txt
  *
@@ -34,7 +34,7 @@
 
 define( 'AI_SCRIBE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'AI_SCRIBE_URL', plugin_dir_url( __FILE__ ) );
-define( 'AI_SCRIBE_VER', '2.5' );
+define( 'AI_SCRIBE_VER', '2.5.1' );
 
 
 class AI_Scribe {
@@ -793,12 +793,7 @@ Does the article provide an original, interesting and engaging perspective on th
 			'api_key'          => $api_key,
 		];
 		update_option( 'ab_gpt3_ai_engine_settings', $frmagArr );
-		$resArr = [
-			'status' => 'success',
-			'msg'    => 'Your settings have been updated successfully',
-		];
-		echo json_encode( $resArr );
-		exit();
+		wp_send_json_success( [ 'msg' => 'Your settings have been updated successfully' ] );
 	}
 
 	/*
