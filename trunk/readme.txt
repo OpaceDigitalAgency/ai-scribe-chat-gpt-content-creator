@@ -1,6 +1,6 @@
-=== AI Scribe - SEO AI Writer, Content Generator, Humanizer, Blog Writer, SEO Optimizer, DALLE-3, AI WordPress Plugin ChatGPT (GPT-4o 128K) ===
+=== SEO AI Writer: ChatGPT Content Creator WordPress Plugin - AI Blog Writer, Humanizer, GPT-4.5, OpenAI o3, Sonnet 4 & GPT-4o Images ===
 Contributors: opacewebdesign
-Tags: AI, ChatGPT, SEO, Content Generator, OpenAI
+Tags: AI Writer, AI Content Generator, AI Creator, SEO, ChatGPT
 Requires at least: 4.4 or higher
 Tested up to: 6.8.1
 Stable tag: 2.5.1
@@ -8,13 +8,13 @@ License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://opace.agency/get-in-touch
 
-AI Scribe: Free ChatGPT Plugin for WordPress. Create SEO-optimized content with GPT-4o. Includes keyword research, humanizer modes, and DALLE-3 images. Compatible with Yoast, Rank Math, AIOSEO & SEOPress.
+SEO AI Writer: ChatGPT Content Creator & Humanizer WordPress Plugin. SEO articles with GPT-4.5, o3, Sonnet 4 & 4o images. Works with Yoast & Rank Math
 
 == Description ==
 
-Introducing **AI Scribe**, the **ultimate SEO AI Writer, Content Generator & Humaizer using ChatGPT (GPT-4o)**. 
+Introducing **AI Scribe**, the **ultimate SEO AI Writer, Content Generator & Humaizer using ChatGPT (GPT-4.5 & OpenAI o3)**. 
 
-Configurable for **OpenAI GPT-4 (GPT-4o and GPT-4o-mini)**, this open-source AI WordPress Plugin is designed to automate your content creation process with SEO and keyword research set from the outset. AI Scribe is not just an AI writer, but also a **premium SEO content optimiser** and **humanizer** that enhances and optimises your content based on tried-and-tested prompts. 
+Configurable for **OpenAI GPT-4 (GPT-4.5) & OpenAI o3**, this open-source AI WordPress Plugin is designed to automate your content creation process with SEO and keyword research set from the outset. AI Scribe is not just an AI writer, but also a **premium SEO content optimiser** and **humanizer** that enhances and optimises your content based on tried-and-tested prompts. 
 
 With AI Scribe, you can generate SEO optimised content for your website with ease using the models behind OpenAI and ChatGPT. This free WordPress plugin offers customisable options that allow you to tailor your content to your specific needs. All prompts are fully visible and editable at each stage, and these can be changed or saved globally allowing you to fine-tune the entire content creation process. We've even built in a range of prompt shortcodes to give you greater control over your content. 
 
@@ -28,21 +28,21 @@ With AI Scribe, you can generate SEO optimised content for your website with eas
 [Heading Tag]
 [Keywords to Avoid]
 
-**Please note:** With GPT-4, some of these have now been incorporated into the custom instructions, in particular language, style, and tone. This means they are no visible within the prompt itself but will be saved for use within the instructions used. 
+**Please note:** With GPT-4.5, some of these have now been incorporated into the custom instructions, in particular language, style, and tone. This means they are no visible within the prompt itself but will be saved for use within the instructions used. 
 
 AI-Scribe is both desktop and mobile-friendly, allowing usability on all devices. Whether you're looking to create blog posts, articles, or other forms of content, look no further than AI Scribe.
 
-AI Scribe v2.0 brings the addition of GPT-4o, so it’s now possible to create long-form articles with lighting speed, cost, and efficiency. You can choose between gpt-4o and gpt-4o-mini and also include an SEO-optimised DALLE-3 image. 
+AI Scribe v2.0 brings the addition of GPT-4.5, so it’s now possible to create long-form articles with lighting speed, cost, and efficiency. You can choose between GPT-4.5 and OpenAI o3 and also include an SEO-optimised GPT-4o image. 
 
-**GPT-4o:**
-Max tokens: 128,000 tokens (huge capacity for complex/long tasks).
-Cost: Approx. $0.00075 per 1,000 tokens (input), $0.001 per 1,000 tokens (output)
+**GPT-4.5:**
+Max tokens: 128,000 tokens (large capacity for complex or multi-step content tasks).
+Cost: Approx. $0.075 per 1,000 tokens (input), $0.15 per 1,000 tokens (output)
 
-**GPT-4o mini:**
-Max tokens: 128,000 tokens (same large context window).
-Cost: Approx. 50% cheaper than GPT-3.5 Turbo—$0.00075 per 1,000 tokens (input), $0.001 per 1,000 tokens (output)
+**OpenAI o3*
+Max tokens: 200,000 tokens (even larger context for long-form and document-heavy work).
+Cost: Approx. $0.01 per 1,000 tokens (input), $0.04 per 1,000 tokens (output)
 
-**[Correct as of 13.10.24]**
+**[Correct as of 05.06.25]**
 
 The following models have been deprecated - gpt-4-1106-preview, gpt-4-vision-preview, gpt-3.5-turbo-1106, gpt-3.5-turbo, gpt-4, gpt-3.5-turbo-16k, gpt-4-32k, and text-davinci-003.
 
@@ -70,7 +70,7 @@ With the addition of [custom GPTs](https://openai.com/blog/introducing-gpts) for
 
 * Continual input and clarification at each stage of the article writer 
 * Auto save as MS Word at each stage 
-* Auto generation of relevant images using Dall-e 3 (saved as separate files and embedded within MS Word)
+* Auto generation of relevant images using GPT-4o (saved as separate files and embedded within MS Word)
 * Browse the web feature with the ability to summarise data as tables, charts and graphs
 * Download final version as MS Word
 
@@ -81,11 +81,11 @@ This could of course be used in conjunction with WordPress and copied to a post 
 This plugin requires using the external services of the company OpenAI to work, please make sure to read the [Terms of Use](https://openai.com/policies/terms-of-use) and the
 [Privacy Policy](https://openai.com/policies/privacy-policy). To use AI Scribe, you will need OpenAI credits and an API Key. Currently, you can get $5 in free credits that can be used during your first 3 months by visiting the [Pricing](https://openai.com/pricing) page.
 
-AI Scribe helps users generate SEO-optimised content for their blog posts. Designed to integrate with AI **GPT-4o** and **GPT-4o-mini** (128K) from OpenAI, AI Scribe aims to streamline the content creation process by offering **editable prompts** and **suggestions** throughout the content writing journey.
+AI Scribe helps users generate SEO-optimised content for their blog posts. Designed to integrate with AI **GPT-4.5** and **OpenAI o3** (200K) from OpenAI, AI Scribe aims to streamline the content creation process by offering **editable prompts** and **suggestions** throughout the content writing journey.
 
 == CORE FEATURES ==
 
-* **Multiple Model Compatibility**: AI Scribe is compatible with OpenAI GPT-4o and GPT-4o-mini with 128K tokens. 
+* **Multiple Model Compatibility**: AI Scribe is compatible with OpenAI GPT-4.5 and OpenAI o3 with 200K tokens. 
 * **SEO Content Creation**: The plugin is designed to provide auto content creation with SEO and keyword research set from the outset. Multiple keywords and article titles are suggested and then you're taken through the process of building SEO optimised content for your website. 
 * **Content & Prompt Optimisation**: AI Scribe is a premium SEO content optimiser that enhances and optimises your content at each individual stage based on tried-and-tested prompts.
 * **Customisable Options**: The plugin offers customisable options that allow you to tailor your content to your specific needs globally or when using the plugin at each stage of the article writing process. These include a range of language options, along with style and tone. You can select your preferred OpenAI model and model parameters such as Temperature and Top P. There are also options to configure the number of headings, preferred HTML heading tag, whether you would like to include Q&As, a TOC, and more. 
@@ -108,6 +108,24 @@ AI Scribe helps users generate SEO-optimised content for their blog posts. Desig
 
 
 Please note that AI Scribe is not a commercial plugin, and support is limited to critical issues and suggestions. To get the most out of AI Scribe, users should follow SEO guidelines, personalise their content, and always add value to ensure the best chances of ranking in search engines.
+
+== WHAT'S NEW IN V2.5.1 ==
+
+Support for GPT-4.5, OpenAI 3o, Claue Sonnet 4 & Opus 4, GPT-4o images instead of DALLE-3. 
+
+== WHAT'S NEW IN V2.5.1 ==
+
+**Compatibility Check**
+Compatibility with WordPress version 6.8.1.
+
+**Bug Fix: API Key Save Error**
+Fixed a critical user experience issue where the API key save functionality displayed "Error" messages even when the save operation was successful. The settings page now correctly shows "Success" messages when API keys are saved properly, eliminating user confusion.
+
+**Enhanced Settings Response**
+Improved the backend response handling for all settings pages by implementing WordPress standard JSON response functions, ensuring consistent and reliable feedback to users across all configuration options.
+
+**User Experience Improvements**
+Streamlined the settings save process to provide clearer, more accurate feedback, making it easier for users to configure their OpenAI API keys and other plugin settings with confidence.
 
 == WHAT'S NEW IN V2.0 ==
 
@@ -398,14 +416,14 @@ https://www.youtube.com/embed/KHY1pEM6fCo
 * Enhanced code checks for sanitising and validating user input.
 * Tested up to WordPress 6.7.1
 
+= 2.5 =
+* **Security:** Fixed a potential SQL injection vulnerability in the send_shortcode_page_data() function.
+* **Bug:** Fixed issue causing shortcodes not to delete, this is now working.
+
 = 2.5.1 =
 * **Bug:** Fixed API key save success message displaying as "Error" instead of "Success"
 * **Compatibility:** Updated compatibility to WordPress 6.8.1
 * **Improvement:** Enhanced user experience for settings page
-
-= 2.5 =
-* **Security:** Fixed a potential SQL injection vulnerability in the send_shortcode_page_data() function.
-* **Bug:** Fixed issue causing shortcodes not to delete, this is now working.
 
 == Additional Info ==
 
