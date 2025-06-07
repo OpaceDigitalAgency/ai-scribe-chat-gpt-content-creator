@@ -1,4 +1,81 @@
 
+/* Modern AI-Scribe Header Styles */
+.ai-scribe-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.opace-logo-compact {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    background: white;
+    padding: 5px;
+}
+
+.brand-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-name {
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    letter-spacing: -0.5px;
+}
+
+.version-badge {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .ai-scribe-header {
+        padding: 12px 15px;
+    }
+    
+    .logo-container {
+        gap: 10px;
+    }
+    
+    .opace-logo-compact {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .brand-name {
+        font-size: 22px;
+    }
+    
+    .version-badge {
+        font-size: 11px;
+        padding: 3px 8px;
+    }
+}
+
 /* v2.4 - wp_add_inline_style removals from php */
 th, td {
     text-align: center !important;

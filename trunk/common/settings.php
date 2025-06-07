@@ -13,9 +13,18 @@
 			<button class="al-engine" id="second">Content</button>
 			<button class="al-engine" id="first">Al Engine</button>
 		</div>
-		<img
-			src="<?php echo esc_url( AI_SCRIBE_URL . 'assets/2023/03/AI-Scribe-Logo-simplified.png' ) ?>"
-			class="opace-logo" style="width:100px; margin-top:30px"/> <br/><br/>
+		<!-- Modern compact header for settings -->
+		<div class="ai-scribe-header">
+			<div class="logo-container">
+				<img class="opace-logo-compact"
+				     src="<?php echo esc_url( AI_SCRIBE_URL . 'assets/2023/03/AI-Scribe-Logo-simplified-80x80.png' ) ?>"
+				     alt="AI-Scribe Logo">
+				<div class="brand-info">
+					<h1 class="brand-name">AI-Scribe Settings</h1>
+					<span class="version-badge">v<?php echo AI_SCRIBE_VER; ?></span>
+				</div>
+			</div>
+		</div>
 		<button class="btn tab_regenerate_btn regen" onclick="document.location.href='./admin.php?page=ai_scribe_help'">READ ME
 			INFORMATION
 		</button>
@@ -23,7 +32,7 @@
 			<?php 
 
 
-			$getarr      = get_option( 'ab_gpt3_content_settings' );
+			$getarr      = get_option( 'ab_gpt_content_settings' );
 			$promptsContent    = get_option( 'ab_prompts_content' );
 
 			// Get mode - 12.10.24
@@ -339,7 +348,7 @@
 <div class="form-step1 second_form" style="display: none;">
 	<div class="form-text">
 		<form id="al_engine">
-			<?php $getarr     = get_option( 'ab_gpt3_ai_engine_settings' );
+			<?php $getarr     = get_option( 'ab_gpt_ai_engine_settings' );
 			$model            = isset( $getarr['model'] ) ? $getarr['model'] : '';
 			$temp             = isset( $getarr['temp'] ) ? $getarr['temp'] : '';
 			$maxTokens        = isset( $getarr['max_tokens'] ) ? $getarr['max_tokens'] : '';
@@ -348,76 +357,73 @@
 			$freq_pent        = isset( $getarr['freq_pent'] ) ? $getarr['freq_pent'] : '';
 			$Presence_penalty = isset( $getarr['Presence_penalty'] ) ? $getarr['Presence_penalty'] : '';
 			$api_key          = isset( $getarr['api_key'] ) ? $getarr['api_key'] : '';
+			$anthropic_api_key = isset( $getarr['anthropic_api_key'] ) ? $getarr['anthropic_api_key'] : '';
 
 			$modelArr = array(
-				'gpt-4o',
-				'gpt-4o-mini',
-				/*'gpt-4-1106-preview',
-				'gpt-4-vision-preview',
-				'gpt-3.5-turbo-1106',
-				"gpt-3.5-turbo",
-				"gpt-4",
-				"gpt-3.5-turbo-16k",
-				"gpt-4-32k",
-				'text-davinci-003',*/
+				// OpenAI Models
+				'gpt-4o' => 'OpenAI GPT-4o (128K)',
+				'gpt-4o-mini' => 'OpenAI GPT-4o-mini (128K)',
+				'gpt-4.5-preview' => 'OpenAI GPT-4.5 Preview (128K)',
+				'o3' => 'OpenAI o3 (200K)',
+				// Anthropic Models
+				'claude-sonnet-4-20250514' => 'Claude Sonnet 4 (200K)',
+				'claude-opus-4-20250514' => 'Claude Opus 4 (200K)',
 			);
 
 			?>
 			<div style="border: 1px dotted grey !important; padding: 20px; margin: 0 0 20px 0">
-					Global settings to control the behaviour of your chosen model. We've made the decision to remove older models in favour of the faster, smarter and cheaper latest models. Whether you have access to all models is out of our control as this is decided by OpenAI and new features tend to be rolled out gradually. 
-					<P style="background-color: #facd9d; padding:15px;"><strong>New for v1.3: Choose between gpt-4o and gpt-4o-mini. The following models have been deprecated - gpt-4-1106-preview, gpt-4-vision-preview, gpt-3.5-turbo-1106, gpt-3.5-turbo, gpt-4, gpt-3.5-turbo-16k, gpt-4-32k, and text-davinci-003. <br/><br/>
-					<strong>GPT-4o:</strong><br/>
-					Max tokens: 128,000 tokens (huge capacity for complex/long tasks).<br/>
-					Cost: Approx. $0.00075 per 1,000 tokens (input), $0.001 per 1,000 tokens (output)<br/>
-					<strong>GPT-4o mini:</strong><br/>
-					Max tokens: 128,000 tokens (same large context window).<br/>
-					Cost: Approx. 50% cheaper than GPT-3.5 Turbo—$0.00075 per 1,000 tokens (input), $0.001 per 1,000 tokens (output)<br/><br/>
-					[Correct as of 13.10.24]
-					 </P>
+					<h3>🚀 AI Scribe v2.6 - Next-Generation AI Models</h3>
+					<p>Global settings to control the behaviour of your chosen AI model. We now support both OpenAI and Anthropic models, giving you access to the most advanced AI capabilities available.</p>
+
+					<div style="background-color: #e8f5e8; padding:15px; border-left: 4px solid #4caf50; margin: 15px 0;">
+						<strong>🆕 New in v2.6:</strong> Support for GPT-4.5, OpenAI o3, Claude Sonnet 4 & Opus 4, plus GPT-4o image generation!
+					</div>
+
+					<div style="background-color: #f0f8ff; padding:15px; border-left: 4px solid #0073aa; margin: 15px 0;">
+						<h4>📊 Model Comparison:</h4>
+						<strong>OpenAI Models:</strong><br/>
+						• <strong>GPT-4o:</strong> 128K tokens | $0.0025/$0.01 per 1K tokens<br/>
+						• <strong>GPT-4o-mini:</strong> 128K tokens | $0.00015/$0.0006 per 1K tokens<br/>
+						• <strong>GPT-4.5 Preview:</strong> 128K tokens | $0.075/$0.15 per 1K tokens<br/>
+						• <strong>o3:</strong> 200K tokens | $0.01/$0.04 per 1K tokens<br/><br/>
+
+						<strong>Anthropic Models:</strong><br/>
+						• <strong>Claude Sonnet 4:</strong> 200K tokens | $3/$15 per 1M tokens<br/>
+						• <strong>Claude Opus 4:</strong> 200K tokens | $15/$75 per 1M tokens<br/><br/>
+
+						<strong>🖼️ Image Generation:</strong> GPT-4o images (replaces DALLE-3)<br/>
+						<small style="color: #666;">[Pricing as of January 2025]</small>
+					</div>
 			<div class="gform">
 				<h3>AI Engine &amp; Model Settings</h3>
-				    <div class="mode-selection">
-					<ul>
-						<li><strong>Models:</strong> GPT-4o (128K max tokens) and GPT-4o-mini (128K max tokens). GPT-4o mini gives the best performance while reducing costs.</li>
-						<li><strong>Temperature:</strong> Helps&nbsp;the model to make creative or focused answers.
-							Higher temperature = more creative, lower temperature = more focused.
-						</li>
-						<li><strong>Top P:</strong> Picks the best ideas. Lower Top P = only the best ideas, higher Top
-							P = more variety of ideas.
-						</li>
-						<li><strong>Best OI:</strong> A technique that encourages the model to choose the best possible
-							word to complete a sentence, based on what it has learned.
-						</li>
-						<li><strong>Frequency Penalty:</strong> A setting that stops&nbsp;the model from repeating words
-							or phrases too much, making its answers more varied and interesting.
-						</li>
-						<li><strong>Presence Penalty:</strong> A setting that helps&nbsp;the model not say things it
-							already said, making its answers less repetitive and more useful.
-						</li>
-						<li><strong>API Key:</strong> A special code that lets the AI-Scribe plugin talk to&nbsp;OpenAI&nbsp;and
-							get answers from it. It's like a secret password to use GPT's smartness. Read more below.
-						</li>
-					</ul>
+				<div class="mode-selection">
+					<p style="background-color: #f0f8ff; padding: 15px; border-left: 4px solid #0073aa; margin: 15px 0;">
+						<strong>🎯 Smart Interface:</strong> Settings automatically adjust based on your selected model. Only relevant parameters will be shown.
+					</p>
 				</div>
 				<input type="hidden" name="action" value="al_scribe_engine_request_data">
 				<label for="fname">Models: <br/></label>
-				<select name="model">
-					<?php foreach ( $modelArr as $modelArrkey => $modelArrvalue ) {
-						$selected = "";
-						if ( $modelArrvalue == $model ) {
-							$selected = "selected";
-						}
+				<select name="model" id="model-select">
+					<?php foreach ( $modelArr as $modelKey => $modelLabel ) {
 						?>
-						<option <?php echo selected( $modelArrvalue, $model ); ?>
-							value="<?php echo esc_attr( $modelArrvalue ); ?>"><?php echo esc_attr( $modelArrvalue ); ?></option>
+						<option <?php echo selected( $modelKey, $model ); ?>
+							value="<?php echo esc_attr( $modelKey ); ?>"><?php echo esc_html( $modelLabel ); ?></option>
 						<?php
 					} ?>
 				</select>
 			</div>
-			<div class="gform">
-				<label for="fname">Tempeature</label>
+			<div class="gform" id="temperature-input">
+				<label for="fname">Temperature</label>
 				<input type="number" step="0.1" name="temp" min="0" max="1" value="<?php echo esc_attr( $temp ); ?>"
 				       placeholder="0.7">
+			</div>
+			<div class="gform" id="reasoning-effort-select" style="display: none;">
+				<label for="reasoning_effort">Reasoning Effort (for o3 models)</label>
+				<select name="reasoning_effort" id="reasoning_effort">
+					<option value="low" <?php selected( $temp <= 0.3 ? 'low' : '', 'low' ); ?>>Low</option>
+					<option value="medium" <?php selected( ($temp > 0.3 && $temp < 0.7) ? 'medium' : '', 'medium' ); ?>>Medium</option>
+					<option value="high" <?php selected( $temp >= 0.7 ? 'high' : '', 'high' ); ?>>High</option>
+				</select>
 			</div>
 			<div class="gform">
 				<label for="fname">Top P</label>
@@ -441,9 +447,89 @@
 				<input type="number" name="Presence_penalty" step="0.1" min="0" max="2"
 				       value="<?php echo esc_attr( $Presence_penalty ); ?>" placeholder="0.01">
 			</div>
-			<div class="gform">
-				<label for="fname">Api Key</label>
-				<input type="text" name="api_key" value="<?php echo esc_attr( $api_key ); ?>">
+			<!-- Image Generation Section -->
+			<div class="gform" style="border: 2px solid #28a745; padding: 20px; margin: 20px 0; background-color: #f8fff8;">
+				<h3 style="color: #28a745; margin-top: 0;">🖼️ Image Generation Settings</h3>
+				<p style="background-color: #d4edda; padding: 15px; border-left: 4px solid #28a745; margin: 10px 0;">
+					<strong>Enhanced Feature:</strong> Generate AI images using GPT-4o. Works with all text models (OpenAI + Anthropic).
+				</p>
+				<div style="display: flex; align-items: center; margin: 15px 0;">
+					<input type="checkbox" name="enable_image_generation" id="enable_image_generation" value="1"
+						<?php checked(1, get_option('ab_enable_image_generation', 1)); ?> style="margin-right: 10px;">
+					<label for="enable_image_generation" style="margin: 0; font-weight: bold;">
+						Enable AI Image Generation
+					</label>
+				</div>
+				
+				<small style="color: #666; display: block; margin-left: 25px;">
+					When enabled, articles can include AI-generated images using GPT-4o. Requires OpenAI API key.
+				</small>
+				
+				<!-- Image Generation Settings -->
+				<div id="image-generation-settings" style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+					<h4 style="margin-top: 0; color: #333;">Image Generation Settings</h4>
+					
+					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+						<div>
+							<label for="image_size" style="display: block; margin-bottom: 5px; font-weight: bold;">Size</label>
+							<select name="image_size" id="image_size" style="width: 100%; padding: 5px;">
+								<option value="auto" <?php selected(get_option('ab_image_size', 'auto'), 'auto'); ?>>Auto</option>
+								<option value="square" <?php selected(get_option('ab_image_size', 'auto'), 'square'); ?>>Square (1024×1024)</option>
+								<option value="portrait" <?php selected(get_option('ab_image_size', 'auto'), 'portrait'); ?>>Portrait (1024×1536)</option>
+								<option value="landscape" <?php selected(get_option('ab_image_size', 'auto'), 'landscape'); ?>>Landscape (1536×1024)</option>
+							</select>
+						</div>
+						
+						<div>
+							<label for="image_quality" style="display: block; margin-bottom: 5px; font-weight: bold;">Quality</label>
+							<select name="image_quality" id="image_quality" style="width: 100%; padding: 5px;">
+								<option value="high" <?php selected(get_option('ab_image_quality', 'high'), 'high'); ?>>High</option>
+								<option value="medium" <?php selected(get_option('ab_image_quality', 'high'), 'medium'); ?>>Medium</option>
+								<option value="low" <?php selected(get_option('ab_image_quality', 'high'), 'low'); ?>>Low</option>
+							</select>
+						</div>
+					</div>
+					
+					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+						<div>
+							<label for="image_format" style="display: block; margin-bottom: 5px; font-weight: bold;">Output Format</label>
+							<select name="image_format" id="image_format" style="width: 100%; padding: 5px;">
+								<option value="png" <?php selected(get_option('ab_image_format', 'png'), 'png'); ?>>PNG</option>
+								<option value="webp" <?php selected(get_option('ab_image_format', 'png'), 'webp'); ?>>WebP</option>
+								<option value="jpeg" <?php selected(get_option('ab_image_format', 'png'), 'jpeg'); ?>>JPEG</option>
+							</select>
+						</div>
+						
+						<div>
+							<label for="image_background" style="display: block; margin-bottom: 5px; font-weight: bold;">Background</label>
+							<select name="image_background" id="image_background" style="width: 100%; padding: 5px;">
+								<option value="auto" <?php selected(get_option('ab_image_background', 'auto'), 'auto'); ?>>Auto</option>
+								<option value="transparent" <?php selected(get_option('ab_image_background', 'auto'), 'transparent'); ?>>Transparent</option>
+								<option value="opaque" <?php selected(get_option('ab_image_background', 'auto'), 'opaque'); ?>>Opaque</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- API Keys Section -->
+			<div class="api-keys-section" style="border: 2px solid #0073aa; padding: 20px; margin: 20px 0; background-color: #f0f8ff;">
+				<h3 style="color: #0073aa; margin-top: 0;">🔑 API Keys Configuration</h3>
+				<p style="background-color: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 10px 0;">
+					<strong>Important:</strong> You need an Anthropic API key for Claude models. You need an OpenAI API key for GPT models and image generation. If you plan to use Claude models with image generation, you'll need <strong>both</strong> API keys.
+				</p>
+
+				<div class="gform">
+					<label for="openai_api_key"><strong>OpenAI API Key</strong> (Required for GPT models & image generation)</label>
+					<input type="text" name="api_key" id="openai_api_key" value="<?php echo esc_attr( $api_key ); ?>" placeholder="sk-...">
+					<small style="color: #666;">Used for: GPT-4o, GPT-4o-mini, GPT-4.5 Preview, o3, and all image generation</small>
+				</div>
+
+				<div class="gform">
+					<label for="anthropic_api_key"><strong>Anthropic API Key</strong> (Required for Claude models)</label>
+					<input type="text" name="anthropic_api_key" id="anthropic_api_key" value="<?php echo esc_attr( $anthropic_api_key ); ?>" placeholder="sk-ant-...">
+					<small style="color: #666;">Used for: Claude Sonnet 4, Claude Opus 4</small>
+				</div>
 			</div>
 			<div class="gform">
 				<div style="border: 1px dotted grey !important; padding: 20px; margin: 0 0 20px 0">

@@ -79,11 +79,68 @@ jQuery( document ).ready( function () {
     });
 
 
-	var apikey = ai_scribe.apiKey;
+	// Check API keys based on selected model
+	var selectedModel = ai_scribe.aiEngine?.model || '';
+	var openaiKey = ai_scribe.apiKey || '';
+	var anthropicKey = ai_scribe.aiEngine?.anthropic_api_key || '';
 
-	if ( apikey.length == 0 ) {
-		alert( "Please add your API key within the settings page. If you don't have an OpenAI account yet, you can sign up for one here: https://beta.openai.com/signup" );
+	console.log('AI Scribe JS Debug - Selected Model:', selectedModel);
+	console.log('AI Scribe JS Debug - OpenAI Key Length:', openaiKey.length);
+	console.log('AI Scribe JS Debug - Anthropic Key Length:', anthropicKey.length);
+
+	// Define Anthropic models - updated to include newer models
+	var anthropicModels = [
+		'claude-3-5-sonnet-20241022',
+		'claude-3-opus-20240229',
+		'claude-3-sonnet-20240229',
+		'claude-3-haiku-20240307',
+		'claude-sonnet-4-20250514',
+		'claude-opus-4-20250514',
+		'claude-3-5-sonnet-20250514',
+		// Add any model that contains 'claude' for future compatibility
+	];
+	
+	// Enhanced model detection - check if model name contains 'claude'
+	var isAnthropicModel = anthropicModels.includes(selectedModel) || selectedModel.toLowerCase().includes('claude');
+
+	var needsOpenAI = !isAnthropicModel && selectedModel !== ''; // Only OpenAI models (not empty)
+	var needsAnthropic = isAnthropicModel;
+
+	console.log('AI Scribe JS Debug - Is Anthropic Model:', isAnthropicModel);
+	console.log('AI Scribe JS Debug - Needs OpenAI:', needsOpenAI);
+	console.log('AI Scribe JS Debug - Needs Anthropic:', needsAnthropic);
+
+	// Check required API keys
+	var missingKeys = [];
+	if (needsOpenAI && openaiKey.length === 0) {
+		missingKeys.push('OpenAI API key');
+		console.log('AI Scribe JS Debug - Missing OpenAI key');
+	}
+	if (needsAnthropic && anthropicKey.length === 0) {
+		missingKeys.push('Anthropic API key');
+		console.log('AI Scribe JS Debug - Missing Anthropic key');
+	}
+
+	console.log('AI Scribe JS Debug - Missing Keys:', missingKeys);
+
+	if (missingKeys.length > 0) {
+		var message = "Please add your " + missingKeys.join(' and ') + " in the settings page.\n\n";
+		message += "You can add OpenAI API keys and/or Anthropic API keys depending on which models you want to use:\n\n";
+		if (needsOpenAI) {
+			message += "• For OpenAI models (GPT-4o, GPT-4.5, GPT-4o-mini, o3): https://beta.openai.com/signup\n";
+		}
+		if (needsAnthropic) {
+			message += "• For Anthropic models (Claude 3.5 Sonnet, Claude Sonnet 4, Claude Opus 4): https://console.anthropic.com/\n";
+		}
+		if (!needsOpenAI && !needsAnthropic) {
+			message += "• For OpenAI models: https://beta.openai.com/signup\n";
+			message += "• For Anthropic models: https://console.anthropic.com/";
+		}
+		console.log('AI Scribe JS Debug - Showing popup with message:', message);
+		alert(message);
 		window.location = ai_scribe.settingsUrl;
+	} else {
+		console.log('AI Scribe JS Debug - All required API keys are present');
 	}
 
 	if ( !ai_scribe.checkArr.addQNA ) {
@@ -334,7 +391,7 @@ jQuery( document ).ready( function () {
 		} else if ( dataStep == 3 ) {
 			autogenerateObj = promptsData.outline_prompts;
 			if (
-				aiengine.model.includes("gpt-4")
+				aiengine.model.includes("gpt-4") || aiengine.model.includes("o3")
 			) {
 				autogenerateObj = autogenerateObj.replaceAll(
 					"and any relevant sub-sections",
@@ -774,6 +831,10 @@ jQuery( document ).ready( function () {
 
 			},
 			beforeSend: function () {
+			console.log('🚀 AI Scribe Debug - AJAX request starting...');
+			console.log('🚀 AI Scribe Debug - URL:', linkaction);
+			console.log('🚀 AI Scribe Debug - Action:', 'al_scribe_suggest_content');
+			console.log('🚀 AI Scribe Debug - Nonce:', ai_scribe.nonce);
 			jQuery( '.progress-container' ).css( 'display', 'block' );
 			jQuery( ".article-main" ).addClass( "article_progress" );
 			progress();
@@ -781,27 +842,140 @@ jQuery( document ).ready( function () {
 			jQuery('button').attr('disabled', true);
 			},
 			success: function ( response ) {
-				if ( response.type == 'error' ) {
+				console.log('🚨 AI Scribe - Raw response received:', response);
+				console.log('🚨 AI Scribe - Response type:', typeof response);
+				console.log('🚨 AI Scribe - Response keys:', response ? Object.keys(response) : 'null response');
+				
+				// Handle WordPress AJAX response structure
+				var actualResponse = response;
+				if (response.success && response.data) {
+					console.log('🔄 AI Scribe - WordPress AJAX success response detected, using response.data');
+					actualResponse = response.data;
+				} else if (response.success === false && response.data) {
+					console.log('❌ AI Scribe - WordPress AJAX error response detected');
+					console.log('❌ Error details:', response.data);
+					
+					// Handle detailed API error information
+					if (response.data.api_response) {
+						console.log('🔍 API Response:', response.data.api_response);
+						try {
+							var apiError = JSON.parse(response.data.api_response);
+							console.log('🔍 Parsed API Error:', apiError);
+						} catch (e) {
+							console.log('🔍 Raw API Error:', response.data.api_response);
+						}
+					}
+					
+					// Show detailed error message
+					var errorMsg = response.data.msg || 'Unknown error occurred';
+					alert('GPT-Image-1 Error: ' + errorMsg);
+					return false;
+				}
+				
+				// Output debug messages to console if present
+				var debugMessages = actualResponse.debug || actualResponse.debug_messages;
+				console.log('🚨 AI Scribe - Debug messages found:', debugMessages);
+				
+				if (debugMessages && Array.isArray(debugMessages)) {
+					console.group('🔍 AI Scribe Debug Messages');
+					debugMessages.forEach(function(debugMsg, index) {
+						console.log((index + 1) + '. ' + debugMsg);
+					});
+					console.groupEnd();
+					
+					// Also log specific important messages
+					console.log('🎯 Selected Model:', debugMessages.find(msg => msg.includes('Selected Model:')) || 'Not found');
+					console.log('🤖 Is Anthropic Model:', debugMessages.find(msg => msg.includes('Is Anthropic Model:')) || 'Not found');
+					console.log('📡 API Response Code:', debugMessages.find(msg => msg.includes('Response HTTP code:')) || 'Not found');
+					console.log('📝 Content Length:', debugMessages.find(msg => msg.includes('Content extracted successfully')) || 'Not found');
+				} else {
+					console.log('⚠️ AI Scribe - No debug messages in response');
+				}
+
+				if ( actualResponse.type == 'error' ) {
 					// Display the error message in a popup or another UI element
-					alert( response.message );
+					alert( actualResponse.message );
 					return false;
 				} else {
-					//console.log(response.html);
+					//console.log(actualResponse.html);
 					// Your existing success code
 					if ( promptRegenerate == 'currentpage' || dataStep == 6 ) {
-						var delta = alok.clipboard.convert( decodeHtmlEntities( response.html ) );
+						var delta = alok.clipboard.convert( decodeHtmlEntities( actualResponse.html ) );
 						alok.setContents( delta , 'silent' );
 					} else if ( skipbtn && dataStep == 5 ) {
-						var delta = alok.clipboard.convert( decodeHtmlEntities( response.html ) );
+						var delta = alok.clipboard.convert( decodeHtmlEntities( actualResponse.html ) );
 						alok.setContents( delta, 'silent' );
 					} else if ( promptRegenerate == 'currentpage' || dataStep == 10 ) {
-						var delta = finalreview.clipboard.convert( decodeHtmlEntities( response.html ) );
+						var delta = finalreview.clipboard.convert( decodeHtmlEntities( actualResponse.html ) );
 						finalreview.setContents( delta, 'silent' );
 					} else if ( generateMore == 'generate_more' ) {
-						jQuery( '.at_temp_sec.active_page .title_class' ).append( response.html );
+						jQuery( '.at_temp_sec.active_page .title_class' ).append( actualResponse.html );
 					} else {
-						jQuery( '.at_temp_sec.active_page .title_class' ).html( decodeHtmlEntities( response.html ) );
+						// Enhanced response handling with better debugging
+						console.log('🔍 AI Scribe - Checking actualResponse.html:', actualResponse.html);
+						console.log('🔍 AI Scribe - actualResponse.html type:', typeof actualResponse.html);
+						console.log('🔍 AI Scribe - actualResponse.html length:', actualResponse.html ? actualResponse.html.length : 'null/undefined');
+						
+						// Check if actualResponse.html exists and has content
+						if (actualResponse.html && actualResponse.html !== 'undefined' && actualResponse.html.trim() !== '') {
+							console.log('✅ AI Scribe - Valid content found, updating UI');
+							jQuery( '.at_temp_sec.active_page .title_class' ).html( decodeHtmlEntities( actualResponse.html ) );
+						} else {
+							console.log('❌ AI Scribe - No valid content found');
+							console.log('🔍 AI Scribe - Full actualResponse object:', actualResponse);
+							
+							// Show user-friendly error message
+							var errorMsg = "⚠️ No content generated. ";
+							if (actualResponse.debug && Array.isArray(actualResponse.debug)) {
+								var apiError = actualResponse.debug.find(msg => msg.includes('Engine API Error:'));
+								if (apiError) {
+									errorMsg += "API Error: " + apiError.split('Engine API Error: ')[1];
+								} else {
+									errorMsg += "Please check the browser console for debug information.";
+								}
+							} else {
+								errorMsg += "Please try again or contact support.";
+							}
+							
+							jQuery( '.at_temp_sec.active_page .title_class' ).html('<div style="color: #d63638; padding: 15px; border: 1px solid #d63638; border-radius: 4px; background: #fef7f7;">' + errorMsg + '</div>');
+							
+							// Also show popup for immediate attention
+							alert("Content Generation Failed\n\n" + errorMsg.replace(/⚠️|<[^>]*>/g, ''));
+						}
 					}
+
+					// ⚡ EXECUTE PARALLEL IMAGE GENERATION JAVASCRIPT
+					// Handle parallel image generation JavaScript from response
+					if (response.parallel_image_js) {
+						console.log('⚡ TRUE PARALLEL: Executing image generation JavaScript');
+						try {
+							// Execute the JavaScript for parallel image generation
+							eval(response.parallel_image_js);
+						} catch (error) {
+							console.error('❌ TRUE PARALLEL: Error executing image generation JavaScript:', error);
+						}
+					}
+
+					// Handle no title JavaScript from response
+					if (response.no_title_js) {
+						console.log('ℹ️ TRUE PARALLEL: Executing no title JavaScript');
+						try {
+							eval(response.no_title_js);
+						} catch (error) {
+							console.error('❌ TRUE PARALLEL: Error executing no title JavaScript:', error);
+						}
+					}
+
+					// Handle final status JavaScript from response
+					if (response.final_status_js) {
+						console.log('✅ TRUE PARALLEL: Executing final status JavaScript');
+						try {
+							eval(response.final_status_js);
+						} catch (error) {
+							console.error('❌ TRUE PARALLEL: Error executing final status JavaScript:', error);
+						}
+					}
+
 					jQuery( ".prompts-options" ).show();
 					// **Capture and store the attachment_id**
 			        /*if (response.attachment_id) {
@@ -811,7 +985,9 @@ jQuery( document ).ready( function () {
 			},
 			// New v1.2.4 error handling when issues such as timeout
 			error: function (xhr, textStatus, errorThrown) {
-			    console.log('AJAX Error:', textStatus, xhr.status, errorThrown);
+			    console.log('❌ AI Scribe Debug - AJAX Error:', textStatus, xhr.status, errorThrown);
+			    console.log('❌ AI Scribe Debug - Response Text:', xhr.responseText);
+			    console.log('❌ AI Scribe Debug - Full XHR object:', xhr);
 			    var errorMsg = "An error occurred: ";
 			    if (textStatus === "timeout") {
 			        errorMsg += "The request timed out. Please check your internet connection and try again.";
@@ -819,6 +995,8 @@ jQuery( document ).ready( function () {
 			        errorMsg += "There was a server error. Please try again later.";
 			    } else if (xhr.status === 404) {
 			        errorMsg += "The requested resource could not be found. Please contact support.";
+			    } else if (textStatus === "parsererror") {
+			        errorMsg += "Server response format error. Please check the console for details and contact support if the issue persists.";
 			    } else {
 			        errorMsg += "Please check your internet connection and try again.";
 			    }

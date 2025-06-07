@@ -15,9 +15,18 @@
 		</strong>
 	</h3>
 
-	<img class="opace-logo"
-	     src="<?php echo esc_url(AI_SCRIBE_URL .'assets/2023/03/AI-Scribe-Logo.png') ?>"
-	     alt="opace logo">
+	<!-- Modern compact header for help -->
+	<div class="ai-scribe-header">
+		<div class="logo-container">
+			<img class="opace-logo-compact"
+			     src="<?php echo esc_url( AI_SCRIBE_URL . 'assets/2023/03/AI-Scribe-Logo-simplified-80x80.png' ) ?>"
+			     alt="AI-Scribe Logo">
+			<div class="brand-info">
+				<h1 class="brand-name">AI-Scribe Help</h1>
+				<span class="version-badge">v<?php echo AI_SCRIBE_VER; ?></span>
+			</div>
+		</div>
+	</div>
 	<h2>
 		<strong>QUICK NAVIGATION</strong>
 	</h2>

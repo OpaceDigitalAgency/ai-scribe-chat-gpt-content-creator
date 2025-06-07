@@ -1,5 +1,5 @@
 <?php
-$getarr            = get_option( 'ab_gpt3_content_settings' );
+$getarr            = get_option( 'ab_gpt_content_settings' );
 $lang              = isset( $getarr['language'] ) ? $getarr['language'] : '';
 $writing_style     = isset( $getarr['writing_style'] ) ? $getarr['writing_style'] : '';
 $writing_tone      = isset( $getarr['writing_tone'] ) ? $getarr['writing_tone'] : '';
@@ -74,11 +74,18 @@ $checkArr          = array(
 
 ?>
 <div class="create_template_cont_sec">
-	<center><img class="opace-logo"
-	             src="<?php echo esc_url( AI_SCRIBE_URL . 'assets/2023/03/AI-Scribe-Logo-simplified.png' ) ?>"
-	             alt="opace logo">
-	<div class="plugin-version">Version: <?php echo AI_SCRIBE_VER; ?></div>
-	</center>
+	<!-- Modern compact header -->
+	<div class="ai-scribe-header">
+		<div class="logo-container">
+			<img class="opace-logo-compact"
+			     src="<?php echo esc_url( AI_SCRIBE_URL . 'assets/2023/03/AI-Scribe-Logo-simplified-80x80.png' ) ?>"
+			     alt="AI-Scribe Logo">
+			<div class="brand-info">
+				<h1 class="brand-name">AI-Scribe</h1>
+				<span class="version-badge">v<?php echo AI_SCRIBE_VER; ?></span>
+			</div>
+		</div>
+	</div>
 	<!-- header-start -->
 	<div class="article_header">
 
