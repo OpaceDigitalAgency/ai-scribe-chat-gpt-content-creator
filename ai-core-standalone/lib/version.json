@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "build": "20241106-001",
+  "compatibility": {
+    "php": ">=7.4",
+    "wordpress": ">=5.0"
+  },
+  "changelog": {
+    "1.0.0": "Initial AI-Core library with OpenAI, Anthropic, and Image generation support"
+  }
+}

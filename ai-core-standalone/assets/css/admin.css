@@ -1,0 +1,308 @@
+/**
+ * AI-Core Admin Styles
+ * 
+ * @package AI_Core
+ * @version 1.0.0
+ */
+
+/* Dashboard */
+.ai-core-dashboard {
+    max-width: 1200px;
+}
+
+.ai-core-welcome-panel {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 24px;
+    margin: 20px 0;
+}
+
+.ai-core-welcome-panel h2 {
+    margin-top: 0;
+    color: #0068b3;
+}
+
+/* Stats Grid */
+.ai-core-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.stat-box {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 13px;
+    color: #646970;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 32px;
+    font-weight: 600;
+    color: #0068b3;
+}
+
+/* Quick Links */
+.ai-core-links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.ai-core-link-box {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 24px;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: block;
+}
+
+.ai-core-link-box:hover {
+    border-color: #0068b3;
+    box-shadow: 0 2px 8px rgba(0, 104, 179, 0.1);
+}
+
+.ai-core-link-box .dashicons {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #0068b3;
+    margin-bottom: 12px;
+}
+
+.ai-core-link-box h3 {
+    margin: 12px 0 8px;
+    color: #1d2327;
+}
+
+.ai-core-link-box p {
+    color: #646970;
+    margin: 0;
+}
+
+/* API Key Fields */
+.ai-core-api-key-field {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.ai-core-api-key-input {
+    flex: 1;
+}
+
+.ai-core-test-key {
+    white-space: nowrap;
+}
+
+.ai-core-key-status {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.ai-core-key-status.success {
+    color: #46b450;
+}
+
+.ai-core-key-status.error {
+    color: #dc3232;
+}
+
+.ai-core-key-status .dashicons {
+    vertical-align: middle;
+}
+
+/* Statistics Page */
+.ai-core-stats-summary {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 24px;
+    margin: 20px 0;
+}
+
+.ai-core-stats-details {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 24px;
+    margin: 20px 0;
+}
+
+.ai-core-stats-details table {
+    margin-top: 16px;
+}
+
+/* Add-ons Grid */
+.ai-core-addons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.ai-core-addon-card {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s;
+}
+
+.ai-core-addon-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ai-core-addon-card.active {
+    border-color: #46b450;
+    background: #f7fcf7;
+}
+
+.addon-icon {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.addon-icon .dashicons {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #0068b3;
+}
+
+.addon-content {
+    flex: 1;
+}
+
+.addon-content h3 {
+    margin: 0 0 12px;
+    color: #1d2327;
+}
+
+.addon-description {
+    color: #646970;
+    margin-bottom: 16px;
+    line-height: 1.6;
+}
+
+.addon-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: #646970;
+    margin-bottom: 8px;
+}
+
+.addon-requires {
+    font-size: 12px;
+    color: #646970;
+    padding: 8px 0;
+    border-top: 1px solid #dcdcde;
+    margin-top: 12px;
+}
+
+.addon-requires .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+
+.addon-actions {
+    margin-top: 16px;
+}
+
+.addon-actions .button {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Add-ons Info */
+.ai-core-addons-info {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 24px;
+    margin: 20px 0;
+}
+
+.ai-core-addons-info pre {
+    background: #f6f7f7;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+    padding: 16px;
+    overflow-x: auto;
+}
+
+.ai-core-addons-info code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Providers Status */
+.ai-core-providers-status {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 24px;
+    margin: 20px 0;
+}
+
+.ai-core-providers-status table {
+    margin-top: 16px;
+}
+
+/* Loading States */
+.ai-core-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.ai-core-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #0068b3;
+    border-radius: 50%;
+    animation: ai-core-spin 1s linear infinite;
+    vertical-align: middle;
+    margin-left: 8px;
+}
+
+@keyframes ai-core-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 782px) {
+    .ai-core-stats-grid,
+    .ai-core-links-grid,
+    .ai-core-addons-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .ai-core-api-key-field {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
