@@ -1,8 +1,8 @@
 # AI-Core Standalone Plugin - Master Project Document
 
 **Project:** AI-Core - Universal AI Integration Hub for WordPress
-**Version:** 1.0.0
-**Status:** 🟢 READY FOR TESTING - ALL CRITICAL FEATURES COMPLETE
+**Version:** 0.0.1
+**Status:** 🟡 IN DEVELOPMENT - CORE FEATURES COMPLETE, TESTING REQUIRED
 **Date Started:** 2025-10-04
 **Last Updated:** 2025-10-04
 
@@ -25,7 +25,7 @@
 
 ## Executive Summary
 
-### Current Status: 🟢 READY FOR TESTING - ALL CRITICAL FEATURES COMPLETE
+### Current Status: 🟡 IN DEVELOPMENT - CORE FEATURES COMPLETE, TESTING REQUIRED
 
 **What Works:**
 - ✅ Plugin structure and WordPress integration
@@ -37,14 +37,55 @@
 - ✅ API key validation implementation (all 4 providers)
 - ✅ Usage statistics tracking implementation
 - ✅ Text domain loading for i18n
+- ✅ Settings persistence option (keep API keys on uninstall)
+- ✅ Version system (0.0.1 with incremental updates)
 
 **What Needs Work:**
+- 🔴 Test button functionality verification (debug logging added, needs testing)
+- 🔴 Prompt Library feature (0% complete - only skeleton files created)
 - ⏳ Real API testing with all 4 providers
 - ⏳ Integration testing with AI-Scribe/AI-Imagen
 - ⏳ WordPress.org compliance audit
 - ⏳ Bug fixes from testing
 
-**Estimated Time to Production:** 1-2 hours (testing and compliance only)
+**Estimated Time to Production:** 4-6 hours (Prompt Library + testing + compliance)
+
+### Recent Changes (2025-10-04)
+
+**Version System Updated:**
+- Changed from 1.0.0 to 0.0.1
+- Will increment gradually (0.0.2, 0.0.3, etc.) for cache busting
+- Memory saved in Augment to always follow this pattern
+
+**Settings Persistence Added:**
+- New option: "Persist Settings on Uninstall" (defaults to checked)
+- When enabled, API keys and settings are kept when plugin is deleted
+- When disabled, all data is removed on uninstall
+- Prevents users from losing API keys when reinstalling
+
+**Test Button Debug Logging:**
+- Added comprehensive console logging to admin.js
+- Logs jQuery version, aiCoreAdmin object status, button existence
+- Will help identify why test button isn't responding
+- **Status:** Needs user testing to verify fix
+
+**Prompt Library Feature:**
+- **Status:** 🔴 NOT STARTED (0% complete)
+- Created skeleton files only (not integrated):
+  - `admin/class-ai-core-prompt-library.php` (partial UI only)
+  - `admin/class-ai-core-prompt-library-ajax.php` (AJAX handlers only)
+- **Still Required:**
+  - Database table creation
+  - Menu registration and integration
+  - CSS styling (`assets/css/prompt-library.css`)
+  - JavaScript functionality (`assets/js/prompt-library.js`)
+  - Full CRUD operations
+  - Search/filter functionality
+  - Export/import JSON
+  - Integration with settings page
+  - Run prompt functionality with output display
+  - Support for text and image generation
+- **Estimated Time:** 3-4 hours for complete implementation
 
 ---
 

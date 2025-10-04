@@ -198,6 +198,16 @@ class AI_Core_Settings {
             'ai_core_general_section',
             array('field' => 'enable_caching', 'label' => 'Cache available models list')
         );
+
+        // Persist Settings on Uninstall
+        add_settings_field(
+            'persist_on_uninstall',
+            __('Persist Settings on Uninstall', 'ai-core'),
+            array($this, 'checkbox_field_callback'),
+            $this->settings_page,
+            'ai_core_general_section',
+            array('field' => 'persist_on_uninstall', 'label' => 'Keep API keys and settings when plugin is deleted (recommended)')
+        );
     }
     
     /**
@@ -319,6 +329,7 @@ class AI_Core_Settings {
             'enable_stats' => true,
             'enable_caching' => true,
             'cache_duration' => 3600,
+            'persist_on_uninstall' => true,
         );
     }
     
@@ -343,10 +354,11 @@ class AI_Core_Settings {
         // Sanitize checkboxes
         $sanitized['enable_stats'] = isset($input['enable_stats']) && $input['enable_stats'] == '1';
         $sanitized['enable_caching'] = isset($input['enable_caching']) && $input['enable_caching'] == '1';
-        
+        $sanitized['persist_on_uninstall'] = isset($input['persist_on_uninstall']) && $input['persist_on_uninstall'] == '1';
+
         // Sanitize cache duration
         $sanitized['cache_duration'] = isset($input['cache_duration']) ? absint($input['cache_duration']) : 3600;
-        
+
         return $sanitized;
     }
     
