@@ -457,3 +457,30 @@ This project is developed and maintained by **Opace Digital Agency**, a Birmingh
 - 📧 Services: [Web Design & Development](https://opace.agency/services/web-design)
 - 💼 GitHub: [@OpaceDigitalAgency](https://github.com/OpaceDigitalAgency)
 - 📍 Location: Birmingham, UK
+
+
+== More Open Source Projects from Opace Digital Agency ==
+
+Explore our other tools and web applications:
+
+**AI & Productivity Tools:**
+* [AI-Core](https://github.com/OpaceDigitalAgency/ai-core) - Centralized WordPress plugin for managing AI provider API keys (OpenAI, Anthropic, Gemini, Grok)
+* [Task Smasher](https://github.com/OpaceDigitalAgency/task-smasher) - Secure, rate-limited proxy for OpenAI API with React/TypeScript client
+* [Article Smasher](https://github.com/OpaceDigitalAgency/article-smasher) - AI-powered content generation and marketing utility
+* [Smashing Apps](https://github.com/OpaceDigitalAgency/smashingapps) - Suite of AI-powered productivity tools including TaskSmasher
+
+**Web Applications:**
+* [Driving Lesson Hunter](https://github.com/OpaceDigitalAgency/driving-lesson-hunter) - UK driving test centre finder using official DVSA data (Astro)
+* [3D Racing](https://github.com/OpaceDigitalAgency/3D-Racing) - Advanced 3D racing game prototype built with Babylon.js, React, and TypeScript
+* [Timeline v2](https://github.com/OpaceDigitalAgency/timelinev2) - Interactive visualization of 59 world religions from prehistory to present (Astro, Supabase)
+* [Website Critique Tool](https://github.com/OpaceDigitalAgency/website-critique-tool) - Web application for analyzing and critiquing website design and UX
+
+**CMS & Frameworks:**
+* [Headless CMS](https://github.com/OpaceDigitalAgency/headless-cms) - Super-powered Payload CMS platform with dual Next.js and Astro Jamstack frontends
+
+---
+
+**Visit our websites:**  
+[Opace Digital Agency](https://opace.agency) - Birmingham web design and development services  
+[Monthly Web Design](https://monthlywebdesign.com) - Pay monthly website design services
+
