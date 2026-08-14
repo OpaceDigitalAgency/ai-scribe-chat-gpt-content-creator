@@ -16,14 +16,17 @@
 
 <p align="center">
   <a href="https://wordpress.org/plugins/ai-scribe-the-chatgpt-powered-seo-content-creation-wizard/">WordPress.org</a>
+  · <a href="https://github.com/OpaceDigitalAgency/ai-core-integration-hub-prompt-engine-wordpress-plugin">Required AI Core hub</a>
   · <a href="https://github.com/OpaceDigitalAgency/ai-scribe-chat-gpt-content-creator/issues">Issues</a>
   · <a href="SECURITY.md">Security</a>
   · <a href="https://github.com/OpaceDigitalAgency">More from Opace</a>
 </p>
 
-AI Scribe requires the separate [**Opace AI Core**](https://github.com/OpaceDigitalAgency/ai-core-integration-hub-prompt-engine-wordpress-plugin)
-hub plugin. AI Core centralises encrypted provider keys, live model discovery, shared prompts, usage
-and cost reporting. Its WordPress.org listing is awaiting separate moderation.
+> **AI Scribe + [Opace AI Core](https://github.com/OpaceDigitalAgency/ai-core-integration-hub-prompt-engine-wordpress-plugin) are one companion WordPress AI stack, installed as two separate plugins.**
+> AI Scribe provides the writing and publishing workflow; AI Core provides encrypted provider keys,
+> live model discovery, shared prompts, usage and cost reporting. Install
+> [AI Core](https://github.com/OpaceDigitalAgency/ai-core-integration-hub-prompt-engine-wordpress-plugin/releases/latest)
+> first, then AI Scribe. They remain separate packages so AI Core can also support other compatible plugins.
 
 **Compatibility:** requires WordPress 6.5 or newer and has been tested up to **WordPress 7.0.4**.
 
@@ -250,13 +253,24 @@ retained-data reinstalls fill missing settings only and never overwrite a valid 
 
 1. Install and activate the verified [**Opace AI Core** package](https://github.com/OpaceDigitalAgency/ai-core-integration-hub-prompt-engine-wordpress-plugin/releases/latest).
 2. In AI-Core → Settings, add a key for at least one provider and press Test.
-3. Install and activate AI Scribe.
+3. Install and activate [**AI Scribe**](https://github.com/OpaceDigitalAgency/ai-scribe-chat-gpt-content-creator), following the current repository instructions.
 4. AI Scribe → Settings → Providers & Model: confirm the status chip, pick a model, then open
    Generate Article.
 
 Upgrading from 2.6.x is a normal update, but AI-Core must be active first. Prompts, settings, custom
 languages, saved shortcodes and keys migrate on the first admin page load; keys are encrypted at rest
 during that migration; edited prompts are **copied** into AI-Core's library, never moved.
+
+---
+
+## Companion plugin
+
+- [**Opace AI Core**](https://github.com/OpaceDigitalAgency/ai-core-integration-hub-prompt-engine-wordpress-plugin) — the required provider, model, prompt, usage and pricing hub.
+- [**AI Scribe**](https://github.com/OpaceDigitalAgency/ai-scribe-chat-gpt-content-creator) — the article creation, SEO, image, review and WordPress publishing workflow.
+
+The projects are developed and released together as a companion stack, but installed from separate
+ZIP packages. This avoids duplicating credentials and provider code inside AI Scribe and lets other
+WordPress plugins share the same AI Core configuration.
 
 ---
 
