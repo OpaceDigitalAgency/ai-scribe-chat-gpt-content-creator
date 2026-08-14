@@ -7,7 +7,7 @@
 <p align="center"><strong>SEO content creator and humaniser for WordPress, powered by OpenAI, Anthropic and Google Gemini.</strong></p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.2.22-087abd" alt="AI Scribe version 3.2.22">
+  <img src="https://img.shields.io/badge/version-3.2.23-087abd" alt="AI Scribe version 3.2.23">
   <img src="https://img.shields.io/badge/WordPress-6.5%2B-21759b" alt="Requires WordPress 6.5 or newer">
   <img src="https://img.shields.io/badge/tested%20up%20to-WordPress%207.0.4-21759b" alt="Tested up to WordPress 7.0.4">
   <img src="https://img.shields.io/badge/PHP-7.4%2B-777bb4" alt="Requires PHP 7.4 or newer">
@@ -21,10 +21,9 @@
   · <a href="https://github.com/OpaceDigitalAgency">More from Opace</a>
 </p>
 
-AI Scribe requires the separate **AI-Core** hub plugin. AI-Core centralises encrypted provider keys,
-live model discovery, shared prompts, usage and cost reporting. Its public source and WordPress.org
-links will be added here when that separately reviewed dependency is published; this README does not
-point users to an unverified or unavailable repository.
+AI Scribe requires the separate [**Opace AI Core**](https://github.com/OpaceDigitalAgency/ai-core-integration-hub-prompt-engine-wordpress-plugin)
+hub plugin. AI Core centralises encrypted provider keys, live model discovery, shared prompts, usage
+and cost reporting. Its WordPress.org listing is awaiting separate moderation.
 
 **Compatibility:** requires WordPress 6.5 or newer and has been tested up to **WordPress 7.0.4**.
 
@@ -89,7 +88,7 @@ The other structural change is modularity. What used to be one plugin is now two
   text + images            text only            text + images
 ```
 
-AI Scribe declares `Requires Plugins: opace-ai-core-openai-claude-gemini`, so WordPress refuses activation without the hub. If
+AI Scribe declares `Requires Plugins: opace-ai-core-integration-hub-prompt-engine`, so WordPress refuses activation without the hub. If
 AI-Core is deactivated later, AI Scribe unhooks itself — no menu, no endpoints — and shows a notice
 with a reactivation button.
 
@@ -249,8 +248,7 @@ retained-data reinstalls fill missing settings only and never overwrite a valid 
 
 ## Installation
 
-1. Install and activate the verified **AI-Core** package. Its public source and WordPress.org links
-   will appear above when the separate dependency has been published.
+1. Install and activate the verified [**Opace AI Core** package](https://github.com/OpaceDigitalAgency/ai-core-integration-hub-prompt-engine-wordpress-plugin/releases/latest).
 2. In AI-Core → Settings, add a key for at least one provider and press Test.
 3. Install and activate AI Scribe.
 4. AI Scribe → Settings → Providers & Model: confirm the status chip, pick a model, then open

@@ -4,8 +4,8 @@ Tags: AI Writer, Content Generator, Content Creator, AI, SEO
 Requires at least: 6.5
 Tested up to: 7.0.4
 Requires PHP: 7.4
-Requires Plugins: opace-ai-core-openai-claude-gemini
-Stable tag: 3.2.22
+Requires Plugins: opace-ai-core-integration-hub-prompt-engine
+Stable tag: 3.2.23
 License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://opace.agency/get-in-touch
@@ -267,6 +267,12 @@ Only if you opt in. Choose the delete-on-uninstall setting before deleting the p
 8. Evaluate with responsive summary cards, measured structural evidence and clearly labelled editorial checks.
 
 == Changelog ==
+
+= 3.2.23 =
+* Fixed: the required AI-Core slug, text-domain detection and one-click dependency route now match `opace-ai-core-integration-hub-prompt-engine`, the permanent WordPress.org submission slug.
+* Improved: the missing-dependency notice enables its install button automatically as soon as WordPress.org resolves the approved AI-Core listing.
+* Documentation: linked the separately published AI-Core source and verified GitHub release.
+* Compatibility: tested up to WordPress 7.0.4.
 
 = 3.2.22 =
 * Improved: fresh provider defaults are now selected dynamically from each configured account: newest Terra, Claude Opus or non-Lite Gemini Flash for writing, with medium reasoning or thinking where supported.

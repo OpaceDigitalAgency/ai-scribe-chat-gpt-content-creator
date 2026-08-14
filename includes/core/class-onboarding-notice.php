@@ -31,10 +31,10 @@ class AI_Scribe_Onboarding_Notice {
 	const NONCE_ACTION     = 'ai_scribe_dismiss_notice';
 
 	/** Text domain declared by the AI-Core hub, used to find it on disk. */
-	const HUB_TEXT_DOMAIN = 'opace-ai-core-openai-claude-gemini';
+	const HUB_TEXT_DOMAIN = 'opace-ai-core-integration-hub-prompt-engine';
 
 	/** wordpress.org slug, and what the Requires Plugins header resolves against. */
-	const HUB_SLUG = 'opace-ai-core-openai-claude-gemini';
+	const HUB_SLUG = 'opace-ai-core-integration-hub-prompt-engine';
 
 	/** Where a user without the hub can get it. */
 	const HUB_HOME_URL = 'https://opace.agency/services/web-design/wordpress-development/';
@@ -137,7 +137,7 @@ class AI_Scribe_Onboarding_Notice {
 			if ( isset( $plugin_data['TextDomain'] ) && self::HUB_TEXT_DOMAIN === $plugin_data['TextDomain'] ) {
 				return $plugin_file;
 			}
-			if ( 'opace-ai-core-openai-claude-gemini.php' === basename( $plugin_file ) ) {
+			if ( 'opace-ai-core-integration-hub-prompt-engine.php' === basename( $plugin_file ) ) {
 				return $plugin_file;
 			}
 		}
@@ -212,14 +212,24 @@ class AI_Scribe_Onboarding_Notice {
 	/**
 	 * Whether to render the WordPress.org hub install button.
 	 *
-	 * Disabled by default until AI-Core has a verified public WordPress.org
-	 * listing. Distributors may opt in after confirming that the dependency
-	 * slug resolves to an installable package.
+	 * WordPress resolves the declared dependency through its own plugin API.
+	 * The button therefore appears automatically once the permanent AI-Core
+	 * slug has a public listing, without shipping a second AI Scribe update.
 	 *
 	 * @return bool
 	 */
 	public static function hub_install_cta_enabled() {
-		return (bool) apply_filters( 'ai_scribe_hub_install_cta', false ) && ! self::hub_active();
+		if ( self::hub_active() ) {
+			return false;
+		}
+
+		$available = false;
+		if ( class_exists( 'WP_Plugin_Dependencies' ) ) {
+			WP_Plugin_Dependencies::initialize();
+			$available = ! empty( WP_Plugin_Dependencies::get_dependency_data( self::HUB_SLUG ) );
+		}
+
+		return (bool) apply_filters( 'ai_scribe_hub_install_cta', $available );
 	}
 
 	/**

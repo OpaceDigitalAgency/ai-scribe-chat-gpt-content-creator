@@ -10,8 +10,8 @@
  * Requires at least:   6.5
  * Tested up to:        7.0.4
  * Requires PHP:        7.4
- * Requires Plugins:    opace-ai-core-openai-claude-gemini
- * Version:             3.2.22
+ * Requires Plugins:    opace-ai-core-integration-hub-prompt-engine
+ * Version:             3.2.23
  * License:             GPL-3.0
  * License URI:         http://www.gnu.org/licenses/gpl-3.0.txt
  *
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'AI_SCRIBE_VERSION', '3.2.22' ); // Used for cache busting on every enqueue
+define( 'AI_SCRIBE_VERSION', '3.2.23' ); // Used for cache busting on every enqueue
 if ( ! defined( 'AI_SCRIBE_VER' ) ) {
 	define( 'AI_SCRIBE_VER', AI_SCRIBE_VERSION ); // Back-compat alias used by copied v4 services
 }
