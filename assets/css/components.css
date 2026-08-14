@@ -1,0 +1,3925 @@
+/* ===========================
+   Modal Components
+   =========================== */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-modal);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.modal-content {
+  position: relative;
+  background: var(--surface);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-xl);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal-large {
+  max-width: 800px;
+}
+
+.modal-header {
+  padding: var(--space-6);
+  border-bottom: var(--border-width) solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-header h3 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--gray-900);
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  padding: var(--space-2);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  color: var(--gray-500);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  background: var(--gray-100);
+  color: var(--gray-700);
+}
+
+.modal-close i {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.modal-body {
+  padding: var(--space-6);
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  padding: var(--space-6);
+  border-top: var(--border-width) solid var(--gray-200);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+/* ===========================
+   Cost Calculator Components
+   =========================== */
+
+.cost-summary {
+  background: var(--gray-50);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.cost-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) 0;
+  border-bottom: var(--border-width) solid var(--gray-200);
+}
+
+.cost-item:last-child {
+  border-bottom: none;
+}
+
+.cost-value {
+  font-weight: var(--font-semibold);
+  color: var(--primary-600);
+}
+
+.model-selector {
+  margin-bottom: var(--space-4);
+}
+
+.model-selector label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--gray-700);
+  margin-bottom: var(--space-2);
+}
+
+/* ===========================
+   Settings Components
+   =========================== */
+
+.settings-tabs {
+  display: flex;
+  border-bottom: var(--border-width) solid var(--gray-200);
+  margin-bottom: var(--space-6);
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--gray-600);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.tab-btn:hover {
+  color: var(--gray-800);
+  background: var(--gray-50);
+}
+
+.tab-btn.active {
+  color: var(--primary-600);
+  border-bottom-color: var(--primary-500);
+  background: var(--primary-50);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.settings-section {
+  margin-bottom: var(--space-6);
+}
+
+.settings-section h4 {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--gray-900);
+  margin-bottom: var(--space-4);
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: var(--space-4);
+}
+
+.form-group .test-key-btn {
+  position: absolute;
+  right: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: 0.75rem; /* Account for label height */
+}
+
+.form-group input[type="password"] {
+  padding-right: 5rem; /* Make space for test button */
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  margin-right: var(--space-2);
+  accent-color: var(--primary-500);
+}
+
+label:has(input[type="checkbox"]) {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: var(--text-base);
+  font-weight: var(--font-normal);
+}
+
+/* ===========================
+   Keywords Grid
+   =========================== */
+
+.keywords-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+/* Same elevation and selection model as .option-card: 1px border, inset ring
+   on select so nothing shifts, and no lift-on-hover. */
+.keyword-card {
+  background: var(--elev-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-3) var(--space-4) var(--space-3) 3.25rem;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  position: relative;
+}
+
+.keyword-result {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.keyword-card:hover {
+  border-color: var(--border-strong);
+  background: var(--elev-3);
+}
+
+.keyword-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-subtle);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.keyword-card .checkbox {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-4);
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 0.375rem;
+  background: var(--elev-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.keyword-card.selected .checkbox {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+.keyword-card .checkbox i {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.keyword-content {
+  padding-right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.keyword-title {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--gray-900);
+  margin-bottom: 0;
+}
+
+.keyword-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  flex: 1 1 18rem;
+  flex-wrap: wrap;
+}
+
+.keyword-role {
+  color: var(--gray-700);
+  background: var(--elev-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  white-space: nowrap;
+}
+
+.keyword-stats {
+  display: flex;
+  gap: var(--space-4);
+  margin-bottom: 0;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.keyword-trends-link,
+.keyword-compare-link {
+  color: var(--accent);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  text-underline-offset: 0.16em;
+}
+
+.keyword-trends-link {
+  white-space: nowrap;
+}
+
+.keyword-trends-link:focus-visible,
+.keyword-compare-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--border-radius-sm);
+}
+
+.keyword-compare-link.is-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.keyword-evidence-badge {
+  color: var(--gray-600);
+  background: var(--gray-100);
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+
+.choice-guidance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-3);
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--border-radius-lg);
+  background: var(--elev-2);
+}
+
+.choice-guidance p { margin: 0; color: var(--gray-700); }
+.choice-guidance-actions { display: flex; align-items: center; gap: var(--space-2); flex: 0 0 auto; }
+.choice-selection-status { color: var(--gray-700); font-size: var(--text-sm); font-weight: var(--font-semibold); white-space: nowrap; }
+
+/* Keyword guidance has three actions plus a status and therefore cannot share
+   one line safely inside the desktop workspace's narrower content column. */
+[data-step-panel="2"] .choice-guidance {
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+[data-step-panel="2"] .choice-guidance > p,
+[data-step-panel="2"] .choice-guidance-actions {
+  width: 100%;
+}
+
+[data-step-panel="2"] .choice-guidance-actions {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+[data-step-panel="1"] .options-grid,
+[data-step-panel="5"] .options-grid { gap: var(--space-2); }
+
+[data-step-panel="1"] .option-card,
+[data-step-panel="5"] .option-card {
+  min-height: 52px;
+  padding: var(--space-3) var(--space-4) var(--space-3) 3.25rem;
+}
+
+[data-step-panel="1"] .option-card .checkbox,
+[data-step-panel="5"] .option-card .checkbox {
+  left: var(--space-4);
+  right: auto;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.placement-options.is-disabled { opacity: 0.65; }
+
+.keyword-stat {
+  font-size: var(--text-xs);
+  color: var(--gray-600);
+}
+
+.keyword-stat strong {
+  color: var(--gray-800);
+  font-weight: var(--font-semibold);
+}
+
+.keyword-difficulty {
+  font-size: var(--text-xs);
+  padding: 0.125rem var(--space-2);
+  border-radius: var(--border-radius-sm);
+  font-weight: var(--font-medium);
+}
+
+.difficulty-easy {
+  background: var(--success-100);
+  color: var(--success-700);
+}
+
+.difficulty-medium {
+  background: var(--warning-100);
+  color: var(--warning-700);
+}
+
+.difficulty-hard {
+  background: var(--error-100);
+  color: var(--error-700);
+}
+
+/* ===========================
+   Outline Components
+   =========================== */
+
+.outline-options {
+  display: grid;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.outline-card {
+  background: var(--elev-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-6);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  position: relative;
+}
+
+.outline-card:hover {
+  border-color: var(--border-strong);
+  background: var(--elev-3);
+}
+
+.outline-card.selected {
+  border-color: var(--primary-500);
+  background: var(--primary-50);
+  box-shadow: var(--shadow-lg);
+}
+
+.outline-card .checkbox {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--gray-300);
+  border-radius: var(--border-radius-sm);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.outline-card.selected .checkbox {
+  background: var(--primary-500);
+  border-color: var(--primary-500);
+  color: var(--on-primary);
+}
+
+.outline-content {
+  padding-right: var(--space-8);
+}
+
+.outline-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--gray-900);
+  margin-bottom: var(--space-4);
+}
+
+.outline-structure {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.outline-structure li {
+  padding: var(--space-2) 0;
+  color: var(--gray-700);
+  position: relative;
+  padding-left: var(--space-6);
+}
+
+.outline-structure li:before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--primary-500);
+  font-weight: var(--font-semibold);
+}
+
+.outline-structure li.heading-2 {
+  font-weight: var(--font-semibold);
+  color: var(--gray-800);
+}
+
+.outline-structure li.heading-3 {
+  padding-left: var(--space-8);
+  font-size: var(--text-sm);
+}
+
+.outline-structure li.heading-3:before {
+  content: "•";
+}
+
+/* ===========================
+   Loading Overlay
+   =========================== */
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(var(--surface-rgb), 0.9);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-overlay);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.loading-overlay .loading-spinner {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-400));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--on-primary);
+  animation: pulse 2s infinite;
+}
+
+.loading-overlay .loading-spinner i {
+  width: 1.5rem;
+  height: 1.5rem;
+  animation: spin 1s linear infinite;
+}
+
+.loading-overlay p {
+  font-size: var(--text-lg);
+  color: var(--gray-600);
+  font-weight: var(--font-medium);
+}
+
+/* ===========================
+   Responsive Components
+   =========================== */
+
+@media (max-width: 768px) {
+  .modal-content {
+    margin: var(--space-4);
+    max-width: none;
+    width: calc(100% - 2rem);
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: var(--space-4);
+  }
+
+  .settings-tabs {
+    flex-wrap: wrap;
+  }
+
+  /* C-13-2: flex: 1 crushed four tabs into equal 82px slots at 375, clipping
+     "Providers & Model" to "Providers" and "Generation" to "Generatio". Tabs
+     keep their natural width and wrap onto a second row instead. */
+  .tab-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+  }
+
+  .keywords-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cost-summary {
+    padding: var(--space-3);
+  }
+
+  .cost-item {
+    padding: var(--space-2) 0;
+    font-size: var(--text-sm);
+  }
+
+  .form-group .test-key-btn {
+    position: static;
+    transform: none;
+    margin-top: var(--space-2);
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .form-group input[type="password"] {
+    padding-right: var(--space-4);
+    margin-bottom: var(--space-2);
+  }
+}
+
+/* ===========================
+   Q&A Components
+   =========================== */
+
+.qa-combined-input {
+  background: var(--gray-50);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-6);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  margin-bottom: var(--space-4);
+}
+
+.qa-combined-input:hover {
+  border-color: var(--primary-300);
+  background: var(--primary-50);
+  box-shadow: var(--shadow-md);
+}
+
+.qa-combined-input.selected {
+  border-color: var(--primary-500);
+  background: var(--primary-50);
+  box-shadow: var(--shadow-lg);
+}
+
+.qa-combined-input .checkbox {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--gray-300);
+  border-radius: var(--border-radius-sm);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.qa-combined-input.selected .checkbox {
+  background: var(--primary-500);
+  border-color: var(--primary-500);
+  color: var(--on-primary);
+}
+
+.qa-content {
+  padding-right: var(--space-8);
+}
+
+.qa-item {
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.qa-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.qa-question {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--gray-900);
+  margin-bottom: var(--space-2);
+}
+
+.qa-answer {
+  font-size: var(--text-sm);
+  color: var(--gray-700);
+  line-height: 1.6;
+}
+
+/* ===========================
+   Evaluation Table Components
+   =========================== */
+
+/* This sheet loads after main.css, so its `overflow` shorthand was the rule
+   that actually decided the evaluate table's fate — it reset the axis
+   main.css opens for scrolling. Both sheets now agree: scroll on x, clip on y. */
+.evaluation-table-container {
+  background: var(--surface);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin-bottom: var(--space-6);
+}
+
+.evaluation-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.evaluation-table thead {
+  background: var(--gray-50);
+}
+
+.evaluation-table th {
+  padding: var(--space-4);
+  text-align: left;
+  font-weight: var(--font-semibold);
+  color: var(--gray-900);
+  border-bottom: 2px solid var(--gray-200);
+}
+
+.evaluation-table td {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--gray-200);
+  vertical-align: top;
+}
+
+.evaluation-row.excellent {
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.evaluation-row.good {
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.evaluation-row.needs-work {
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.criteria-cell {
+  font-weight: var(--font-medium);
+  color: var(--gray-900);
+}
+
+
+.status-text {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  text-transform: capitalize;
+}
+
+.score-cell {
+  font-weight: var(--font-semibold);
+  color: var(--gray-900);
+}
+
+.recommendation-cell {
+  font-size: var(--text-sm);
+  color: var(--gray-700);
+  line-height: 1.5;
+}
+
+/* ===========================
+   Mobile Responsive Updates
+   =========================== */
+
+@media (max-width: 768px) {
+  .evaluation-table th,
+  .evaluation-table td {
+    padding: var(--space-3);
+  }
+
+  .qa-combined-input {
+    padding: var(--space-4);
+  }
+
+  .qa-content {
+    padding-right: var(--space-6);
+  }
+
+  .qa-question {
+    font-size: var(--text-sm);
+  }
+
+  .qa-answer {
+    font-size: var(--text-xs);
+  }
+}
+/* ===================================================================
+   v3 additions — states, streaming, express, a11y, theme, stepper
+   =================================================================== */
+
+/* Accessible visually-hidden text (live regions, labels) */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Visible focus rings on every interactive element (WCAG 2.4.7) */
+.ai-scribe-app :focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--border-radius-sm);
+}
+
+/* State boxes: error-with-retry + empty */
+.state-box {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--border-radius-lg);
+  border: var(--border-width) solid var(--gray-200);
+  background: var(--surface);
+  margin-bottom: var(--space-4);
+}
+
+.state-box[hidden] {
+  display: none;
+}
+
+.state-box-message {
+  flex: 1;
+  margin: 0;
+  color: var(--gray-700);
+}
+
+/* Error-with-retry.
+
+   Reads as an alert, not as an empty-state placeholder: full width of the
+   panel, text left-aligned, icon pinned to the first line rather than
+   vertically centred against a wrapped paragraph, and the action on the
+   right where it does not fight the message for the same column. */
+.error-state {
+  align-items: flex-start;
+  width: 100%;
+  max-width: none;
+  text-align: left;
+  border: var(--border-width) solid var(--error-500);
+  border-left-width: 3px;
+  background: var(--error-50);
+  padding: var(--space-4) var(--space-5);
+  gap: var(--space-4);
+}
+
+.error-state .state-box-message {
+  color: var(--error-600);
+  font-weight: var(--font-medium);
+  text-align: left;
+  /* Provider errors can be long; keep them readable rather than full-bleed. */
+  max-width: 72ch;
+  overflow-wrap: anywhere;
+}
+
+/* showError() moves focus here so screen readers announce the failure. The
+   element is tabindex="-1", so it is never keyboard-reachable and a visible
+   ring communicates nothing — it just drew a stray box around the text.
+   Suppressed here only; every genuinely focusable control keeps its ring. */
+.error-state .state-box-message:focus,
+.error-state .state-box-message:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.error-state i {
+  color: var(--error-500);
+  flex: none;
+  /* Optically aligns the glyph with the first line of the message. */
+  margin-top: 0.125rem;
+}
+
+.error-state [data-testid="step-retry"] {
+  flex: none;
+  align-self: flex-start;
+  margin-left: auto;
+}
+
+@media (max-width: 600px) {
+  .error-state {
+    flex-wrap: wrap;
+  }
+
+  .error-state [data-testid="step-retry"] {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* Idle: "this step hasn't run yet", on wizard panels 2–9 and 11 before
+   anything is generated. It shares .state-box geometry with .error-state, so
+   the job here is to make sure the two are never mistaken for each other. The
+   error box is a raised surface with a red 3px left edge and red text; idle is
+   recessed — a fill one step BELOW the panel, a subtle border, a muted glyph
+   and ordinary body colour. Nothing about it should read as a fault. */
+.idle-state {
+  align-items: flex-start;
+  width: 100%;
+  max-width: none;
+  text-align: left;
+  background: var(--elev-2);
+  border: var(--border-width) solid var(--border-subtle);
+  padding: var(--space-5);
+  gap: var(--space-3);
+}
+
+.idle-state i {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--gray-400);
+  flex: none;
+  /* Optically aligns the glyph with the first line, as .error-state does. */
+  margin-top: 0.125rem;
+}
+
+.idle-state .state-box-message {
+  color: var(--gray-600);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  /* The copy runs 143–211 characters; capped so it sets as two or three even
+     lines rather than one full-bleed run across a wide panel. */
+  max-width: 56ch;
+}
+
+/* Two sentences: what the step is, then what has to happen first. Splitting
+   them onto separate lines is what keeps the box scannable at a glance
+   instead of a paragraph the user has to read to learn nothing happened. */
+.idle-state .state-box-lead {
+  display: block;
+  color: var(--gray-800);
+  font-weight: var(--font-semibold);
+}
+
+.idle-state .state-box-next {
+  display: block;
+}
+
+/* Skeleton loaders */
+.skeleton-loader {
+  display: grid;
+  gap: var(--space-4);
+  margin: var(--space-4) 0;
+}
+
+.skeleton-loader[hidden] {
+  display: none;
+}
+
+.skeleton-card {
+  padding: var(--space-5);
+  border-radius: var(--border-radius-lg);
+  border: var(--border-width) solid var(--gray-200);
+  background: var(--surface);
+  display: grid;
+  gap: var(--space-3);
+}
+
+/* Match the result users are waiting for instead of showing three generic,
+   oversized prose cards on every step. */
+.skeleton-choice {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.skeleton-card-choice {
+  min-height: 54px;
+  padding: var(--space-4);
+  align-content: center;
+}
+
+.skeleton-card-choice .skeleton-line-title {
+  width: min(82%, 28rem);
+  height: 0.875rem;
+}
+
+.skeleton-meta,
+.skeleton-prose,
+.skeleton-article,
+.skeleton-report {
+  gap: var(--space-3);
+}
+
+.skeleton-card-meta,
+.skeleton-card-prose,
+.skeleton-card-article,
+.skeleton-card-report {
+  padding: var(--space-4);
+}
+
+@media (max-width: 600px) {
+  .skeleton-choice { grid-template-columns: 1fr; }
+}
+
+.skeleton-line {
+  display: block;
+  height: 0.75rem;
+  border-radius: var(--border-radius-sm);
+  background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+  background-size: 200% 100%;
+  animation: ai-scribe-shimmer 1.4s ease infinite;
+}
+
+.skeleton-line-title {
+  width: 45%;
+  height: 1rem;
+}
+
+.skeleton-line-short {
+  width: 65%;
+}
+
+@keyframes ai-scribe-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-line {
+    animation: none;
+  }
+}
+
+/* Regeneration keeps the last valid result visible beneath a restrained busy
+   treatment. Generation controls remain disabled to prevent duplicate calls. */
+.results-section.is-refreshing {
+  position: relative;
+  opacity: 0.62;
+  transition: opacity 160ms ease-out;
+}
+
+.results-section.is-refreshing::after {
+  content: "Updating…";
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 2;
+  padding: var(--space-1) var(--space-2);
+  color: var(--primary-700, #075985);
+  background: var(--surface, #fff);
+  border: 1px solid var(--primary-200, #bae6fd);
+  border-radius: 999px;
+  box-shadow: var(--shadow-sm);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .results-section.is-refreshing { transition: none; }
+}
+
+/* Streaming output prose panel */
+.stream-output {
+  background: var(--surface);
+  border: var(--border-width) solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-6);
+  min-height: 8rem;
+  max-height: 32rem;
+  overflow-y: auto;
+  line-height: var(--leading-relaxed);
+  color: var(--gray-800);
+}
+
+.stream-output:empty {
+  display: none;
+}
+
+[data-state="streaming"] .stream-output {
+  border-color: var(--primary-500);
+}
+
+[data-state="streaming"] .stream-output::after {
+  content: "▍";
+  color: var(--primary-500);
+  animation: ai-scribe-caret 1s steps(2) infinite;
+}
+
+@keyframes ai-scribe-caret {
+  50% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-state="streaming"] .stream-output::after {
+    animation: none;
+  }
+}
+
+/* ===================================================================
+   Generated article typography
+
+   Everything below the model's output is long-form reading matter, but it
+   was inheriting wp-admin's form defaults: 13px/19.5px body, and h2 and h3
+   BOTH at 16.9px/600 — visually identical, so the FAQ questions were
+   indistinguishable from the article's own section headings. Lines also ran
+   to ~125 characters because nothing capped the measure.
+
+   This gives the prose its own scale, independent of wp-admin.
+   =================================================================== */
+
+.prose-output {
+  font-size: 1rem;
+  line-height: var(--leading-relaxed);
+  color: var(--gray-800);
+}
+
+/* Cap the measure, not the container: the card keeps its full width while
+   the text inside stays readable.
+
+   In rem rather than ch. The ch unit is the width of "0", and Inter's
+   figures are wide (~0.63em), so 68ch resolved to 685px — about 88 real
+   characters, not 68. A fixed measure also keeps headings and body on the
+   same right edge; sizing in ch made every heading wider than the text
+   under it. 36rem lands at roughly 72 characters at the 16px body size. */
+.prose-output > * {
+  max-width: var(--prose-measure, 36rem);
+}
+
+/* Short standalone prose should use the result panel the owner is reviewing;
+   the reading-measure cap made Introduction look like a half-width error. */
+[data-step-panel="4"] .prose-output > *,
+[data-step-panel="7"] .prose-output > * {
+  max-width: none;
+}
+
+.editable-prose-hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  color: var(--gray-600);
+  font-size: var(--text-sm);
+}
+
+.editable-prose-hint svg { width: 1rem; height: 1rem; }
+.prose-output[data-editable-prose="true"] { cursor: text; }
+.prose-output[data-editable-prose="true"]:focus-visible {
+  outline: 3px solid var(--primary-500);
+  outline-offset: 3px;
+}
+
+.prose-output h1,
+.prose-output h2,
+.prose-output h3,
+.prose-output h4 {
+  color: var(--gray-900);
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.prose-output h1 {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  margin: 0 0 var(--space-4);
+}
+
+.prose-output h2 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  margin: var(--space-8) 0 var(--space-3);
+}
+
+.prose-output h3 {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.prose-output h4 {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  margin: var(--space-5) 0 var(--space-2);
+}
+
+.prose-output > :first-child {
+  margin-top: 0;
+}
+
+/* font-size is restated on the elements themselves, not just inherited from
+   .prose-output: wp-admin ships a bare `p { font-size: 13px }`, and any
+   matching rule beats an inherited value however specific the ancestor. */
+.prose-output p,
+.prose-output li,
+.prose-output td,
+.prose-output th {
+  font-size: 1rem;
+  line-height: var(--leading-relaxed);
+}
+
+.prose-output p {
+  margin: 0 0 var(--space-4);
+}
+
+.prose-output ul,
+.prose-output ol {
+  margin: 0 0 var(--space-4);
+  padding-left: var(--space-6);
+}
+
+.prose-output li {
+  margin-bottom: var(--space-2);
+}
+
+.prose-output li::marker {
+  color: var(--gray-400);
+}
+
+/* The opening line the model emits as a bolded or italic standfirst reads as
+   a deck rather than as body copy. */
+.prose-output > p:first-of-type strong:only-child,
+.prose-output > p:first-of-type em:only-child {
+  display: block;
+  font-size: var(--text-lg);
+  font-weight: var(--font-normal);
+  font-style: normal;
+  color: var(--gray-600);
+  line-height: var(--leading-normal);
+}
+
+.prose-output blockquote {
+  margin: var(--space-6) 0;
+  padding-left: var(--space-5);
+  border-left: 3px solid var(--accent-border);
+  color: var(--gray-600);
+}
+
+.prose-output a {
+  color: var(--accent-text);
+}
+
+.prose-output img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+}
+
+/* Evaluation table (server-rendered HTML) */
+.evaluation-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.evaluation-table-container th,
+.evaluation-table-container td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-width) solid var(--gray-200);
+  text-align: left;
+  vertical-align: top;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  text-transform: uppercase;
+}
+
+.status-pass { background: var(--success-50); color: var(--success-600); }
+.status-warn { background: var(--warning-50); color: var(--warning-600); }
+.status-fail { background: var(--error-50); color: var(--error-600); }
+
+/* Mode switcher + Express screen */
+.mode-switcher {
+  display: inline-flex;
+  gap: var(--space-1);
+  margin-right: var(--space-4);
+}
+
+.mode-btn.active {
+  background: var(--primary-500);
+  color: var(--on-primary);
+  border-color: var(--primary-500);
+}
+
+.mode-screen[hidden] {
+  display: none;
+}
+
+.express-container {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-4);
+}
+
+.express-article {
+  max-height: none;
+  --prose-measure: 44rem;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  background: var(--surface);
+}
+
+/* Provider fragments sometimes add a wrapper around only part of the
+   response. Measure the actual reading elements at every nesting level so
+   adjacent paragraphs and headings still share one left and right edge. */
+.express-article :is(h1, h2, h3, h4, p, ul, ol, blockquote, table, figure) {
+  width: 100%;
+  max-width: var(--prose-measure);
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+/* Express fragments are normalised into semantic blocks before rendering.
+   Keep every readable line on the same axis even when wp-admin or a theme
+   supplies broad paragraph rules. */
+.express-article :is(p, li) {
+  padding-inline: 0;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+
+.express-article > :last-child {
+  margin-bottom: 0;
+}
+
+.article-target-status {
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--primary-200);
+  border-radius: var(--border-radius-lg);
+  background: var(--primary-50);
+}
+.article-target-status[hidden] { display: none; }
+.article-target-status-copy { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-4); }
+.article-target-status-copy strong { color: var(--gray-900); font-size: var(--text-lg); }
+.article-target-status-copy span { color: var(--gray-600); }
+.article-target-track { height: .6rem; overflow: hidden; border-radius: 999px; background: var(--gray-200); }
+.article-target-track span { display: block; height: 100%; border-radius: inherit; background: var(--primary-600); transition: width 240ms ease; }
+.article-target-action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+}
+.article-target-action[hidden] { display: none; }
+.article-target-action > div { min-width: 0; }
+.article-target-action strong { display: block; color: var(--gray-900); font-size: var(--text-sm); }
+.article-target-action p { margin: var(--space-1) 0 0; color: var(--gray-600); font-size: var(--text-sm); }
+.article-target-action .btn { flex: none; min-width: 10.5rem; }
+.article-target-action .btn.is-busy [data-improve-length-label]::after { content: '…'; }
+.article-improvement-progress {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  flex: 0 0 100%;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--primary-200);
+  border-radius: var(--border-radius-md);
+  background: color-mix(in srgb, var(--primary-50) 70%, white);
+}
+.article-improvement-progress[hidden] { display: none; }
+.article-improvement-progress strong,
+.article-improvement-progress small { display: block; }
+.article-improvement-progress small { margin-top: .125rem; color: var(--gray-600); font-size: var(--text-xs); }
+.article-improvement-spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--primary-200);
+  border-top-color: var(--primary-600);
+  border-radius: 50%;
+  animation: article-improvement-spin .8s linear infinite;
+}
+.article-improvement-track {
+  grid-column: 1 / -1;
+  height: .25rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--gray-200);
+}
+.article-improvement-track span {
+  display: block;
+  width: 35%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary-600);
+  animation: article-improvement-track 1.3s ease-in-out infinite;
+}
+@keyframes article-improvement-spin { to { transform: rotate(360deg); } }
+@keyframes article-improvement-track {
+  0% { transform: translateX(-105%); }
+  100% { transform: translateX(300%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .article-improvement-spinner,
+  .article-improvement-track span { animation: none; }
+}
+.article-target-status.is-in-range { border-color: var(--success-300, #86efac); background: var(--success-50, #f0fdf4); }
+.article-target-status.is-in-range .article-target-track span { background: var(--success-600, #16a34a); }
+.article-target-status.is-advisory { border-color: var(--warning-300, #fcd34d); background: var(--warning-50, #fffbeb); }
+.article-target-status.is-advisory .article-target-track span { background: var(--warning-500, #f59e0b); }
+
+.express-progress-slot:empty {
+  display: none;
+}
+
+.express-progress-slot .step-progress {
+  margin-top: var(--space-4);
+}
+
+/* The refine action sat at a 0px gap directly beneath the article card, so
+   it read as detached from it rather than as its next step. */
+.express-container [data-testid="express-refine"] {
+  margin-top: var(--space-5);
+}
+
+/* Header right cluster + theme toggle */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.theme-toggle {
+  padding: var(--space-2);
+  line-height: 1;
+}
+
+:root[data-ai-scribe-theme="dark"] .theme-icon-dark { display: none; }
+:root:not([data-ai-scribe-theme="dark"]) .theme-icon-light { display: none; }
+
+/* Step panel headings */
+.step-heading {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  color: var(--gray-900);
+  margin-bottom: var(--space-2);
+}
+
+.step-subtitle {
+  color: var(--gray-500);
+  margin-bottom: var(--space-5);
+}
+
+/* Chip nav as buttons (was divs) */
+.step-navigation .step {
+  border: none;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.step-navigation .step-number {
+  display: none;
+}
+
+/* SEO meta character counters */
+.seo-field {
+  position: relative;
+}
+
+.meta-count {
+  display: block;
+  text-align: right;
+  font-size: var(--text-xs);
+  color: var(--gray-500);
+  margin-top: var(--space-1);
+}
+
+.meta-count.over-limit {
+  color: var(--error-600);
+  font-weight: var(--font-semibold);
+}
+
+.seo-meta-intro,
+.seo-meta-destination,
+.seo-meta-guidance,
+.seo-meta-check,
+.seo-meta-keyword-coverage {
+  color: var(--gray-600);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+.seo-meta-intro {
+  margin: 0 0 var(--space-4);
+}
+
+.seo-meta-guidance {
+  display: block;
+  margin-top: var(--space-1);
+}
+
+.seo-meta-guidance[data-status="good"],
+.seo-meta-check[data-status="good"],
+.seo-meta-keyword-list li[data-status="good"] {
+  color: var(--success-700, var(--success-600));
+}
+
+.seo-meta-guidance[data-status="warning"],
+.seo-meta-check[data-status="warning"],
+.seo-meta-keyword-list li[data-status="warning"],
+.seo-meta-keyword-empty[data-status="warning"] {
+  color: var(--warning-700, var(--warning-600));
+}
+
+.seo-meta-guidance[data-status="error"] {
+  color: var(--error-700, var(--error-600));
+  font-weight: var(--font-semibold);
+}
+
+.seo-meta-checks {
+  background: var(--elev-1, var(--gray-50));
+  border: var(--border-width) solid var(--gray-200);
+  border-radius: var(--border-radius);
+  margin: calc(-1 * var(--space-2)) 0 var(--space-6);
+  padding: var(--space-3) var(--space-4);
+}
+
+.seo-meta-check,
+.seo-meta-destination {
+  margin: 0;
+}
+
+.keyword-load-warning,
+.meta-optimise-panel {
+  background: var(--warning-50, #fffbeb);
+  border: var(--border-width) solid var(--warning-300, #fcd34d);
+  border-radius: var(--border-radius);
+  color: var(--warning-800, #92400e);
+  margin: var(--space-3) 0;
+  padding: var(--space-3) var(--space-4);
+}
+
+.meta-optimise-panel h3,
+.meta-optimise-panel h4,
+.meta-optimise-panel p { margin-top: 0; }
+.meta-optimise-status { margin: var(--space-2) 0; }
+.meta-optimise-status[data-status="error"] { color: var(--error-700, #b91c1c); }
+.meta-optimise-status[data-status="good"] { color: var(--success-700, #15803d); }
+.meta-optimise-comparison { background: var(--elev-1, #fff); border-radius: var(--border-radius); padding: var(--space-3); }
+.meta-optimise-comparison dt { color: var(--gray-600); font-size: var(--text-xs); font-weight: var(--font-semibold); text-transform: uppercase; }
+.meta-optimise-comparison dd { margin: 0 0 var(--space-3); }
+.meta-optimise-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+.seo-meta-keyword-coverage {
+  border-top: var(--border-width) solid var(--gray-200);
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+}
+
+.seo-meta-keyword-heading {
+  color: var(--gray-800);
+  display: block;
+  margin-bottom: var(--space-1);
+}
+
+.seo-meta-keyword-list {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.seo-meta-keyword-empty {
+  margin: 0;
+}
+
+.seo-meta-destination {
+  border-top: var(--border-width) solid var(--gray-200);
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+}
+
+/* Q&A set card (single-select wrapper around display-only Q&A items) */
+.qa-set-card {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+.qa-set-content {
+  flex: 1;
+  display: grid;
+  gap: var(--space-3);
+}
+
+/* Says the whole card is one selectable set. Same voice as .form-hint —
+   secondary, small, on the --gray-500 step (4.9:1 on the card's --elev-1,
+   4.6:1 on --elev-3 when the card is selected). */
+.qa-set-hint {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--gray-500);
+}
+
+.qa-display-only {
+  cursor: inherit;
+  border: var(--border-width) solid var(--gray-200);
+}
+
+/* Settings screen */
+.settings-tabs {
+  display: flex;
+  gap: var(--space-1);
+  border-bottom: var(--border-width) solid var(--gray-200);
+  margin: var(--space-5) 0;
+  flex-wrap: wrap;
+}
+
+.settings-tabs .tab-btn {
+  border: none;
+  background: transparent;
+  font: inherit;
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  color: var(--gray-600);
+  border-bottom: 2px solid transparent;
+}
+
+.settings-tabs .tab-btn.active {
+  color: var(--primary-600);
+  border-bottom-color: var(--primary-500);
+  font-weight: var(--font-semibold);
+}
+
+.tab-content[hidden] {
+  display: none;
+}
+
+.key-status {
+  align-self: center;
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--border-radius-sm);
+  white-space: nowrap;
+}
+
+.key-status-set { background: var(--success-50); color: var(--success-600); }
+.key-status-missing { background: var(--warning-50); color: var(--warning-600); }
+
+.form-hint {
+  font-size: var(--text-sm);
+  color: var(--gray-500);
+}
+
+.form-error {
+  color: var(--error-600);
+}
+
+.settings-actions {
+  margin-top: var(--space-6);
+}
+
+.prompt-editor {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+/* ===================================================================
+   v3 responsive pass — 375 / 768 / 1280
+   =================================================================== */
+
+@media (max-width: 1280px) {
+  .header-content {
+    padding: 0 var(--space-3);
+  }
+}
+
+@media (max-width: 768px) {
+  /* Chip nav collapses to a compact stepper: icons + numbers, no labels */
+  .step-navigation .steps-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .step-navigation .step-label {
+    display: none;
+  }
+
+  .step-navigation .step-number {
+    display: inline-block;
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+  }
+
+  .two-column-layout {
+    flex-direction: column;
+  }
+
+  .settings-panel {
+    width: 100%;
+    max-width: none;
+  }
+
+  /* Compact header.
+
+     The previous layout stacked logo / mode switch / progress / cost as
+     four centred rows and spent roughly 340px before any content, putting
+     the first input below the fold on a short phone. It is now three tight
+     left-aligned rows:
+
+       row 1:  logo ........................ theme toggle
+       row 2:  [ Wizard | Express ]  full-width segmented
+       row 3:  Step 1 of 11 — Title .. 9%  Start Again  +  cost chips
+
+     .header-right only exists to group the cost meter and the toggle for
+     the desktop layout; at this width the two belong on different rows, so
+     display:contents dissolves the wrapper and lets both participate in the
+     header grid directly. */
+  .ai-scribe-app .header-content {
+    height: auto;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto auto;
+    column-gap: var(--space-3);
+    row-gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-3);
+  }
+
+  .ai-scribe-app .header-right {
+    display: contents;
+  }
+
+  .ai-scribe-app .logo-section {
+    grid-row: 1;
+    grid-column: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .ai-scribe-app .theme-toggle {
+    grid-row: 1;
+    grid-column: 2;
+    justify-self: end;
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .ai-scribe-app .header-center {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    align-items: stretch;
+    width: 100%;
+    gap: var(--space-3);
+  }
+
+  .ai-scribe-app .progress-container {
+    max-width: none;
+  }
+
+  /* Two equal halves, so it reads as one control rather than two buttons. */
+  .ai-scribe-app .mode-switcher {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+
+  .ai-scribe-app .mode-switcher .mode-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ai-scribe-app .progress-info {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: var(--space-2);
+    justify-content: initial;
+    text-align: left;
+  }
+
+  .ai-scribe-app .progress-info #progress-text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--text-sm);
+  }
+
+  .ai-scribe-app .cost-display {
+    grid-row: 3;
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .ai-scribe-app .cost-header {
+    display: none;
+  }
+
+  .ai-scribe-app .cost-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: flex-start;
+  }
+
+  .ai-scribe-app .cost-value {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (max-width: 480px) {
+  .input-with-button {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .results-actions {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .results-actions .btn {
+    flex: 1 1 auto;
+  }
+
+  .mode-switcher .mode-btn {
+    padding: var(--space-2);
+  }
+
+  .express-container {
+    padding: var(--space-4) var(--space-3);
+  }
+}
+
+/* ===================================================================
+   P7 design pass (REFACTOR.md §13.6–§13.10) — premium polish layer.
+   Loaded after main.css; overrides live here, not scattered edits.
+   =================================================================== */
+
+/* --- §13.6: step heading is a HEADING, never an input-look box ------- */
+/* margin-top is zeroed explicitly: WordPress admin styles `h2` directly,
+   which outranks the `*{ margin: 0 }` reset and was adding 30px above every
+   step heading. */
+.ai-scribe-app .step-heading {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  letter-spacing: -0.022em;
+  line-height: 1.15;
+  color: var(--gray-900);
+  margin-top: 0;
+  margin-bottom: var(--space-6);
+  border: 0;
+  background: transparent;
+  padding: 0;
+  text-wrap: balance;
+}
+
+/* The 40px accent bar that used to hang under every step heading read as a
+   rendering artefact rather than a design element. Hierarchy comes from
+   size and spacing instead. */
+
+/* Programmatic focus target — no focus ring box around a heading. */
+.ai-scribe-app .step-heading:focus,
+.ai-scribe-app .step-heading:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+@media (max-width: 480px) {
+  .ai-scribe-app .step-heading {
+    font-size: 1.625rem;
+    line-height: 1.2;
+    margin-bottom: var(--space-4);
+  }
+}
+
+/* --- §13.9: header cluster composition ------------------------------ */
+.ai-scribe-app .header-content {
+  height: auto;
+  min-height: 4.25rem;
+  padding: var(--space-3) var(--space-6);
+  gap: var(--space-6);
+}
+
+.ai-scribe-app .header-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
+}
+
+.ai-scribe-app .progress-container {
+  width: 100%;
+  max-width: 540px;
+}
+
+.ai-scribe-app .progress-info {
+  width: 100%;
+  justify-content: center;
+  color: var(--gray-700);
+  font-weight: var(--font-medium);
+  white-space: nowrap;
+}
+
+.ai-scribe-app #progress-percentage {
+  color: var(--primary-600);
+  font-weight: var(--font-bold);
+}
+
+/* §13.9: the progress bar must actually read as progress. */
+.ai-scribe-app .progress-bar {
+  height: 0.375rem;
+  background: var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.08);
+  overflow: hidden;
+}
+
+/* Solid accent. The old fill was a 600→400 gradient, and both ends resolve
+   to the same tint in dark mode, so it rendered flat anyway — with a glow
+   hardcoded to an indigo that is no longer in the palette. */
+.ai-scribe-app .progress-fill {
+  background: var(--accent);
+  border-radius: var(--border-radius-lg);
+  transition: width var(--transition-normal);
+}
+
+/* §13.4: Express mode hides the wizard-only progress cluster. */
+.ai-scribe-app .progress-container[hidden] {
+  display: none;
+}
+
+/* Theme toggle: real button with a visible icon (§13.8). */
+.ai-scribe-app .theme-toggle {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-lg);
+  color: var(--gray-700);
+}
+
+.ai-scribe-app .theme-toggle i,
+.ai-scribe-app .theme-toggle svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: block;
+}
+
+.ai-scribe-app .theme-toggle:hover {
+  color: var(--primary-600);
+  border-color: var(--primary-300);
+}
+
+/* --- §13.9: step chips must read as an enabled, coloured journey ---- */
+.ai-scribe-app .step-navigation {
+  padding: var(--space-3) var(--space-4);
+}
+
+.ai-scribe-app .step {
+  padding: var(--space-3);
+  border: 2px solid transparent;
+}
+
+.ai-scribe-app .step-label {
+  color: var(--gray-700);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.ai-scribe-app .step-icon {
+  background: var(--gray-100);
+  border: var(--border-width) solid var(--gray-200);
+  color: var(--gray-600);
+}
+
+.ai-scribe-app .step:hover .step-icon {
+  border-color: var(--primary-300);
+  color: var(--primary-600);
+}
+
+.ai-scribe-app .step.active {
+  background: var(--primary-50);
+  border-color: var(--primary-500);
+}
+
+.ai-scribe-app .step.active .step-label {
+  color: var(--primary-600);
+}
+
+.ai-scribe-app .step.active .step-icon {
+  background: var(--primary-500);
+  border-color: var(--primary-500);
+  color: var(--on-primary);
+  box-shadow: 0 4px 10px rgb(59 130 246 / 0.35);
+}
+
+.ai-scribe-app .step.completed .step-icon {
+  background: var(--success-500);
+  border-color: var(--success-500);
+  color: var(--on-primary);
+}
+
+/* --- §13.10: two-column rebalance ----------------------------------- */
+/* The 100vh right rail dwarfed the content card and produced a page of
+   dead whitespace — the rail now sizes to content and sticks. */
+.ai-scribe-app .two-column-layout {
+  align-items: flex-start;
+}
+
+.ai-scribe-app .settings-panel {
+  min-height: 0;
+}
+
+@media (min-width: 1025px) {
+  .ai-scribe-app .settings-panel {
+    width: 400px;
+    position: sticky;
+    top: calc(32px + var(--space-4)); /* below the WP admin bar */
+  }
+
+  .ai-scribe-app .main-panel {
+    padding: var(--space-8);
+    min-height: 24rem;
+  }
+}
+
+/* Options & Prompt: styled header band, works in both themes (§13.7/10). */
+.ai-scribe-app .panel-header {
+  background: transparent;
+  border-bottom: var(--border-width) solid var(--gray-200);
+  padding: var(--space-4) var(--space-6);
+}
+
+.ai-scribe-app .panel-header h2,
+.ai-scribe-app .panel-header h3 {
+  font-size: var(--text-base);
+  font-weight: var(--font-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--gray-900);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.ai-scribe-app .settings-section-title {
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--gray-500);
+  margin-bottom: var(--space-2);
+}
+
+/* Selected model: informational chip, not an input-look box.
+
+   Wraps to a second line rather than splitting the model name mid-phrase
+   ("GPT-5 Nano ·" / "OpenAI") when the side panel is narrow. */
+.ai-scribe-app .model-info {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  background: var(--elev-2);
+  border: var(--border-width) solid var(--border-subtle);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--border-radius);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: 0;
+}
+
+.ai-scribe-app .model-info .model-details {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-wrap: balance;
+}
+
+.ai-scribe-app .model-details {
+  font-weight: var(--font-semibold);
+  color: var(--gray-900);
+}
+
+/* Without an explicit colour this inherits wp-admin's link blue (#3858e9),
+   which lands at 2.7:1 on the dark panel. --accent-text is the tint chosen
+   to stay readable as text in both themes. */
+.ai-scribe-app .model-info .settings-link,
+.ai-scribe-app a.settings-link {
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  color: var(--accent-text);
+}
+
+.ai-scribe-app .model-info .settings-link:hover,
+.ai-scribe-app a.settings-link:hover {
+  color: var(--accent-text);
+  text-decoration-thickness: 2px;
+}
+
+/* Prompt editor: honest textarea on both themes (§13.7). */
+.ai-scribe-app .prompt-editor {
+  background: var(--surface);
+  color: var(--gray-900);
+  border-color: var(--gray-300);
+  line-height: 1.6;
+}
+
+.ai-scribe-app .prompt-editor::placeholder {
+  color: var(--gray-500);
+}
+
+.ai-scribe-app .prompt-run-actions {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.ai-scribe-app .prompt-run-button {
+  justify-content: center;
+  min-height: 44px;
+  width: 100%;
+}
+
+.ai-scribe-app .results-actions .btn {
+  min-height: 44px;
+}
+
+.ai-scribe-app .prompt-run-status {
+  min-height: 1.25rem;
+  margin: 0;
+  color: var(--gray-500);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
+.ai-scribe-app .prompt-run-status.is-success {
+  color: var(--success-600);
+}
+
+.ai-scribe-app .prompt-run-status.is-error {
+  color: var(--error-600);
+}
+
+/* --- No-keys notice (item 1 replacement for the modal zombie) ------- */
+.ai-scribe-app .app-notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-4) var(--space-6) 0;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--border-radius-lg);
+  border: var(--border-width) solid var(--warning-200, #fde68a);
+  background: var(--warning-50);
+  color: var(--gray-900);
+}
+
+.ai-scribe-app .app-notice a {
+  font-weight: var(--font-semibold);
+  color: var(--primary-600);
+  white-space: nowrap;
+}
+
+.resume-draft-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin: var(--space-4) var(--space-6) 0;
+  padding: var(--space-4) var(--space-5);
+  border: var(--border-width) solid var(--primary-200);
+  border-left: 4px solid var(--primary-500);
+  border-radius: var(--border-radius-lg);
+  background: var(--primary-50);
+  color: var(--gray-900);
+}
+
+.resume-draft-notice[hidden] { display: none; }
+.resume-draft-notice h2 { margin: 0 0 var(--space-1); font-size: var(--text-base); }
+.resume-draft-notice p { margin: 0; color: var(--gray-700); }
+.resume-draft-actions { display: flex; flex: 0 0 auto; gap: var(--space-2); }
+
+@media (max-width: 640px) {
+  .resume-draft-notice { align-items: stretch; flex-direction: column; margin-inline: var(--space-4); }
+  .resume-draft-actions { width: 100%; }
+  .resume-draft-actions .btn { flex: 1; }
+}
+
+/* --- §13.12: Managed by AI-Core panel + provider chips -------------- */
+.ai-scribe-app .managed-by-hub {
+  background: var(--elev-2);
+  border: var(--border-width) solid var(--primary-200);
+  border-radius: var(--border-radius-xl);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.ai-scribe-app .provider-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+}
+
+.ai-scribe-app .provider-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: 999px;
+  border: var(--border-width) solid var(--gray-300);
+  background: var(--surface);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--gray-700);
+}
+
+.ai-scribe-app .provider-chip-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--gray-400);
+}
+
+.ai-scribe-app .provider-chip-configured .provider-chip-dot {
+  background: var(--warning-500, #f59e0b);
+}
+
+.ai-scribe-app .provider-chip-validated {
+  border-color: var(--success-200);
+  background: var(--success-50);
+}
+
+.ai-scribe-app .provider-chip-validated .provider-chip-dot {
+  background: var(--success-500);
+}
+
+.ai-scribe-app .provider-chip-invalid {
+  border-color: var(--error-200, #fecaca);
+  background: var(--error-50);
+}
+
+.ai-scribe-app .provider-chip-invalid .provider-chip-dot {
+  background: var(--error-500, #ef4444);
+}
+
+.ai-scribe-app .key-status-invalid {
+  color: var(--error-600);
+  font-weight: var(--font-semibold);
+}
+
+/* --- §13.7: dark-mode component audit fixes ------------------------- */
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .mode-btn:not(.active) {
+  background: transparent;
+  color: var(--gray-700);
+  border-color: var(--gray-300);
+}
+
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .app-notice {
+  border-color: var(--warning-500, #f59e0b);
+}
+
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .step-icon {
+  background: var(--gray-200);
+  border-color: var(--gray-300);
+}
+
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .progress-bar {
+  background: var(--gray-300);
+}
+
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .model-info,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .cost-display .cost-item {
+  background: var(--gray-100);
+  border-color: var(--gray-300);
+}
+
+/* Inputs must beat wp-admin forms.css specificity (input[type=text] etc.) —
+   without this, fields render white in dark mode and grey-bordered in light. */
+.ai-scribe-app input.form-control,
+.ai-scribe-app textarea.form-control,
+.ai-scribe-app select.form-control,
+.ai-scribe-app .seo-field input,
+.ai-scribe-app .seo-field textarea {
+  background: var(--surface);
+  color: var(--gray-900);
+  border-color: var(--gray-300);
+}
+
+.ai-scribe-app input.form-control::placeholder,
+.ai-scribe-app textarea.form-control::placeholder {
+  color: var(--gray-500);
+}
+
+/* WP core admin notices sit above the app on our screens: keep them legible
+   in BOTH themes (the dark page colour bled white text onto the cream band). */
+.toplevel_page_ai-scribe .notice,
+.wrap .notice,
+#wpbody-content .notice {
+  color: #1d2327;
+}
+
+html[data-ai-scribe-theme="dark"] #wpbody-content .notice {
+  background: var(--surface);
+  color: var(--gray-700);
+  border-right-color: var(--gray-300);
+  border-top-color: var(--gray-300);
+  border-bottom-color: var(--gray-300);
+}
+
+html[data-ai-scribe-theme="dark"] #wpbody-content .notice a {
+  color: var(--primary-600);
+}
+
+/* wp-admin's footer, restated.
+
+   AI-Scribe repaints the whole admin canvas through `body { background:
+   var(--app-bg) }`, which in dark takes it to #0b0c0e — but core's footer
+   keeps its own #646970 text and #c3c4c7 rule, sized for a near-white page.
+   The footer is the one piece of wp-admin chrome left standing on our
+   repainted background, so it has to follow the tokens too. Both themes are
+   set from the same rule; the tokens handle the flip. */
+#wpfooter,
+#wpfooter p,
+#footer-thankyou,
+#footer-upgrade {
+  color: var(--gray-600);
+}
+
+#wpfooter {
+  border-top-color: var(--border-subtle);
+}
+
+#wpfooter a,
+#footer-thankyou a,
+#footer-upgrade a {
+  color: var(--accent-text);
+}
+
+/* ===================================================================
+   Intermediate + wide breakpoints
+
+   The sheet previously jumped straight from the 768 mobile rules to the
+   desktop default: nothing governed 769–1279, where the 480px-wide options
+   panel left the main column too narrow to read comfortably, and nothing
+   capped the layout above 1400px.
+   =================================================================== */
+
+/* Tablet landscape / small laptop: the side panel drops under the main
+   column rather than squeezing it. */
+@media (min-width: 769px) and (max-width: 1400px) {
+  .ai-scribe-app .two-column-layout {
+    flex-direction: column;
+  }
+
+  .ai-scribe-app .settings-panel {
+    width: 100%;
+    position: static;
+    max-height: none;
+  }
+
+  .ai-scribe-app .main-panel {
+    padding: var(--space-6);
+  }
+
+}
+
+/* The rail is always a flex scroller, including wide wp-admin canvases whose
+   usable width is smaller than the browser viewport because of the admin
+   menu or the Options panel. Eleven readable chips may grow to fill a wide
+   row, but they never shrink until the final label is clipped. Overflow stays
+   local to this rail and the active chip is centred by main.js. */
+.ai-scribe-app .steps-container {
+  display: flex;
+  gap: clamp(var(--space-1), .65vw, var(--space-3));
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  scroll-behavior: smooth;
+  scroll-padding-inline: var(--space-3);
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-300) transparent;
+}
+
+.ai-scribe-app .steps-container::after {
+  display: none;
+}
+
+.ai-scribe-app .steps-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.ai-scribe-app .steps-container::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: var(--gray-300);
+}
+
+.ai-scribe-app .steps-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-scribe-app .steps-container {
+    scroll-behavior: auto;
+  }
+}
+
+.ai-scribe-app .step {
+  flex: 1 0 clamp(5.5rem, 7vw, 7rem);
+  scroll-snap-align: center;
+}
+
+/* Edge fades work at every width where the local rail overflows. main.js
+   removes each fade at its corresponding end. */
+.ai-scribe-app .step-navigation::before,
+.ai-scribe-app .step-navigation::after {
+  content: '';
+  position: absolute;
+  top: var(--space-2);
+  bottom: var(--space-2);
+  width: var(--space-6);
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity var(--transition-fast);
+}
+
+.ai-scribe-app .step-navigation::before {
+  left: var(--border-width);
+  background: linear-gradient(to right, var(--elev-1), transparent);
+  opacity: 0;
+}
+
+.ai-scribe-app .step-navigation::after {
+  right: var(--border-width);
+  background: linear-gradient(to left, var(--elev-1), transparent);
+}
+
+.ai-scribe-app .step-navigation.is-scrolled-start::before {
+  opacity: 1;
+}
+
+.ai-scribe-app .step-navigation.is-scrolled-end::after {
+  opacity: 0;
+}
+
+/* Between the stacked layout and full desktop, give the side panel less of
+   the row so the main column keeps a comfortable measure. */
+@media (max-width: 768px) {
+  .choice-guidance,
+  .keyword-content { align-items: flex-start; flex-direction: column; }
+  .choice-guidance-actions { width: 100%; flex-wrap: wrap; }
+  .keyword-stats { justify-content: flex-start; }
+  .keyword-summary,
+  .keyword-stats { width: 100%; }
+  .keyword-stat,
+  .keyword-trends-link { white-space: normal; overflow-wrap: anywhere; }
+  .keyword-result { grid-template-columns: 1fr; }
+  .keyword-trends-link { margin-left: 3.25rem; }
+}
+
+/* Ultra-wide: stop the app from stretching to the full monitor. */
+@media (min-width: 1800px) {
+  .ai-scribe-app .app-main,
+  .ai-scribe-app .header-content {
+    max-width: 1600px;
+  }
+}
+
+/* (A reading-measure rule for .article-preview lived here. That class is not
+   rendered by any template or script — the generated article always lands in
+   .prose-output — so the rule never applied. The measure is set on
+   .prose-output instead.) */
+
+/*
+ * One truthful progress component: observed stage, selected model and elapsed
+ * time. Provider APIs expose no reliable percentage, so the bar is explicitly
+ * indeterminate.
+ */
+.step-progress {
+    margin: 0 0 var(--space-4, 16px);
+    padding: var(--space-3, 12px) var(--space-4, 16px);
+    background: var(--elev-1, var(--gray-50, #f9fafb));
+    border: 1px solid var(--border-subtle, var(--gray-200, #e5e7eb));
+    border-left: 4px solid var(--primary-500, #0068b3);
+    border-radius: var(--border-radius-lg, 8px);
+}
+
+.step-progress[hidden] {
+    display: none;
+}
+
+.step-progress-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3, 12px);
+    margin-bottom: var(--space-2, 8px);
+}
+
+.step-progress-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-700, #374151);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.step-progress-label::before {
+    content: "";
+    width: 14px;
+    height: 14px;
+    flex: none;
+    border: 2px solid var(--gray-300, #d1d5db);
+    border-top-color: var(--primary-600, #2563eb);
+    border-radius: 50%;
+    animation: ai-scribe-ticker-spin 700ms linear infinite;
+}
+
+.step-progress-elapsed {
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    color: var(--gray-500, #6b7280);
+    flex: none;
+}
+
+.step-progress-bar {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--gray-200, #e5e7eb);
+    overflow: hidden;
+}
+
+.step-progress-fill {
+    height: 100%;
+    width: 34%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--primary-500, #0068b3), var(--primary-600, #2563eb));
+    animation: ai-scribe-indeterminate 1.45s ease-in-out infinite;
+}
+
+.step-progress-note,
+.step-progress-context {
+    margin: var(--space-2, 8px) 0 0;
+    font-size: 13px;
+    color: var(--gray-500, #6b7280);
+}
+
+.step-progress-context {
+    margin-top: var(--space-1, 4px);
+}
+
+@keyframes ai-scribe-indeterminate {
+    from { transform: translateX(-120%); }
+    to { transform: translateX(320%); }
+}
+
+@keyframes ai-scribe-ticker-spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .step-progress-label::before { animation: none; }
+    .step-progress-fill {
+        width: 100%;
+        opacity: 0.55;
+        animation: none;
+        transform: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .step-progress-row { align-items: flex-start; }
+    .step-progress-label { line-height: 1.35; }
+}
+
+html[data-ai-scribe-theme="dark"] .step-progress {
+    background: var(--elev-1, #1f2937);
+    border-color: var(--border-subtle, #374151);
+}
+
+html[data-ai-scribe-theme="dark"] .step-progress-bar {
+    background: var(--gray-300, #374151);
+}
+
+/* ==========================================================================
+   Async action feedback (L-09/O-03): every action button spins while its
+   request runs, and success lands as a visible toast.
+   ========================================================================== */
+
+.btn.is-busy {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.btn.is-busy::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin-left: var(--space-2);
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  animation: ai-scribe-ticker-spin 700ms linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn.is-busy::after { animation: none; }
+}
+
+/* Toast region: fixed, stacked, above the WP admin chrome. */
+.ai-scribe-toast-region {
+  position: fixed;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: min(360px, calc(100vw - 32px));
+}
+
+.ai-scribe-toast-region .notification {
+  background: var(--elev-1, #ffffff);
+  border: 1px solid var(--border-subtle, var(--gray-200));
+  border-left: 4px solid var(--primary-500);
+  border-radius: var(--border-radius-lg, 8px);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-3) var(--space-4);
+  animation: ai-scribe-toast-in 200ms ease-out;
+}
+
+.ai-scribe-toast-region .notification-success { border-left-color: var(--success-500); }
+.ai-scribe-toast-region .notification-error { border-left-color: var(--error-500); }
+.ai-scribe-toast-region .notification-warning { border-left-color: var(--warning-500); }
+
+.ai-scribe-toast-region .notification-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: 14px;
+  color: var(--gray-700);
+}
+
+.ai-scribe-toast-region .notification-close {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--gray-500);
+  line-height: 1;
+  flex: none;
+}
+
+.ai-scribe-toast-region .notification-close:hover {
+  color: var(--gray-700);
+}
+
+@keyframes ai-scribe-toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-scribe-toast-region .notification { animation: none; }
+}
+
+/* ==========================================================================
+   Button and panel breathing room (L-10): the action row never touches the
+   content above it.
+   ========================================================================== */
+
+.results-section .results-actions,
+.review-content .results-actions {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-subtle, var(--gray-200));
+}
+
+.featured-image-review,
+.publishing-details {
+  margin: var(--space-5) 0;
+  padding: var(--space-5);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+}
+
+.featured-image-review {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+}
+
+.featured-image-review[hidden] {
+  display: none;
+}
+.featured-image-review-media { grid-column: 1; grid-row: 1; }
+.featured-image-review-copy { grid-column: 2; grid-row: 1; min-width: 0; }
+
+.featured-image-review h3,
+.publishing-details h3 {
+  margin: 0 0 var(--space-2);
+}
+
+.featured-image-review p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.featured-image-review-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  height: 72px;
+  max-height: 72px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+}
+
+.publishing-details { display: grid; gap: var(--space-4); }
+.publishing-details-heading p,
+.publishing-author,
+.publishing-assignment-result { margin: 0; color: var(--gray-600); font-size: var(--text-sm); }
+.publishing-assignment-result.is-warning { color: var(--warning-text, #92400e); }
+.publishing-assignment-result.is-success { color: var(--success-text, #166534); }
+.publishing-details-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: var(--space-4); }
+.publishing-details-grid label { min-width: 0; color: var(--gray-700); font-size: var(--text-sm); font-weight: var(--font-semibold); }
+.publishing-details-grid .form-control { margin-top: var(--space-2); max-width: none; }
+
+@media (max-width: 720px) {
+  .featured-image-review {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+  .featured-image-review-media img { height: 60px; max-height: 60px; }
+  .publishing-details-grid { grid-template-columns: 1fr; }
+}
+
+.results-section .stream-output {
+  margin-bottom: var(--space-4);
+}
+
+/* ==========================================================================
+   Final-step persistence: a visible, shared source of truth on Review and
+   Evaluate. The coloured edge communicates state; wording carries the fact.
+   ========================================================================== */
+
+.save-status-card {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  border: 1px solid var(--gray-200);
+  border-left: 4px solid var(--warning-500);
+  border-radius: var(--border-radius-lg);
+  background: var(--warning-50);
+}
+
+.save-status-card.is-saved {
+  border-left-color: var(--success-500);
+  background: var(--success-50);
+}
+
+.save-status-card.has-unsaved-changes {
+  border-left-color: var(--warning-500);
+  background: var(--warning-50);
+}
+
+.save-status-summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.save-status-copy h3,
+.save-status-copy p {
+  margin: 0;
+}
+
+.save-status-copy h3 {
+  margin-bottom: var(--space-1);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+}
+
+.save-status-copy p {
+  color: var(--text-secondary);
+}
+
+.save-status-badge {
+  flex: none;
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  background: var(--warning-100);
+  color: var(--warning-600);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+}
+
+.save-status-card.is-saved .save-status-badge {
+  background: var(--success-100);
+  color: var(--success-600);
+}
+
+.save-destinations {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.save-destinations[hidden] {
+  display: none;
+}
+
+.save-destinations li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  background: var(--surface);
+  color: var(--text-secondary);
+}
+
+.save-destinations strong {
+  color: var(--text-primary);
+}
+
+.save-status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.save-status-card + .results-actions {
+  margin-top: var(--space-4);
+}
+
+.express-article + .results-actions + .save-status-card {
+  margin-top: var(--space-4);
+}
+
+[data-testid="complete"].is-discard-confirm {
+  border-color: var(--error-600);
+  background: var(--error-600);
+}
+
+@media (max-width: 640px) {
+  .article-target-action {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .article-target-action .btn {
+    width: 100%;
+  }
+
+  .article-improvement-progress {
+    flex: none;
+  }
+
+  .save-status-summary,
+  .save-destinations li {
+    flex-direction: column;
+  }
+
+  .save-destinations {
+    grid-template-columns: 1fr;
+  }
+
+  .save-status-badge {
+    align-self: flex-start;
+  }
+
+  .save-status-actions .btn {
+    flex: 1 1 100%;
+  }
+}
+
+/* ==========================================================================
+   Image gallery (L-11, L-13..L-18): labelled items, click-to-place states,
+   visible status line, optional prompt field.
+   ========================================================================== */
+
+.ai-scribe-app .image-gallery-actions .btn {
+  padding: var(--space-2) var(--space-4);
+  white-space: normal;
+  line-height: 1.35;
+  text-align: center;
+  justify-content: center;
+}
+
+.gallery-item {
+  position: relative;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.gallery-badge {
+  position: absolute;
+  top: var(--space-1);
+  left: var(--space-1);
+  z-index: 1;
+  background: var(--primary-600);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: var(--border-radius-sm, 4px);
+  pointer-events: none;
+}
+
+.gallery-item .gallery-insert-btn {
+  font-size: 12px;
+  padding: 4px 8px;
+  line-height: 1.3;
+}
+
+.gallery-item.is-armed .gallery-image {
+  outline: 3px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+/* The editor advertises that it is waiting for a placement click. */
+.quill-editor .ql-editor.insert-target,
+.ql-editor.insert-target {
+  cursor: copy;
+  box-shadow: inset 0 0 0 2px var(--primary-500);
+  border-radius: var(--border-radius-sm, 4px);
+}
+
+.image-status-line {
+  display: block;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--gray-600);
+  min-height: 1.2em;
+}
+
+.image-status-line:empty {
+  display: none;
+}
+
+.image-prompt-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-700);
+}
+
+.image-prompt-input {
+  font-size: 13px;
+  resize: vertical;
+}
+
+/* ==========================================================================
+   Q&A step (L-22): one editable box per Q&A with an include checkbox.
+   ========================================================================== */
+
+.qa-list-hint {
+  font-size: 14px;
+  color: var(--gray-600);
+  margin: 0 0 var(--space-3);
+}
+
+.qa-options {
+  width: 100%;
+  min-width: 0;
+}
+
+.qa-bulk-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-3);
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-lg, 8px);
+}
+
+.qa-bulk-control,
+.qa-item-include {
+  min-height: 44px;
+}
+
+.qa-bulk-control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--gray-900);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+}
+
+.qa-bulk-checkbox,
+.qa-item-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+}
+
+.qa-bulk-count {
+  color: var(--gray-600);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.qa-item-card {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  background: var(--elev-1, #ffffff);
+  border: 1px solid var(--border-subtle, var(--gray-200));
+  border-radius: var(--border-radius-lg, 8px);
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+  transition: border-color 120ms ease, background-color 120ms ease, box-shadow 120ms ease;
+}
+
+.qa-item-card.included {
+  border-color: var(--primary-300);
+  box-shadow: inset 3px 0 0 var(--primary-500);
+}
+
+.qa-item-card:not(.included) {
+  background: var(--gray-50);
+  border-style: dashed;
+}
+
+.qa-item-include {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-700);
+  cursor: pointer;
+  margin-bottom: var(--space-3);
+}
+
+.ai-scribe-app [data-step-panel="8"] .qa-item-question {
+  display: block;
+  width: 100%;
+  inline-size: 100%;
+  max-width: none;
+  max-inline-size: none;
+  min-width: 0;
+  box-sizing: border-box;
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+.ai-scribe-app [data-step-panel="8"] .qa-item-answer {
+  display: block;
+  width: 100%;
+  inline-size: 100%;
+  max-width: none;
+  max-inline-size: none;
+  min-width: 0;
+  min-height: 8rem;
+  box-sizing: border-box;
+  overflow-y: auto;
+  resize: vertical;
+}
+
+.qa-bulk-checkbox:focus-visible,
+.qa-item-checkbox:focus-visible,
+.qa-item-question:focus-visible,
+.qa-item-answer:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .qa-bulk-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .qa-item-card {
+    padding: var(--space-3);
+  }
+}
+
+/* ==========================================================================
+   SEO meta counters (L-23): green in range, amber short, red truncated.
+   ========================================================================== */
+
+.meta-count.in-range {
+  color: var(--success-600);
+  font-weight: var(--font-semibold);
+}
+
+.meta-count.under-range {
+  color: var(--warning-600);
+  font-weight: var(--font-semibold);
+}
+
+/* ==========================================================================
+   Evaluate report (L-27): one row per check, coloured status icons,
+   suggestions under the failing row. Token-based, so dark mode follows.
+   ========================================================================== */
+
+.evaluation-report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.evaluation-report-table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--gray-700);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 2px solid var(--border-subtle, var(--gray-200));
+}
+
+.evaluation-report-table td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border-subtle, var(--gray-200));
+  vertical-align: top;
+  color: var(--gray-700);
+}
+
+.eval-row.eval-pass { background: var(--success-50); }
+.eval-row.eval-warn { background: var(--warning-50); }
+.eval-row.eval-fail { background: var(--error-50); }
+
+.eval-status-cell {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.eval-status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  margin-right: var(--space-2);
+  font-size: 12px;
+  line-height: 1;
+  color: #ffffff;
+  vertical-align: middle;
+}
+
+.eval-status-icon.eval-status-pass { background: var(--success-500); }
+.eval-status-icon.eval-status-warn { background: var(--warning-500); }
+.eval-status-icon.eval-status-fail { background: var(--error-500); }
+.eval-status-icon.eval-status-info { background: var(--gray-400); }
+.eval-status-icon.eval-status-unknown { background: var(--gray-500); }
+
+.eval-status-icon.eval-status-pass::before { content: "\2713"; }
+.eval-status-icon.eval-status-warn::before { content: "!"; }
+.eval-status-icon.eval-status-fail::before { content: "\2715"; }
+.eval-status-icon.eval-status-info::before { content: "i"; }
+.eval-status-icon.eval-status-unknown::before { content: "?"; }
+
+.eval-suggestions td {
+  padding-top: 0;
+}
+
+.eval-suggestions ul {
+  margin: var(--space-1) 0 var(--space-2) var(--space-5);
+  color: var(--gray-600);
+  font-size: 13px;
+}
+
+/* Evaluate is a finished QA report, not a streaming prose box. Let the page
+   scroll once; a second 32rem vertical scroller hid the headings and actions. */
+.evaluation-table-container.stream-output {
+  max-height: none;
+  min-height: 0;
+  overflow: visible;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.evaluation-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  container-type: inline-size;
+  gap: var(--space-4) var(--space-6);
+  padding: var(--space-5);
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--border-subtle, var(--gray-200));
+  border-radius: var(--border-radius-lg);
+  background: var(--elev-1, var(--surface));
+}
+
+.evaluation-summary-heading h3 {
+  margin: 0 0 var(--space-1);
+  color: var(--gray-900);
+  font-size: var(--text-lg);
+}
+
+.evaluation-summary-heading p {
+  margin: 0;
+  max-width: 64ch;
+  color: var(--gray-600);
+  font-size: var(--text-sm);
+}
+
+.evaluation-summary-statuses {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.evaluation-summary-status {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--gray-200);
+  border-left-width: 4px;
+  border-radius: var(--border-radius);
+  background: var(--surface);
+  color: var(--gray-700);
+}
+
+/* Four cards share a row only when every label retains a useful measure.
+   The main column can be much narrower than the viewport when the prompt
+   panel is beside it, so this decision follows the summary itself. */
+@container (min-width: 52rem) {
+  .evaluation-summary-statuses {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.evaluation-summary-status strong {
+  color: var(--gray-900);
+  font-size: var(--text-xl);
+  line-height: 1;
+}
+
+.evaluation-summary-status span { font-size: var(--text-xs); }
+.evaluation-summary-status.eval-pass { border-left-color: var(--success-500); }
+.evaluation-summary-status.eval-warn { border-left-color: var(--warning-500); }
+.evaluation-summary-status.eval-fail { border-left-color: var(--error-500); }
+.evaluation-summary-status.eval-unknown { border-left-color: var(--gray-500); }
+
+.evaluation-facts {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle, var(--gray-200));
+}
+
+.evaluation-facts > div {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  background: var(--elev-2, var(--gray-50));
+}
+
+.evaluation-facts dt { color: var(--gray-600); font-size: var(--text-xs); }
+.evaluation-facts dd { margin: 0; color: var(--gray-900); font-weight: var(--font-semibold); }
+
+.evaluation-report-region {
+  overflow: visible;
+  border: 1px solid var(--border-subtle, var(--gray-200));
+  border-radius: var(--border-radius-lg);
+  background: var(--surface);
+}
+
+.evaluation-report-table {
+  table-layout: auto;
+  min-width: 0;
+  font-size: var(--text-sm);
+}
+
+.evaluation-report-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.evaluation-report-table thead th {
+  position: sticky;
+  /* Clear the sticky 4rem app header (including its border and viewport inset). */
+  top: calc(4rem + 8px);
+  z-index: 40;
+  padding: var(--space-3) var(--space-4);
+  background: var(--elev-2, var(--gray-50));
+  color: var(--gray-800);
+  box-shadow: 0 1px 0 var(--gray-200);
+}
+
+/* The first cell includes a status icon; align its heading with the status
+   words rather than the icon edge. Suggested actions are plain guidance, so
+   do not retain an empty list indent that shifts them away from the heading. */
+.evaluation-report-table thead th:first-child {
+  padding-left: calc(var(--space-4) + 26px);
+}
+
+.evaluation-report-table th:nth-child(1) { width: 7rem; }
+.evaluation-report-table th:nth-child(2) { width: 13rem; }
+.evaluation-report-table th:nth-child(3) { width: 42%; }
+
+.evaluation-report-table td {
+  padding: var(--space-4);
+  line-height: 1.55;
+}
+
+.evaluation-report-table .eval-row {
+  background: var(--surface);
+  box-shadow: inset 4px 0 var(--gray-400);
+}
+
+.evaluation-report-table .eval-row.eval-pass { box-shadow: inset 4px 0 var(--success-500); }
+.evaluation-report-table .eval-row.eval-warn { box-shadow: inset 4px 0 var(--warning-500); }
+.evaluation-report-table .eval-row.eval-fail { box-shadow: inset 4px 0 var(--error-500); }
+.evaluation-report-table .eval-row.eval-unknown { box-shadow: inset 4px 0 var(--gray-500); }
+
+.eval-label-cell { font-weight: var(--font-semibold); color: var(--gray-900) !important; }
+.eval-details-cell { color: var(--gray-700) !important; }
+.eval-action-cell { color: var(--gray-600) !important; }
+.eval-action-cell ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+@media (max-width: 1100px) {
+  .evaluation-summary { grid-template-columns: 1fr; padding: var(--space-4); }
+  .evaluation-summary-statuses { justify-content: stretch; display: grid; grid-template-columns: 1fr 1fr; }
+  .evaluation-summary-status { min-width: 0; }
+
+  .evaluation-report-region { overflow: visible; border: 0; background: transparent; }
+  .evaluation-report-table { display: block; min-width: 0; }
+  .evaluation-report-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+  .evaluation-report-table tbody { display: grid; gap: var(--space-3); }
+  .evaluation-report-table .eval-row {
+    display: block;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border-subtle, var(--gray-200));
+    border-radius: var(--border-radius-lg);
+  }
+  .evaluation-report-table td {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: var(--space-3);
+    padding: var(--space-2) 0;
+    border: 0;
+  }
+  .evaluation-report-table td::before {
+    content: attr(data-label);
+    color: var(--gray-500);
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .evaluation-report-table .eval-status-cell { white-space: normal; }
+}
+
+@media (max-width: 420px) {
+  .evaluation-summary-statuses { grid-template-columns: 1fr; }
+  .evaluation-report-table td { grid-template-columns: 1fr; gap: var(--space-1); }
+}
+
+/* ==========================================================================
+   Editor image UX (owner image spec, 2026-08-12): drag-and-drop drop zones
+   between article blocks, and Delete/Replace affordances on embedded images.
+   ========================================================================== */
+
+/* The editor lights up as a whole while a gallery image is dragged over it. */
+.quill-editor.drop-active {
+  box-shadow: inset 0 0 0 2px var(--primary-500);
+  border-color: var(--primary-500);
+}
+
+/* The insertion point between blocks: a bold accent rule above or below the
+   block nearest the pointer, so where the image will land is unmistakable. */
+.ql-editor .drop-before {
+  box-shadow: 0 -3px 0 0 var(--primary-500);
+}
+
+.ql-editor .drop-after {
+  box-shadow: 0 3px 0 0 var(--primary-500);
+}
+
+/* Floating Delete/Replace toolbar over an embedded image. */
+.editor-image-toolbar {
+  position: absolute;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+  background: var(--elev-1, #ffffff);
+  border: 1px solid var(--border-subtle, var(--gray-200));
+  border-radius: var(--border-radius-lg, 8px);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-2);
+}
+
+.editor-image-toolbar .editor-image-btn {
+  font-size: 12px;
+  padding: 4px 10px;
+  line-height: 1.3;
+}
+
+.editor-image-toolbar .editor-image-btn-danger {
+  color: var(--error-600, #dc2626);
+  border-color: var(--error-600, #dc2626);
+}
+
+.ql-editor img.has-image-toolbar {
+  outline: 2px solid var(--primary-400, #60a5fa);
+  outline-offset: 2px;
+}
+
+/* Replace panel: gallery thumbnails plus an editable generation prompt. */
+.editor-image-replace-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: min(260px, 70vw);
+}
+
+.editor-image-replace-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--gray-600);
+}
+
+.editor-image-replace-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-1);
+}
+
+.editor-image-replace-thumb {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--border-radius-sm, 4px);
+  border: 1px solid var(--border-subtle, var(--gray-200));
+  cursor: pointer;
+}
+
+.editor-image-replace-choice {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  border-radius: var(--border-radius-sm, 4px);
+  cursor: pointer;
+}
+
+.editor-image-replace-choice:focus-visible {
+  outline: 3px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+.editor-image-replace-thumb:hover {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 1px;
+}
+
+.editor-image-replace-prompt {
+  font-size: 12px;
+  resize: vertical;
+}
+
+/* A gallery image mid-drag dims so the drop zone reads as the focus. */
+.gallery-item.dragging .gallery-image {
+  opacity: 0.6;
+}
+
+.gallery-item .gallery-image {
+  cursor: grab;
+}
+
+html[data-ai-scribe-theme="dark"] .editor-image-toolbar {
+  background: var(--elev-1, #1f2937);
+  border-color: var(--border-subtle, #374151);
+}
+
+/* Image Studio — editorial workbench rather than a thumbnail rail. */
+.ai-scribe-app .image-studio {
+  container-name: image-studio;
+  container-type: inline-size;
+  width: min(480px, 40%);
+  min-width: 0;
+  max-height: none;
+  overflow: visible;
+  padding: clamp(var(--space-4), 2vw, var(--space-6));
+  background: var(--surface);
+  border-color: var(--border-subtle, var(--gray-200));
+}
+
+.editor-with-gallery:has(.image-studio.is-unavailable) {
+  flex-direction: column;
+}
+
+.ai-scribe-app .image-studio.is-unavailable {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+}
+
+.image-studio.is-unavailable .image-insert-all { display: none; }
+.image-studio.is-unavailable .image-gallery-header { margin-bottom: var(--space-2); }
+.image-studio.is-unavailable [data-testid="images-unavailable"] { margin: 0; max-width: 90ch; }
+
+.image-studio .image-gallery-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.image-studio .image-gallery-header > div {
+  min-width: 0;
+}
+
+.image-studio .image-gallery-subtitle {
+  display: block;
+  margin: 0;
+  font-style: normal;
+  line-height: 1.45;
+}
+
+.image-insert-all { flex: 0 0 auto; }
+
+.image-generation-status {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--primary-200);
+  border-radius: var(--border-radius-lg);
+  background: var(--primary-50);
+  color: var(--gray-800);
+}
+.image-generation-status[hidden] { display: none; }
+.image-generation-status-icon {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--primary-700);
+}
+.image-generation-status.is-active .image-generation-status-icon { animation: image-studio-pulse 1.5s ease-in-out infinite; }
+.image-generation-status.is-complete { border-color: var(--success-300); background: var(--success-50, #f0fdf4); }
+.image-generation-status.is-error { border-color: var(--error-300, #fca5a5); background: var(--error-50, #fef2f2); }
+.image-generation-status-copy { display: flex; min-width: 0; flex-direction: column; gap: 2px; }
+.image-generation-status-copy span { font-size: var(--text-xs); line-height: 1.45; }
+.image-generation-status time { font-variant-numeric: tabular-nums; color: var(--gray-600); font-size: var(--text-xs); }
+.image-progress-queue {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: var(--space-2);
+  margin: var(--space-1) 0 0;
+  padding: var(--space-3) 0 0;
+  border-top: 1px solid var(--primary-200);
+  list-style: none;
+}
+.image-progress-queue[hidden] { display: none; }
+.image-progress-queue li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  font-size: var(--text-xs);
+}
+.image-progress-marker {
+  width: .65rem;
+  height: .65rem;
+  border: 2px solid var(--gray-400);
+  border-radius: 999px;
+  background: var(--surface);
+}
+.image-progress-label { min-width: 0; overflow-wrap: anywhere; font-weight: var(--font-semibold); }
+.image-progress-state { color: var(--gray-600); text-align: right; }
+.image-progress-queue li[data-state="active"] .image-progress-marker,
+.image-progress-queue li[data-state="retrying"] .image-progress-marker { border-color: var(--primary-600); background: var(--primary-200); }
+.image-progress-queue li[data-state="complete"] .image-progress-marker { border-color: var(--success-600, #16a34a); background: var(--success-500, #22c55e); }
+.image-progress-queue li[data-state="error"] .image-progress-marker { border-color: var(--error-600, #dc2626); background: var(--error-500, #ef4444); }
+.image-progress-queue li[data-state="retrying"] .image-progress-state { color: var(--primary-700); font-weight: var(--font-semibold); }
+.image-progress-queue li[data-state="error"] .image-progress-state { color: var(--error-700, #b91c1c); font-weight: var(--font-semibold); }
+@keyframes image-studio-pulse { 50% { transform: scale(.88); opacity: .65; } }
+
+.image-override-panel,
+.image-create-panel {
+  border: 1px solid var(--border-subtle, var(--gray-200));
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-4);
+  margin-block: var(--space-4);
+  background: var(--gray-50);
+}
+
+.image-override-panel summary,
+.image-plan summary,
+.gallery-prompt-details summary {
+  cursor: pointer;
+  font-weight: var(--font-semibold);
+}
+
+.image-override-panel summary {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.image-override-panel summary strong {
+  color: var(--primary-700);
+  font-size: var(--text-xs);
+}
+
+.image-override-toggle { display: flex; align-items: center; gap: var(--space-2); margin: var(--space-4) 0; line-height: 1.4; }
+.image-override-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+.image-override-grid label { font-size: var(--text-xs); font-weight: var(--font-semibold); }
+.image-override-grid .form-control { width: 100%; min-width: 0; margin-top: var(--space-2); }
+.image-reset-overrides { margin-top: var(--space-4); white-space: normal; text-align: left; }
+.image-create-help { margin: var(--space-1) 0 var(--space-3); color: var(--gray-600); font-size: var(--text-xs); line-height: 1.45; }
+.image-prompt-input { width: 100%; min-width: 0; resize: vertical; }
+.image-create-actions { display: flex; gap: var(--space-2); margin-top: var(--space-3); }
+.image-create-actions .btn { display: inline-flex; flex: 1 1 0; min-width: 0; min-height: 46px; padding-inline: var(--space-3); white-space: normal; line-height: 1.25; }
+.image-plan { margin-top: var(--space-3); }
+.image-plan label { display: block; margin-top: var(--space-3); font-size: var(--text-xs); font-weight: var(--font-semibold); }
+.image-plan-prompt { margin-top: var(--space-1); resize: vertical; font-weight: var(--font-normal); }
+.image-plan-details { border-top: 1px solid var(--border-subtle, var(--gray-200)); padding-top: var(--space-3); }
+.image-plan-details:not([open]) { padding-bottom: 0; }
+.image-plan-help { margin: var(--space-2) 0 0; color: var(--gray-600); font-size: var(--text-xs); line-height: 1.45; }
+
+.ai-scribe-app .image-studio .image-gallery-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.image-bulk-placement {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-block: var(--space-4);
+  padding: var(--space-3);
+  border: 1px solid var(--border-subtle, var(--gray-200));
+  border-radius: var(--border-radius-lg);
+  background: var(--gray-50);
+}
+.image-bulk-placement p { margin: 0; color: var(--gray-600); font-size: var(--text-xs); }
+.image-bulk-placement .image-insert-all { flex: 0 0 auto; }
+
+.image-studio .gallery-item {
+  display: grid;
+  grid-template-columns: 116px minmax(0, 1fr);
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--border-subtle, var(--gray-200));
+  border-radius: var(--border-radius-lg);
+  background: var(--surface);
+}
+
+.image-studio .gallery-item.is-placed { border-color: var(--success-400, #4ade80); }
+.gallery-media { min-width: 0; }
+.ai-scribe-app .image-studio .gallery-image { width: 116px; aspect-ratio: 1; object-fit: cover; border-radius: var(--border-radius); }
+.gallery-card-content { display: flex; min-width: 0; flex-direction: column; gap: var(--space-2); }
+.gallery-card-topline { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+.image-studio .gallery-badge { position: static; pointer-events: auto; }
+.gallery-placement-state { font-size: var(--text-xs); font-weight: var(--font-semibold); color: var(--gray-600); }
+.gallery-item.is-placed .gallery-placement-state { color: var(--success-700, #15803d); }
+.gallery-prompt-details { min-width: 0; font-size: var(--text-sm); }
+.gallery-prompt-editor { width: 100%; margin-top: var(--space-2); resize: vertical; }
+.gallery-prompt-used {
+  margin: var(--space-2) 0 0;
+  padding: var(--space-2);
+  max-height: 7rem;
+  overflow: auto;
+  border-radius: var(--border-radius-sm);
+  background: var(--gray-100);
+  color: var(--gray-700);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.gallery-prompt-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
+.gallery-prompt-actions .btn { min-height: 40px; padding-inline: var(--space-3); white-space: normal; }
+.gallery-caption-label { display: block; font-size: var(--text-xs); font-weight: var(--font-semibold); }
+.gallery-caption-editor { width: 100%; min-width: 0; min-height: 54px; margin-top: var(--space-1); resize: vertical; line-height: 1.4; overflow-wrap: anywhere; }
+.gallery-item-status {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--border-radius);
+  background: var(--primary-50);
+  color: var(--primary-800, #1e40af);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.gallery-item-status[hidden] { display: none; }
+.gallery-item-status[data-state="error"] { background: var(--error-50, #fef2f2); color: var(--error-700, #b91c1c); }
+.gallery-item-status[data-state="complete"] { background: var(--success-50, #f0fdf4); color: var(--success-700, #15803d); }
+.gallery-item.is-generating { border-color: var(--primary-400); box-shadow: 0 0 0 2px var(--primary-100); }
+.gallery-place-btn { align-self: stretch; min-height: 40px; white-space: normal; }
+.ai-scribe-image-caption { margin: calc(-1 * var(--space-2)) 0 var(--space-4) !important; color: var(--gray-600); font-size: var(--text-sm); font-style: italic; line-height: 1.45; }
+
+/* The Image Studio often sits inside a second, narrower column even on a
+   desktop viewport. Respond to the component's actual width rather than the
+   viewport so its heading, actions and cards never collapse into word-wide
+   strips beside the prompt panel. */
+@container image-studio (max-width: 32rem) {
+  .image-studio .image-gallery-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .image-gallery-header .image-insert-all {
+    width: 100%;
+  }
+
+  .image-studio .gallery-item {
+    grid-template-columns: 88px minmax(0, 1fr);
+  }
+
+  .ai-scribe-app .image-studio .gallery-image {
+    width: 88px;
+  }
+
+  .image-override-panel summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .image-override-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@container image-studio (max-width: 24rem) {
+  .image-create-actions,
+  .image-bulk-placement {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .image-create-actions .btn,
+  .image-bulk-placement .image-insert-all {
+    width: 100%;
+  }
+
+  .image-studio .gallery-item {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-scribe-app .image-studio .gallery-image {
+    width: 100%;
+    max-height: 220px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .editor-with-gallery { flex-direction: column; }
+  .editor-with-gallery .quill-editor-container { order: 1; }
+  .ai-scribe-app .editor-with-gallery .image-studio { order: 2; width: 100%; }
+  .image-studio .image-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 680px) {
+  .image-studio .image-gallery-header,
+  .image-create-actions,
+  .image-bulk-placement { flex-direction: column; align-items: stretch; }
+  .image-insert-all,
+  .image-create-actions .btn { width: 100%; }
+  .image-override-grid,
+  .image-studio .image-gallery-grid { grid-template-columns: 1fr; }
+  .image-studio .gallery-item { grid-template-columns: 88px minmax(0, 1fr); }
+  .ai-scribe-app .image-studio .gallery-image { width: 88px; }
+  .image-progress-queue li { grid-template-columns: auto minmax(0, 1fr); }
+  .image-progress-state { grid-column: 2; text-align: left; }
+}
+
+@media (max-width: 420px) {
+  .ai-scribe-app .image-studio { padding: var(--space-3); }
+  .image-studio .gallery-item { grid-template-columns: 1fr; }
+  .ai-scribe-app .image-studio .gallery-image { width: 100%; max-height: 220px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-generation-status.is-active .image-generation-status-icon { animation: none; }
+}
+
+/* A valid article that narrowly misses its preferred range is a completed
+   draft with an advisory, not an error or a vanished result. */
+.ai-scribe-app .article-quality-notice {
+  display: grid;
+  gap: var(--space-2);
+  margin-block: var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--warning-400, #f59e0b);
+  border-left-width: 4px;
+  border-radius: var(--border-radius-lg);
+  background: var(--warning-50, #fffbeb);
+  color: var(--gray-800);
+}
+
+.ai-scribe-app .article-quality-notice[hidden] { display: none; }
+.ai-scribe-app .article-quality-notice strong { font-size: var(--text-base); }
+.ai-scribe-app .article-quality-notice p { margin: 0; line-height: 1.55; }

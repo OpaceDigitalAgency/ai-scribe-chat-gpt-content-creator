@@ -1,0 +1,149 @@
+/**
+ * AI-Scribe onboarding / model-remap notice (REFACTOR.md §15.2).
+ *
+ * Renders on ANY admin screen, so every token reference carries a literal
+ * fallback matching main.css; on AI-Scribe screens the token system (incl.
+ * the dark-theme overrides) takes over automatically.
+ */
+
+/*
+ * Kept deliberately compact. This is a welcome notice, not the page: it
+ * renders above every AI-Scribe screen until dismissed, and at its original
+ * size it took 276px of a 900px viewport and pushed the wizard 315px down the
+ * page. The five "what's changed" points now sit on one wrapped row rather
+ * than a bulleted column.
+ */
+/*
+ * WordPress relocates admin notices to just after the first heading, which on
+ * these screens is inside .page-brand — a flex row. Without this the notice
+ * becomes a narrow column beside the page title instead of a band above it.
+ */
+.ai-scribe-notice.notice {
+	flex: 1 0 100%;
+	order: -1;
+}
+
+.ai-scribe-notice.notice {
+	border-left-color: var( --primary-500, #0068b3 );
+	padding: 12px 38px 12px 16px;
+}
+
+.ai-scribe-remap-notice.notice {
+	border-left-color: var( --warning-500, #f59e0b );
+}
+
+.ai-scribe-notice__title {
+	margin: 0 0 2px;
+	font-size: var( --text-base, 1rem );
+}
+
+.ai-scribe-notice__intro {
+	margin: 0 0 6px;
+	color: var( --gray-600, #4b5563 );
+}
+
+.ai-scribe-notice__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2px 18px;
+	list-style: none;
+	margin: 0 0 8px;
+	padding: 0;
+}
+
+.ai-scribe-notice__list li {
+	margin: 0;
+	position: relative;
+	padding-left: 12px;
+}
+
+/* Own bullet, so the items can sit side by side and still read as a list. */
+.ai-scribe-notice__list li::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0.55em;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: var( --primary-500, #0068b3 );
+}
+
+/* One column below the point the row stops fitting sensibly. */
+@media ( max-width: 900px ) {
+	.ai-scribe-notice__list {
+		display: block;
+	}
+
+	.ai-scribe-notice__list li {
+		margin-bottom: 2px;
+	}
+}
+
+.ai-scribe-notice__hub {
+	margin: 0 0 8px;
+	padding: 6px 10px;
+	background: var( --primary-50, #eff8ff );
+	border-radius: 4px;
+	color: var( --gray-700, #374151 );
+	font-size: var( --text-sm, 0.8125rem );
+}
+
+.ai-scribe-notice__actions {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0 0 4px;
+}
+
+.ai-scribe-notice__dismiss-link {
+	color: var( --gray-500, #6b7280 );
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+/* Dark theme (AI-Scribe screens set data-ai-scribe-theme on <html>). */
+html[data-ai-scribe-theme='dark'] .ai-scribe-notice__intro,
+html[data-ai-scribe-theme='dark'] .ai-scribe-notice__hub,
+html[data-ai-scribe-theme='dark'] .ai-scribe-notice__dismiss-link {
+	color: var( --gray-300, #d1d5db );
+}
+
+html[data-ai-scribe-theme='dark'] .ai-scribe-notice__hub {
+	background: var( --gray-800, #1f2937 );
+}
+
+/*
+ * This notice is an admin notice, so it also renders on screens AI-Scribe does
+ * not own — AI-Core's pages, the dashboard, the plugins list. Those never carry
+ * data-ai-scribe-theme, so the rules above cannot fire and the light background
+ * was left with light text: measured at 1.01:1, a white bar with invisible
+ * words. Follow the OS preference wherever the attribute is absent, and stand
+ * down when a theme has been chosen explicitly so the choice still wins.
+ */
+@media ( prefers-color-scheme: dark ) {
+	html:not([data-ai-scribe-theme]) .ai-scribe-notice__intro,
+	html:not([data-ai-scribe-theme]) .ai-scribe-notice__hub,
+	html:not([data-ai-scribe-theme]) .ai-scribe-notice__dismiss-link {
+		color: var( --gray-300, #d1d5db );
+	}
+
+	html:not([data-ai-scribe-theme]) .ai-scribe-notice__hub {
+		background: var( --gray-800, #1f2937 );
+	}
+}
+
+.ai-scribe-notice__summary {
+	margin: 0 0 8px;
+	color: var( --gray-700, #374151 );
+}
+
+@media ( prefers-color-scheme: dark ) {
+	html:not([data-ai-scribe-theme]) .ai-scribe-notice__summary {
+		color: var( --gray-300, #d1d5db );
+	}
+}
+
+html[data-ai-scribe-theme='dark'] .ai-scribe-notice__summary {
+	color: var( --gray-300, #d1d5db );
+}

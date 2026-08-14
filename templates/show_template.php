@@ -1,101 +1,68 @@
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>AI-Scribe Shortcodes: ChatGPT SEO Content Creator</title>
-	<link rel="stylesheet" href="<?php echo esc_url( AI_SCRIBE_URL . 'assets/css/article_builder.css' ); ?>">
-	<style>
-		body { margin: 0; padding: 0; background: #f1f1f1; }
-		.shortcodes-wrapper { background: white; min-height: 100vh; width: 100%; }
-		.shortcodes-container { width: 100%; max-width: none; margin: 0; padding: 0; }
-	</style>
-</head>
-<body>
-<div class="shortcodes-wrapper">
-<div class="shortcodes-container">
-<!-- Consistent header across all pages -->
-<div class="ai-scribe-header">
-	<div class="logo-container">
-		<img class="opace-logo-compact"
-		     src="<?php echo esc_url( AI_SCRIBE_URL . 'assets/2023/03/AI-Scribe-Logo-simplified-80x80.png' ) ?>"
-		     alt="AI-Scribe Logo">
-		<div class="brand-info">
-			<h1 class="brand-name">AI-Scribe</h1>
-			<span class="version-badge">v<?php echo AI_SCRIBE_VER; ?></span>
-		</div>
+<?php
+/**
+ * AI-Scribe v3 — Saved Shortcodes screen.
+ *
+ * Rebuilt in P5 (UAT §12.5): the legacy template emitted a full <html>
+ * document inside wp-admin and referenced assets pruned in v3. This is a
+ * proper admin fragment styled with the v3 token system.
+ *
+ * @package AI_Scribe
+ * @since   3.0.0
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+global $wpdb;
+$ai_scribe_table = $wpdb->prefix . 'article_builder';
+$ai_scribe_rows  = array();
+// The table exists on any install that activated 2.6.2 or v3; guard anyway.
+if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $ai_scribe_table ) ) === $ai_scribe_table ) {
+	$ai_scribe_rows = $wpdb->get_results( $wpdb->prepare( 'SELECT id, title FROM %i ORDER BY id DESC', $ai_scribe_table ) );
+}
+?>
+
+<div class="wrap ai-scribe-app" id="ai-scribe-shortcodes-root" data-testid="shortcodes-root">
+	<div class="page-brand">
+		<img class="logo-image" src="<?php echo esc_url( AI_SCRIBE_URL . 'assets/images/ai-scribe-logo-icon.png' ); ?>"
+			alt="" aria-hidden="true" width="40" height="40" data-testid="brand-logo">
+		<h1><?php esc_html_e( 'Saved Shortcodes', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></h1>
 	</div>
-</div>
 
-<!-- Navigation menu -->
-<div class="header-main">
-	<div class="temp-progress-bar">
-		<div class="step" onclick="document.location.href='./admin.php?page=ai_scribe_generate_article'">
-			<p>Generate Article</p>
-		</div>
-		<div class="step" onclick="document.location.href='./admin.php?page=ai_scribe_settings'">
-			<p>Settings</p>
-		</div>
-		<div class="step" onclick="document.location.href='./admin.php?page=ai_scribe_help'">
-			<p>Help</p>
-		</div>
-		<div class="step active_step">
-			<p>Saved Shortcodes</p>
-		</div>
-	</div>
-</div>
+	<p class="form-hint">
+		<?php esc_html_e( 'Each saved article template has a shortcode you can place in any post or page.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
+	</p>
 
-<div class="shortcodes-content" style="padding: 30px; margin: 0 auto; width: 100%; max-width: 1200px;">
-	<h1 class="page-title" style="text-align: center; margin-bottom: 30px;">Saved Shortcodes</h1>
-	<table class="widefat fixed modern-table" cellspacing="0" style="width: 100%; max-width: none; margin: 0 auto;">
-	<thead>
-	<?php
-	global $wpdb;
-	$table_name = $wpdb->prefix . 'article_builder';
-	$post_data  = $wpdb->get_results( "SELECT id,title,heading from $table_name ORDER BY id DESC " );
-
-	$page = sanitize_text_field($_GET['page']);
-	$current_page        = admin_url( "admin.php?page=" . $page );
-	$current_page_edit   = '&action=edit&id=';
-	$current_page_delete = '&action=delete&id=';
-	if ( ! $post_data == null ) {
-	?>
-	<tr>
-		<th id="columnname" class="manage-column column-cb check-column" scope="col"><h4>Title</h4></th>
-		<th id="columnname" class="manage-column column-cb check-column" scope="col"><h4>Shortcode</h4></th>
-		<th id="columnname" class="manage-column column-cb check-column" scope="col"><h4>Action</h4></th>
-	</tr>
-	</thead>
-	<tbody>
-	<?php
-	foreach ( $post_data as $key => $value ) {
-		?>
-		<tr class="alternate">
-			<td class="column-columnname"><?php echo esc_attr( $value->title ); ?></td>
-			<td class="column-columnname">[article_builder_generate_data
-				template_id="<?php echo esc_attr( $value->id ); ?>"]
-			</td>
-			<td>
-				<button class="btn btn-danger delete" data-id= <?php echo esc_attr( $value->id ); ?>>Remove</button>
-				<img src="<?php echo esc_url( AI_SCRIBE_URL . 'assets/loder.gif' ); ?>"
-				     img-id="<?php echo esc_attr( $value->id ); ?>" id="loader-img-<?php echo esc_attr($value->id); ?>" style="display:none; width:20px;" / >
-			</td>
-		</tr>
-		<?php
-	}
-	} else {
-		/* update 24.03.23 */
-		?>
-		<br/><br/>No shortcodes have been saved.
-	<?php 
-	}
-	?>
-	</tbody>
-</table>
+	<?php if ( empty( $ai_scribe_rows ) ) : ?>
+		<div class="state-box empty-state" data-testid="shortcodes-empty">
+			<p class="state-box-message"><?php esc_html_e( 'No shortcodes have been saved yet. Save an article from the wizard\'s Review step to create one.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></p>
+			<a class="btn btn-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=ai-scribe' ) ); ?>">
+				<?php esc_html_e( 'Open the Article Wizard', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
+			</a>
+		</div>
+	<?php else : ?>
+		<table class="widefat striped ai-scribe-table" data-testid="shortcodes-table">
+			<thead>
+				<tr>
+					<th scope="col"><?php esc_html_e( 'Title', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Shortcode', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Action', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $ai_scribe_rows as $ai_scribe_row ) : ?>
+					<tr>
+						<td><?php echo esc_html( $ai_scribe_row->title ); ?></td>
+						<td><code>[article_builder_generate_data template_id="<?php echo esc_attr( (string) $ai_scribe_row->id ); ?>"]</code></td>
+						<td>
+							<button type="button" class="btn btn-outline btn-danger delete" data-id="<?php echo esc_attr( (string) $ai_scribe_row->id ); ?>">
+								<?php esc_html_e( 'Remove', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
+							</button>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+	<?php endif; ?>
 </div>
-</div> <!-- Close shortcodes-container -->
-</div> <!-- Close shortcodes-wrapper -->
-</body>
-<script>
-// Add HTML closing tag if missing
-</script>
-</html>

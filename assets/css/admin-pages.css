@@ -1,0 +1,745 @@
+/**
+ * AI-Scribe v3 — admin page polish layer (UAT §12.3/§12.5).
+ *
+ * Loaded on every AI-Scribe admin screen after main.css + components.css.
+ * Branding (logo), checkbox alignment, settings/shortcodes/help layout,
+ * per-model parameter panel, dark-mode parity via the token system.
+ *
+ * @package AI_Scribe
+ * @since   3.0.0
+ */
+
+/* ---------- Branding ---------- */
+
+.ai-scribe-app .logo-image {
+	width: 40px;
+	height: 40px;
+	border-radius: var(--radius-md, 8px);
+	display: block;
+	flex-shrink: 0;
+}
+
+.ai-scribe-app .logo-image-large {
+	width: 72px;
+	height: 72px;
+}
+
+.ai-scribe-app .page-brand {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: var(--space-3, 12px);
+	margin: var(--space-4, 16px) 0 var(--space-5, 20px);
+}
+
+.ai-scribe-app .page-brand h1 {
+	margin: 0;
+	padding: 0;
+	line-height: 1.2;
+}
+
+/* wp-admin's common.js relocates every .notice to sit after the screen's
+   first H1 — which lives inside this flex row. Without these rules a
+   relocated notice joined the nowrap row and pushed the H1 fully off-canvas
+   at 375/768 (C-13-1). Notices get a full-width row of their own instead. */
+.ai-scribe-app .page-brand > .notice,
+.ai-scribe-app .page-brand > .updated,
+.ai-scribe-app .page-brand > .error {
+	flex: 1 1 100%;
+	min-width: 100%;
+	order: 10;
+}
+
+/* ---------- Form polish (checkbox alignment was off) ---------- */
+
+.ai-scribe-app .checkbox-label {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-2, 8px);
+	cursor: pointer;
+	line-height: 1.4;
+}
+
+.ai-scribe-app .checkbox-label input[type="checkbox"] {
+	margin: 0;
+	flex-shrink: 0;
+}
+
+.ai-scribe-app .form-group {
+	margin-bottom: var(--space-4, 16px);
+}
+
+.ai-scribe-app .form-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-4, 16px);
+}
+
+.ai-scribe-app .form-row .form-group {
+	flex: 1 1 220px;
+	min-width: 200px;
+}
+
+.ai-scribe-app .input-with-button {
+	display: flex;
+	align-items: stretch;
+	gap: var(--space-2, 8px);
+}
+
+.ai-scribe-app .input-with-button .form-control {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+/* The 11-step rail has a wide intrinsic size. Without an explicit shrink
+   boundary it makes .app-main adopt that width before the rail's own
+   horizontal scrolling can engage, which pushes the whole workspace beyond
+   a phone or tablet viewport. Keep overflow local to the rail and let every
+   workspace layer shrink to the available admin canvas. */
+.ai-scribe-app.app-container,
+.ai-scribe-app .app-main,
+.ai-scribe-app .step-navigation,
+.ai-scribe-app .steps-container,
+.ai-scribe-app .two-column-layout,
+.ai-scribe-app .main-panel,
+.ai-scribe-app .workflow-container,
+.ai-scribe-app .step-content {
+	min-width: 0;
+}
+
+.ai-scribe-app .app-main {
+	width: 100%;
+}
+
+.ai-scribe-app .step-navigation {
+	overflow: hidden;
+}
+
+/* Article length is one decision below the topic, not a second field jammed
+   against it. Custom words appear only when Custom is explicitly selected. */
+.ai-scribe-app .article-length-override.form-row,
+.ai-scribe-app .article-length-settings.form-row {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 24rem));
+	gap: var(--space-4, 16px);
+	align-items: start;
+}
+
+@media (max-width: 720px) {
+	.ai-scribe-app .article-length-override.form-row,
+	.ai-scribe-app .article-length-settings.form-row {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+.ai-scribe-app .article-length-override.form-row {
+	margin-top: var(--space-6, 24px);
+}
+
+.ai-scribe-app .article-length-override.form-row .form-group,
+.ai-scribe-app .article-length-settings.form-row .form-group {
+	min-width: 0;
+	margin: 0;
+}
+
+.ai-scribe-app .article-length-override.form-row .form-control,
+.ai-scribe-app .article-length-settings.form-row .form-control {
+	width: 100%;
+	max-width: 32rem;
+}
+
+.ai-scribe-app .article-plan-summary {
+	max-width: 48rem;
+	margin-top: var(--space-3, 12px);
+	line-height: 1.55;
+}
+
+.ai-scribe-app [data-settings-custom-word-count][hidden],
+.ai-scribe-app [data-custom-word-count][hidden] {
+	display: none;
+}
+
+/* ---------- Settings tabs ---------- */
+
+.ai-scribe-app .settings-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-1, 4px);
+	border-bottom: 1px solid var(--gray-200, #e5e7eb);
+	margin-bottom: var(--space-5, 20px);
+}
+
+/*
+ * Tabs are the primary navigation on this screen, so they carry the weight of
+ * one: 15px rather than the inherited 13px, and an active state that reads
+ * from across the room — a 3px rule, a tinted background and a heavier weight,
+ * not colour alone.
+ */
+.ai-scribe-app .settings-tabs .tab-btn {
+	border: none;
+	background: transparent;
+	padding: var(--space-3, 12px) var(--space-4, 16px);
+	cursor: pointer;
+	color: var(--gray-700, #374151);
+	border-bottom: 3px solid transparent;
+	border-radius: 4px 4px 0 0;
+	font-size: var(--text-md, 0.9375rem);
+	font-weight: 500;
+	line-height: 1.4;
+	transition: color 120ms ease, background-color 120ms ease;
+}
+
+.ai-scribe-app .settings-tabs .tab-btn:hover {
+	color: var(--primary-600, #0068b3);
+	background: var(--elev-2, rgba(0, 0, 0, 0.03));
+}
+
+.ai-scribe-app .settings-tabs .tab-btn.active {
+	color: var(--primary-600, #0068b3);
+	border-bottom-color: var(--primary-500, #0068b3);
+	background: var(--primary-50, #eff8ff);
+	font-weight: 600;
+}
+
+.ai-scribe-app .settings-actions {
+	margin-top: var(--space-5, 20px);
+	padding-top: var(--space-4, 16px);
+	border-top: 1px solid var(--gray-200, #e5e7eb);
+	display: flex;
+	align-items: center;
+	gap: var(--space-3, 12px);
+	flex-wrap: wrap;
+}
+
+/* ---------- Per-model parameter panel ---------- */
+
+.ai-scribe-app .model-params {
+	background: var(--gray-50, #f9fafb);
+	border: 1px solid var(--gray-200, #e5e7eb);
+	border-radius: var(--radius-md, 8px);
+	padding: var(--space-4, 16px);
+}
+
+.ai-scribe-app .model-params .settings-section-title {
+	margin-top: 0;
+}
+
+/* ---------- Tables (Saved Shortcodes) ---------- */
+
+.ai-scribe-app .ai-scribe-table {
+	border: 1px solid var(--gray-200, #e5e7eb);
+	border-radius: var(--radius-md, 8px);
+	overflow: hidden;
+	max-width: 900px;
+}
+
+.ai-scribe-app .ai-scribe-table th {
+	font-weight: 600;
+}
+
+.ai-scribe-app .ai-scribe-table code {
+	user-select: all;
+}
+
+.ai-scribe-app .btn-danger {
+	color: var(--error-600, #dc2626);
+	border-color: var(--error-600, #dc2626);
+}
+
+/* ---------- Help page ---------- */
+
+.ai-scribe-app .help-section {
+	max-width: 760px;
+	background: var(--surface, #ffffff);
+	border: 1px solid var(--gray-200, #e5e7eb);
+	border-radius: var(--radius-md, 8px);
+	padding: var(--space-4, 16px) var(--space-5, 20px);
+	margin-bottom: var(--space-4, 16px);
+}
+
+.ai-scribe-app .help-section h2 {
+	margin-top: 0;
+}
+
+/* ---------- Empty/state boxes reused outside the wizard ----------
+
+   These rules describe an EMPTY-state placeholder: narrow, centred, dashed.
+   They used to apply to `.state-box`, which the wizard also uses for its
+   error-with-retry box — so a real failure inherited placeholder styling and
+   rendered as a 560px column of centred red text with a dashed border and
+   the Retry button crushed against it. Scoped to .empty-state; the error
+   variant gets its own treatment in components.css. */
+
+.ai-scribe-app .state-box.empty-state {
+	max-width: 560px;
+	border: 1px dashed var(--gray-300);
+	border-radius: var(--border-radius-lg);
+	padding: var(--space-6);
+	text-align: center;
+}
+
+.ai-scribe-app .state-box.empty-state .btn {
+	margin-top: var(--space-3);
+}
+
+/* The centred text and the `margin-top` above only make sense stacked, but
+   .state-box is `display: flex; align-items: center` with no wrap, so on a
+   narrow screen the icon, the message and the button fought over one row and
+   the box collapsed. Below the tablet breakpoint it becomes the column the
+   rules above already describe. */
+@media (max-width: 600px) {
+	.ai-scribe-app .state-box.empty-state {
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		padding: var(--space-5) var(--space-4);
+	}
+
+	.ai-scribe-app .state-box.empty-state .state-box-message {
+		flex: 0 1 auto;
+	}
+}
+
+/* ---------- Image gallery buttons (wizard steps 6/10) ---------- */
+
+.ai-scribe-app .image-gallery-actions {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2, 8px);
+	margin-top: var(--space-3, 12px);
+}
+
+.ai-scribe-app .image-gallery-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+	gap: var(--space-2, 8px);
+}
+
+.ai-scribe-app .image-gallery-grid .gallery-image {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	border-radius: var(--radius-sm, 4px);
+	border: 1px solid var(--gray-200, #e5e7eb);
+	cursor: pointer;
+}
+
+.ai-scribe-app .image-gallery-grid .gallery-image:focus-visible {
+	outline: 2px solid var(--primary-500, #0068b3);
+	outline-offset: 2px;
+}
+
+/* ---------- Dark mode parity ---------- */
+
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .settings-tabs,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .settings-actions {
+	border-color: var(--gray-300, #374151);
+}
+
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .model-params,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .help-section,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .ai-scribe-table,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .state-box {
+	background: var(--surface, #111827);
+	border-color: var(--gray-300, #374151);
+}
+
+/* ---------- P5.6 parity controls ---------- */
+
+/* Above/below placement radios (tagline, Q&A) and writing-mode radios. */
+.ai-scribe-app .placement-options,
+.ai-scribe-app fieldset[data-testid="writing-mode"] {
+	border: 1px solid var(--gray-200, #e5e7eb);
+	border-radius: var(--radius, 8px);
+	padding: var(--space-3, 12px) var(--space-4, 16px);
+	margin: var(--space-4, 16px) 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-4, 16px);
+	align-items: center;
+}
+
+.ai-scribe-app .placement-options legend,
+.ai-scribe-app fieldset[data-testid="writing-mode"] legend {
+	font-weight: 600;
+	padding: 0 var(--space-2, 8px);
+}
+
+.ai-scribe-app .radio-label {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-2, 8px);
+	cursor: pointer;
+	line-height: 1.4;
+}
+
+.ai-scribe-app .radio-label input[type="radio"] {
+	margin: 0;
+	flex-shrink: 0;
+}
+
+/* check_Arr enhancement checkboxes stack vertically. */
+.ai-scribe-app .check-arr-options {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2, 8px);
+}
+
+/* Shortcode confirmation on the review step. */
+.ai-scribe-app .saved-shortcode-note[hidden] {
+	display: none; /* the display rule below must not defeat [hidden] */
+}
+
+.ai-scribe-app .saved-shortcode-note {
+	display: inline-block;
+	padding: var(--space-2, 8px) var(--space-3, 12px);
+	border-radius: var(--radius, 8px);
+	background: var(--gray-100, #f3f4f6);
+	border: 1px solid var(--gray-200, #e5e7eb);
+	font-family: monospace;
+	user-select: all;
+}
+
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .placement-options,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app fieldset[data-testid="writing-mode"],
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .saved-shortcode-note {
+	background: var(--surface, #111827);
+	border-color: var(--gray-300, #374151);
+}
+
+/* ---------- P7 §13.7: dark-mode heading/label audit ---------- */
+/* WP admin's default heading colour (#1d2327) is invisible on the dark
+   surface — every heading, label and legend inside an AI-Scribe screen
+   must follow the token ramp. */
+html[data-ai-scribe-theme="dark"] .ai-scribe-app h1,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app h2,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app h3,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app h4,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app label,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app legend,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app th,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app summary {
+	color: var(--gray-900, #f9fafb);
+}
+
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .form-hint,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app td {
+	color: var(--gray-600, #d1d5db);
+}
+
+/* Light mode: give the same headings the token colour too (the WP default
+   is close, but the page must not depend on wp-admin styling). */
+.ai-scribe-app h1,
+.ai-scribe-app h2,
+.ai-scribe-app h3 {
+	color: var(--gray-900, #111827);
+}
+
+/* Settings page brand row */
+.ai-scribe-app .page-brand {
+	display: flex;
+	align-items: center;
+	gap: var(--space-3, 12px);
+	margin: var(--space-4, 16px) 0 var(--space-5, 20px);
+}
+
+.ai-scribe-app .page-brand h1 {
+	margin: 0;
+	font-size: var(--text-2xl, 24px);
+	font-weight: 700;
+	letter-spacing: -0.01em;
+}
+
+/* Dark mode: WP's .striped rows keep their light stripe — unreadable with
+   light text. Repaint both stripes on the token ramp. */
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .ai-scribe-table tbody tr,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app table.striped > tbody > tr:nth-child(odd),
+html[data-ai-scribe-theme="dark"] .ai-scribe-app table.striped > tbody > tr:nth-child(even) {
+	background: var(--surface, #111827);
+	color: var(--gray-700, #e5e7eb);
+}
+
+html[data-ai-scribe-theme="dark"] .ai-scribe-app table.striped > tbody > tr:nth-child(odd) {
+	background: var(--gray-100, #1f2937);
+}
+
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .ai-scribe-table code {
+	background: transparent;
+	color: var(--gray-700, #e5e7eb);
+}
+
+/* ===================================================================
+   Admin screen layout (settings / shortcodes / help)
+
+   These screens previously inherited nothing but wp-admin's full-bleed
+   width, so a numeric field like "Max Output Tokens" stretched to ~1200px
+   while the select beside it sat at 400px — arbitrary rather than designed.
+   =================================================================== */
+
+/* Radius aliases: this file was written against --radius-* names that the
+   token layer never defined, so every use silently fell back to its literal.
+   Mapping them keeps one source of truth. */
+.ai-scribe-app {
+	--radius-sm: var(--border-radius-sm);
+	--radius: var(--border-radius);
+	--radius-md: var(--border-radius-lg);
+}
+
+/* One measure for the whole screen. */
+.ai-scribe-app .ai-scribe-admin-page,
+.ai-scribe-app .settings-tabs,
+.ai-scribe-app .tab-content {
+	max-width: 68rem;
+}
+
+/* Field widths follow the data, not the container. A token count and a
+   temperature do not need the same width as a prompt. */
+.ai-scribe-app .form-control {
+	box-sizing: border-box;
+	margin-inline: 0;
+	max-width: 32rem;
+	width: 100%;
+}
+
+.ai-scribe-app input[type="number"].form-control,
+.ai-scribe-app .form-control[inputmode="numeric"] {
+	max-width: 10rem;
+}
+
+.ai-scribe-app select.form-control {
+	max-width: 24rem;
+}
+
+.ai-scribe-app textarea.form-control {
+	max-width: 48rem;
+}
+
+/* Full-bleed inside an explicitly narrow container. */
+.ai-scribe-app .form-row .form-group .form-control {
+	max-width: none;
+}
+
+/* .settings-section is the wizard's Options & Prompt side panel (it does not
+   appear in settings_template.php). Carding it gives "Selected model" and
+   "Current prompt" their own surfaces instead of floating in the panel. */
+.ai-scribe-app .settings-section {
+	background: var(--elev-1);
+	border: 1px solid var(--border-subtle);
+	border-radius: var(--border-radius-lg);
+	padding: var(--space-5) var(--space-6);
+	margin-bottom: var(--space-5);
+}
+
+.ai-scribe-app .settings-section > h3:first-child,
+.ai-scribe-app .settings-section > h4:first-child,
+.ai-scribe-app .settings-section > .settings-section-title:first-child {
+	margin-top: 0;
+}
+
+.ai-scribe-app .form-hint {
+	font-size: var(--text-sm);
+	color: var(--gray-500);
+	margin-top: var(--space-2);
+	max-width: 60ch;
+}
+
+.ai-scribe-app .model-params {
+	background: var(--elev-2);
+	border-color: var(--border-subtle);
+}
+
+.ai-scribe-app .help-section,
+.ai-scribe-app .ai-scribe-table {
+	background: var(--elev-1);
+	border-color: var(--border-subtle);
+}
+
+/* The dark-mode parity block above pinned these to --surface with a
+   --gray-300 border; the elevation tokens now handle both themes, so the
+   overrides are redundant and are neutralised here rather than left to
+   fight the light-mode rules. */
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .model-params {
+	background: var(--elev-2);
+	border-color: var(--border-subtle);
+}
+
+/* The .state-box half is exempted for the two variants that carry their own
+   surface: .error-state's red tint and .idle-state's recessed fill. This rule
+   is the last word in the cascade (three sheets deep, ID-free but four
+   selectors long), so without the exclusion it silently repainted both back to
+   panel colour in dark and the variants existed in light only. */
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .help-section,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .ai-scribe-table,
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .state-box:not(.error-state):not(.idle-state),
+html[data-ai-scribe-theme="dark"] .ai-scribe-app .settings-section {
+	background: var(--elev-1);
+	border-color: var(--border-subtle);
+}
+
+@media (max-width: 768px) {
+	.ai-scribe-app .settings-section {
+		padding: var(--space-4);
+	}
+
+	.ai-scribe-app .form-control,
+	.ai-scribe-app select.form-control,
+	.ai-scribe-app textarea.form-control {
+		max-width: none;
+	}
+}
+
+/* Settings screen section rhythm.
+
+   settings_template.php marks each group with a bare <h2> and no wrapper, so
+   the sections are styled off the heading rather than by changing markup the
+   e2e selectors depend on. A rule above each heading does the grouping work
+   a card would, without the DOM churn. */
+.ai-scribe-app .tab-content > h2 {
+	font-size: var(--text-lg);
+	font-weight: var(--font-semibold);
+	letter-spacing: -0.01em;
+	margin: var(--space-8) 0 var(--space-4);
+	padding-top: var(--space-6);
+	border-top: 1px solid var(--border-subtle);
+}
+
+.ai-scribe-app .tab-content > h2:first-child {
+	margin-top: 0;
+	padding-top: 0;
+	border-top: 0;
+}
+
+/* The AI-Core hub panel is the one genuine card on this screen. */
+.ai-scribe-app .managed-by-hub {
+	background: var(--elev-2);
+	border: 1px solid var(--border-subtle);
+	border-radius: var(--border-radius-lg);
+	padding: var(--space-5) var(--space-6);
+}
+
+.ai-scribe-app .managed-by-hub > h2 {
+	margin-top: 0;
+	padding-top: 0;
+	border-top: 0;
+}
+
+.ai-scribe-app .provider-chip-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+	margin: var(--space-4) 0;
+}
+
+.ai-scribe-app .provider-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-2);
+	padding: var(--space-2) var(--space-4);
+	border: 1px solid var(--border-subtle);
+	border-radius: 999px;
+	background: var(--elev-1);
+	font-size: var(--text-sm);
+}
+
+.ai-scribe-app .provider-chip-dot {
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 50%;
+	background: var(--gray-400);
+	flex: none;
+}
+
+.ai-scribe-app .provider-chip-configured .provider-chip-dot {
+	background: var(--success-500);
+}
+
+.ai-scribe-app .provider-chip-state {
+	color: var(--gray-500);
+}
+
+.ai-scribe-app .provider-chip-configured .provider-chip-state {
+	color: var(--success-600);
+}
+
+/* Links inside the app follow the accent-text token rather than wp-admin's
+   #3858e9, which measures ~2.7:1 on the dark surfaces and is off-palette in
+   light. Scoped to .ai-scribe-app so the rest of wp-admin is untouched. */
+.ai-scribe-app a:not(.btn):not(.button):not(.tab-btn) {
+	color: var(--accent-text);
+	text-underline-offset: 2px;
+}
+
+.ai-scribe-app a:not(.btn):not(.button):not(.tab-btn):hover,
+.ai-scribe-app a:not(.btn):not(.button):not(.tab-btn):focus {
+	color: var(--accent-text);
+	text-decoration-thickness: 2px;
+}
+
+.ai-scribe-app a:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+	border-radius: 2px;
+}
+
+/*
+ * Visible save confirmation. The previous feedback lived only in a
+ * visually-hidden live region, so clicking Save looked like nothing
+ * happened unless a screen reader was running.
+ */
+.ai-scribe-app .settings-save-feedback {
+    margin: 0;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    background: var(--success-bg, #edfaef);
+    color: var(--success-fg, #1a6b2a);
+    border: 1px solid var(--success-border, #a7dcb2);
+    animation: ai-scribe-save-feedback-in 160ms ease-out;
+}
+
+.ai-scribe-app .settings-save-feedback.is-error {
+    background: var(--error-bg, #fdeaea);
+    color: var(--error-fg, #96231f);
+    border-color: var(--error-border, #f0aeac);
+}
+
+@keyframes ai-scribe-save-feedback-in {
+    from { opacity: 0; transform: translateY(-3px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* ---------- Settings design pass (O-04) ----------
+
+   The Images tab (and the other tabs) read as loose controls floating in
+   space: full-width selects inside form rows, and the enable toggle lost
+   among them. Field widths follow the data even inside a row, and the
+   primary toggle reads as the section's headline control. */
+
+.ai-scribe-app .form-row .form-group select.form-control {
+	max-width: 24rem;
+}
+
+.ai-scribe-app .form-row .form-group input.form-control {
+	max-width: 24rem;
+}
+
+.ai-scribe-app .tab-content .checkbox-label {
+	font-weight: 500;
+	color: var(--gray-700);
+}
+
+/* The section's on/off switch gets its own surface so it is found first. */
+.ai-scribe-app #settings-panel-images > .form-group:first-of-type {
+	background: var(--elev-2);
+	border: 1px solid var(--border-subtle);
+	border-radius: var(--border-radius-lg);
+	padding: var(--space-3) var(--space-4);
+	max-width: 32rem;
+}
+
+/* Settings buttons share the wizard's busy spinner (see components.css). */
+.ai-scribe-app .settings-actions .btn.is-busy,
+.ai-scribe-app .input-with-button .btn.is-busy {
+	opacity: 0.75;
+}

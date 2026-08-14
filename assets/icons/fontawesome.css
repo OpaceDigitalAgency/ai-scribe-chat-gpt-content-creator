@@ -1,0 +1,38 @@
+/* Font Awesome Icons - Essential Icons Only */
+/* Use CDN fonts as primary, fallback to system fonts */
+@font-face {
+  font-family: "Font Awesome 6 Free";
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2") format("woff2");
+  font-weight: 900;
+  font-display: swap;
+}
+
+.fa, .fas, .far, .fal, .fab {
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "Font Awesome 6 Brands", monospace;
+  font-weight: 900;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}
+
+/* Status Icons for Evaluation */
+.fa-check-circle::before { content: "\f058"; color: #10b981; }
+.fa-exclamation-triangle::before { content: "\f071"; color: #f59e0b; }
+.fa-times-circle::before { content: "\f057"; color: #ef4444; }
+
+/* Additional utility icons */
+.fa-star::before { content: "\f005"; }
+.fa-star-half::before { content: "\f089"; }
+.fa-info-circle::before { content: "\f05a"; }
+.fa-lightbulb::before { content: "\f0eb"; }
+.fa-cog::before { content: "\f013"; }
+.fa-chart-bar::before { content: "\f080"; }
+
+/* Color classes */
+.text-green { color: #10b981; }
+.text-amber { color: #f59e0b; }
+.text-red { color: #ef4444; }
+.text-blue { color: #3b82f6; }
+.text-gray { color: #6b7280; }

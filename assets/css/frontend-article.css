@@ -1,0 +1,42 @@
+.ai-scribe-article-content {
+  box-sizing: border-box;
+  width: 100%;
+  padding: clamp(1rem, 2.5vw, 2rem) clamp(1rem, 3vw, 2.5rem);
+}
+
+.ai-scribe-article-content :where(p, h2, h3, h4, ul, ol, blockquote) {
+  width: 100%;
+  max-width: 72ch;
+  margin-inline: auto;
+}
+
+.ai-scribe-article-content :where(p, ul, ol, blockquote) {
+  margin-block-start: 0;
+  margin-block-end: 1.1em;
+}
+
+.ai-scribe-article-content :where(h2, h3, h4) {
+  margin-block-start: 1.6em;
+  margin-block-end: .55em;
+}
+
+.ai-scribe-article-content .ai-scribe-article-figure {
+  width: min(100%, 72rem);
+  margin: 1.75rem auto;
+}
+
+.ai-scribe-article-content .ai-scribe-article-image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.ai-scribe-article-content figcaption {
+  max-width: 72ch;
+  margin: .65rem auto 0;
+  color: #5f6875;
+  font-size: .9em;
+  line-height: 1.45;
+}

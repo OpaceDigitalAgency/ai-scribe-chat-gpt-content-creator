@@ -1,0 +1,179 @@
+/* AI-Scribe notification centre: viewport-fixed, readable action outcomes. */
+
+.ai-scribe-notification-centre {
+	position: fixed;
+	top: max(52px, calc(env(safe-area-inset-top) + 16px));
+	left: 50%;
+	z-index: 100001;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	width: min(680px, calc(100vw - 40px));
+	max-height: calc(100vh - 84px);
+	overflow-y: auto;
+	transform: translateX(-50%);
+	pointer-events: none;
+	scrollbar-width: thin;
+}
+
+.ai-scribe-notification {
+	--notification-accent: var(--primary-500, #1473e6);
+	--notification-tint: var(--primary-50, #eef6ff);
+	display: grid;
+	grid-template-columns: 36px minmax(0, 1fr) 36px;
+	gap: 12px;
+	align-items: start;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 15px 16px;
+	border: 1px solid var(--border-subtle, #d6dde5);
+	border-top: 4px solid var(--notification-accent);
+	border-radius: 10px;
+	background: var(--elev-1, #fff);
+	box-shadow: 0 12px 35px rgb(15 23 42 / 22%);
+	color: var(--gray-900, #172033);
+	pointer-events: auto;
+	animation: ai-scribe-notification-in 180ms ease-out;
+}
+
+.ai-scribe-notification-success {
+	--notification-accent: var(--success-500, #16833c);
+	--notification-tint: var(--success-bg, #edfaef);
+}
+
+.ai-scribe-notification-warning {
+	--notification-accent: var(--warning-500, #b05d00);
+	--notification-tint: var(--warning-bg, #fff6df);
+}
+
+.ai-scribe-notification-error {
+	--notification-accent: var(--error-500, #c72c2c);
+	--notification-tint: var(--error-bg, #fdeaea);
+}
+
+.ai-scribe-notification-icon {
+	display: grid;
+	place-items: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: var(--notification-tint);
+	color: var(--notification-accent);
+	font-size: 18px;
+	font-weight: 800;
+	line-height: 1;
+}
+
+.ai-scribe-notification-copy {
+	min-width: 0;
+}
+
+.ai-scribe-notification-title {
+	display: block;
+	margin: 1px 0 4px;
+	color: var(--gray-900, #172033);
+	font-size: 15px;
+	font-weight: 700;
+	line-height: 1.35;
+}
+
+.ai-scribe-notification-detail {
+	margin: 0;
+	color: var(--gray-700, #42526a);
+	font-size: 14px;
+	line-height: 1.5;
+	overflow-wrap: anywhere;
+}
+
+.ai-scribe-notification-repeat {
+	display: inline-block;
+	margin-top: 7px;
+	padding: 2px 7px;
+	border-radius: 999px;
+	background: var(--notification-tint);
+	color: var(--notification-accent);
+	font-size: 12px;
+	font-weight: 650;
+}
+
+.ai-scribe-notification-close {
+	display: grid;
+	place-items: center;
+	width: 36px;
+	height: 36px;
+	margin: -3px -4px 0 0;
+	padding: 0;
+	border: 1px solid transparent;
+	border-radius: 7px;
+	background: transparent;
+	color: var(--gray-600, #536278);
+	cursor: pointer;
+	font-size: 25px;
+	line-height: 1;
+}
+
+.ai-scribe-notification-close:hover {
+	border-color: var(--border-subtle, #d6dde5);
+	background: var(--elev-2, #f6f8fb);
+	color: var(--gray-900, #172033);
+}
+
+.ai-scribe-notification-close:focus-visible {
+	outline: 3px solid var(--primary-300, #7ab8f5);
+	outline-offset: 2px;
+}
+
+.ai-scribe-notification.is-repeated {
+	box-shadow: 0 12px 35px rgb(15 23 42 / 22%), 0 0 0 3px var(--notification-tint);
+}
+
+html[data-ai-scribe-theme="dark"] .ai-scribe-notification {
+	background: var(--elev-1, #172033);
+	border-color: var(--gray-600, #536278);
+	color: var(--gray-50, #f7f9fc);
+	box-shadow: 0 14px 38px rgb(0 0 0 / 45%);
+}
+
+html[data-ai-scribe-theme="dark"] .ai-scribe-notification-title {
+	color: var(--gray-900, #f7f9fc);
+}
+
+html[data-ai-scribe-theme="dark"] .ai-scribe-notification-detail {
+	color: var(--gray-700, #d6dde5);
+}
+
+@keyframes ai-scribe-notification-in {
+	from { opacity: 0; transform: translateY(-8px) scale(.99); }
+	to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 782px) {
+	.ai-scribe-notification-centre {
+		top: max(62px, calc(env(safe-area-inset-top) + 12px));
+		width: min(680px, calc(100vw - 24px));
+		max-height: calc(100vh - 78px);
+	}
+
+	.ai-scribe-notification {
+		grid-template-columns: 30px minmax(0, 1fr) 32px;
+		gap: 9px;
+		padding: 13px 12px;
+	}
+
+	.ai-scribe-notification-icon {
+		width: 28px;
+		height: 28px;
+		font-size: 16px;
+	}
+
+	.ai-scribe-notification-close {
+		width: 32px;
+		height: 32px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ai-scribe-notification {
+		animation: none;
+	}
+}
