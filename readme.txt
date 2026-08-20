@@ -5,7 +5,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: opace-ai-prompt-library-api-hub
-Stable tag: 3.2.26
+Stable tag: 3.2.27
 License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://opace.agency/get-in-touch
@@ -267,6 +267,10 @@ Only if you opt in. Choose the delete-on-uninstall setting before deleting the p
 8. Evaluate with responsive summary cards, measured structural evidence and clearly labelled editorial checks.
 
 == Changelog ==
+
+= 3.2.27 =
+* Fixed: an untouched legacy GPT-4o Mini seed now follows Opace AI Hub's current provider default; explicitly saved model choices remain unchanged.
+* Improved: fresh installs no longer persist a hard-coded text-model seed before the Hub has selected from the account's live models.
 
 = 3.2.26 =
 * Fixed: generation now detects Opace AI Hub at request time, so the renamed `opace-ai-prompt-library-api-hub` folder can load after AI Scribe without producing a false "plugin is not active" error.

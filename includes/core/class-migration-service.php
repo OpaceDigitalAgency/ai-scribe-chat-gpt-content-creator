@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class AI_Scribe_Migration_Service {
 
 	const MIGRATED_OPTION   = 'ai_scribe_v3_migrated';
-	const MIGRATION_VERSION = '3.0.10';
+	const MIGRATION_VERSION = '3.0.11';
 
 	/**
 	 * Whether the one-time migration found genuine 2.x data ('yes'/'no').
@@ -636,12 +636,12 @@ Does the article provide an original, interesting and engaging perspective on th
 	/**
 	 * ab_gpt_ai_engine_settings: fill sampling defaults; retire models
 	 * that no longer exist upstream (the 2.6.2 silent Claude remap and
-	 * stale ids are gone — a retired id is replaced with the current
-	 * budget default and the original kept for reference).
+	 * stale ids are gone. An untouched legacy gpt-4o-mini seed follows the
+	 * Hub default, while an explicitly saved model remains untouched.
 	 */
 	private static function migrate_engine_settings() {
 		$defaults = array(
-			'model'            => 'gpt-4o-mini',
+			'model'            => '',
 			'temp'             => 0.5,
 			'top_p'            => 0.5,
 			'freq_pent'        => 0.2,
@@ -662,15 +662,34 @@ Does the article provide an original, interesting and engaging perspective on th
 			// (the §3.4 remap); the id itself never existed upstream.
 			'claude-3-5-sonnet-20250514' => 'claude-sonnet-4-5',
 		);
+		$remap_from = '';
 		if ( isset( $merged['model'], $retired_models[ $merged['model'] ] ) ) {
-			$merged['model_pre_v3'] = $merged['model'];
-			$merged['model']        = $retired_models[ $merged['model'] ];
+			$remap_from      = $merged['model'];
+			$merged['model'] = $retired_models[ $merged['model'] ];
+		}
+
+		// Versions before 3.2.27 wrote gpt-4o-mini into the grouped option
+		// even on a fresh install. The individual ab_model option is created
+		// only when a person saves the model picker, so its absence lets us
+		// distinguish that seed from an intentional GPT-4o Mini choice.
+		if ( 'gpt-4o-mini' === $merged['model'] && false === get_option( 'ab_model', false ) ) {
+			$hub              = get_option( 'ai_core_settings', array() );
+			$provider         = is_array( $hub ) && ! empty( $hub['default_provider'] ) ? (string) $hub['default_provider'] : '';
+			$hub_model        = is_array( $hub ) && isset( $hub['provider_models'][ $provider ] ) ? (string) $hub['provider_models'][ $provider ] : '';
+			if ( '' !== $hub_model ) {
+				$remap_from      = $remap_from ?: $merged['model'];
+				$merged['model'] = $hub_model;
+			}
+		}
+
+		if ( '' !== $remap_from && $remap_from !== $merged['model'] ) {
+			$merged['model_pre_v3'] = $remap_from;
 			// §15.1: the remap must be visible, never silent. Rendered as a
 			// dismissible admin notice by AI_Scribe_Onboarding_Notice.
 			update_option(
 				self::REMAP_NOTICE_OPTION,
 				array(
-					'from' => $merged['model_pre_v3'],
+					'from' => $remap_from,
 					'to'   => $merged['model'],
 				),
 				false
