@@ -544,7 +544,7 @@ class AI_Scribe_Generation_Service {
 		);
 		$site_host = '';
 		$parse_url = function ( $url, $component ) {
-			return function_exists( 'wp_parse_url' ) ? wp_parse_url( $url, $component ) : parse_url( $url, $component );
+			return wp_parse_url( $url, $component );
 		};
 		if ( function_exists( 'home_url' ) ) {
 			$site_host = strtolower( (string) $parse_url( home_url( '/' ), PHP_URL_HOST ) );

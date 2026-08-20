@@ -2,10 +2,10 @@
 Contributors: opacewebdesign
 Tags: AI Writer, Content Generator, Content Creator, AI, SEO
 Requires at least: 6.5
-Tested up to: 7.0.4
+Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: opace-ai-prompt-library-api-hub
-Stable tag: 3.2.24
+Stable tag: 3.2.25
 License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://opace.agency/get-in-touch
@@ -268,8 +268,13 @@ Only if you opt in. Choose the delete-on-uninstall setting before deleting the p
 
 == Changelog ==
 
+= 3.2.25 =
+* Fixed: AI Scribe now recognises an active Opace AI Hub regardless of plugin load order, including network activation on multisite.
+* Compatibility: Tested with WordPress 7.1 and PHP 8.3.
+
 = 3.2.24 =
 * Changed: the required hub plugin was renamed during WordPress.org review to Opace AI Prompt Library & API Integration Hub for OpenAI, Claude & Gemini; the dependency slug, text-domain detection and all references now use `opace-ai-prompt-library-api-hub`.
+* Compatibility: tested up to WordPress 7.1.
 
 = 3.2.23 =
 * Fixed: the required Opace AI Hub slug, text-domain detection and one-click dependency route now match `opace-ai-prompt-library-api-hub`, the permanent WordPress.org submission slug.

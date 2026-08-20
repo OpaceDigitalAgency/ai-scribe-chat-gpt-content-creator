@@ -93,7 +93,8 @@ class AI_Scribe_Hub_Prompt_Reader {
 	 * @return bool
 	 */
 	public static function hub_active() {
-		return function_exists( 'ai_core' ) || class_exists( 'AI_Core' );
+		return class_exists( 'AI_Scribe_Onboarding_Notice' )
+			&& AI_Scribe_Onboarding_Notice::hub_active();
 	}
 
 	/**

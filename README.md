@@ -7,28 +7,28 @@
 <p align="center"><strong>SEO content creator and humaniser for WordPress, powered by OpenAI, Anthropic and Google Gemini.</strong></p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.2.23-087abd" alt="AI Scribe version 3.2.23">
+  <img src="https://img.shields.io/badge/version-3.2.25-087abd" alt="AI Scribe version 3.2.25">
   <img src="https://img.shields.io/badge/WordPress-6.5%2B-21759b" alt="Requires WordPress 6.5 or newer">
-  <img src="https://img.shields.io/badge/tested%20up%20to-WordPress%207.0.4-21759b" alt="Tested up to WordPress 7.0.4">
+  <img src="https://img.shields.io/badge/tested%20up%20to-WordPress%207.1-21759b" alt="Tested up to WordPress 7.1">
   <img src="https://img.shields.io/badge/PHP-7.4%2B-777bb4" alt="Requires PHP 7.4 or newer">
   <img src="https://img.shields.io/badge/licence-GPL--3.0-2ea44f" alt="GPL 3.0 licence">
 </p>
 
 <p align="center">
   <a href="https://wordpress.org/plugins/ai-scribe-the-chatgpt-powered-seo-content-creation-wizard/">WordPress.org</a>
-  · <a href="https://github.com/OpaceDigitalAgency/ai-core-integration-hub-prompt-engine-wordpress-plugin">Required Opace AI Hub</a>
+  · <a href="https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin">Required Opace AI Hub</a>
   · <a href="https://github.com/OpaceDigitalAgency/ai-scribe-chat-gpt-content-creator/issues">Issues</a>
   · <a href="SECURITY.md">Security</a>
   · <a href="https://github.com/OpaceDigitalAgency">More from Opace</a>
 </p>
 
-> **AI Scribe + [Opace AI Hub](https://github.com/OpaceDigitalAgency/ai-core-integration-hub-prompt-engine-wordpress-plugin) are one companion WordPress AI stack, installed as two separate plugins.**
+> **AI Scribe + [Opace AI Hub](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin) are one companion WordPress AI stack, installed as two separate plugins.**
 > AI Scribe provides the writing and publishing workflow; Opace AI Hub provides encrypted provider keys,
 > live model discovery, shared prompts, usage and cost reporting. Install
-> [Opace AI Hub](https://github.com/OpaceDigitalAgency/ai-core-integration-hub-prompt-engine-wordpress-plugin/releases/latest)
+> [Opace AI Hub](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin/releases/latest)
 > first, then AI Scribe. They remain separate packages so Opace AI Hub can also support other compatible plugins.
 
-**Compatibility:** requires WordPress 6.5 or newer and has been tested up to **WordPress 7.0.4**.
+**Compatibility:** requires WordPress 6.5 or newer and has been tested up to **WordPress 7.1**.
 
 AI Scribe writes long-form, search-optimised articles inside WordPress. An eleven-step wizard takes an
 idea through titles, keywords, outline, body, conclusion, Q&A and SEO meta; Express mode starts with one
@@ -251,7 +251,7 @@ retained-data reinstalls fill missing settings only and never overwrite a valid 
 
 ## Installation
 
-1. Install and activate the verified [**Opace AI Hub** package](https://github.com/OpaceDigitalAgency/ai-core-integration-hub-prompt-engine-wordpress-plugin/releases/latest).
+1. Install and activate the verified [**Opace AI Hub** package](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin/releases/latest).
 2. In Opace AI Hub → Settings, add a key for at least one provider and press Test.
 3. Install and activate [**AI Scribe**](https://github.com/OpaceDigitalAgency/ai-scribe-chat-gpt-content-creator), following the current repository instructions.
 4. AI Scribe → Settings → Providers & Model: confirm the status chip, pick a model, then open
@@ -265,7 +265,7 @@ during that migration; edited prompts are **copied** into Opace AI Hub's library
 
 ## Companion plugin
 
-- [**Opace AI Hub**](https://github.com/OpaceDigitalAgency/ai-core-integration-hub-prompt-engine-wordpress-plugin) — the required provider, model, prompt, usage and pricing hub.
+- [**Opace AI Hub**](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin) — the required provider, model, prompt, usage and pricing hub.
 - [**AI Scribe**](https://github.com/OpaceDigitalAgency/ai-scribe-chat-gpt-content-creator) — the article creation, SEO, image, review and WordPress publishing workflow.
 
 The projects are developed and released together as a companion stack, but installed from separate

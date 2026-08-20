@@ -589,7 +589,10 @@ foreach ( $ai_scribe_steps as $ai_scribe_n => $ai_scribe_def ) {
 											<input type="text" class="form-control" data-publishing-tags autocomplete="off" placeholder="<?php esc_attr_e( 'Comma-separated', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>">
 										</label>
 									</div>
-									<p class="publishing-author"><?php echo esc_html( sprintf( __( 'Author: %s (your current WordPress account)', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), wp_get_current_user()->display_name ) ); ?></p>
+									<p class="publishing-author"><?php
+										/* translators: %s is the current WordPress user's display name. */
+										echo esc_html( sprintf( __( 'Author: %s (your current WordPress account)', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), wp_get_current_user()->display_name ) );
+									?></p>
 									<p class="publishing-assignment-result" data-publishing-result role="status" aria-live="polite"></p>
 								</section>
 								<?php ai_scribe_render_save_status( 'review' ); ?>

@@ -36,6 +36,9 @@ class AI_Scribe_Onboarding_Notice {
 	/** wordpress.org slug, and what the Requires Plugins header resolves against. */
 	const HUB_SLUG = 'opace-ai-prompt-library-api-hub';
 
+	/** Canonical plugin file for the required hub. */
+	const HUB_PLUGIN_FILE = 'opace-ai-prompt-library-api-hub/opace-ai-prompt-library-api-hub.php';
+
 	/** Where a user without the hub can get it. */
 	const HUB_HOME_URL = 'https://opace.agency/services/web-design/wordpress-development/';
 
@@ -86,7 +89,23 @@ class AI_Scribe_Onboarding_Notice {
 	 * @return bool
 	 */
 	public static function hub_active() {
-		return function_exists( 'ai_core' ) || class_exists( 'AI_Core' );
+		if ( function_exists( 'ai_core' ) || class_exists( 'AI_Core' ) ) {
+			return true;
+		}
+
+		// AI Scribe's directory can sort before the hub in active_plugins. In
+		// that load order the hub is active but its API has not been defined yet.
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+		if ( in_array( self::HUB_PLUGIN_FILE, $active_plugins, true ) ) {
+			return true;
+		}
+
+		if ( function_exists( 'is_multisite' ) && is_multisite() && function_exists( 'get_site_option' ) ) {
+			$network_active = (array) get_site_option( 'active_sitewide_plugins', array() );
+			return isset( $network_active[ self::HUB_PLUGIN_FILE ] );
+		}
+
+		return false;
 	}
 
 	/**
