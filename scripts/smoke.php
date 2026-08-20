@@ -140,6 +140,15 @@ try {
         $missing_hub = $adapter->generate_text('smoke-model', [['role' => 'user', 'content' => 'No request must be sent.']]);
         $checks['adapter_fails_closed'] = is_wp_error($missing_hub)
             && $missing_hub->get_error_code() === 'ai_core_hub_missing';
+
+        // Regression: the renamed Hub directory sorts after AI Scribe, so the
+        // adapter can be constructed before WordPress loads the Hub's ai_core()
+        // API. It must detect the API dynamically rather than cache "missing".
+        eval('namespace AICore { class AICore { public static function getProviderStatus() { return array(); } } }');
+        eval('function ai_core() { return new class { public function is_configured() { return true; } }; }');
+        $require_hub = new ReflectionMethod($adapter, 'require_configured_hub');
+        $checks['adapter_detects_late_hub'] = true === $require_hub->invoke($adapter);
+        $checks['health_detects_late_hub'] = true === $adapter->get_health_status()['initialized'];
     }
 } catch (Throwable $e) {
     $failures[] = 'Container/adapter check failed: ' . $e->getMessage();

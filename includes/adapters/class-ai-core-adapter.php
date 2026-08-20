@@ -47,13 +47,6 @@ class AI_Scribe_AI_Core_Adapter {
 	private $config;
 
 	/**
-	 * Whether the Opace AI Hub plugin (the only send path) is active.
-	 *
-	 * @var bool
-	 */
-	private $initialized = false;
-
-	/**
 	 * Constructor
 	 *
 	 * @param AI_Scribe_Logger $logger Logger instance
@@ -69,11 +62,6 @@ class AI_Scribe_AI_Core_Adapter {
 		// the shared library itself: a second AICore::init here would clobber
 		// the hub's config, and a direct sendTextRequest would bypass its
 		// stats pipeline.
-		$this->initialized = function_exists( 'ai_core' );
-		if ( ! $this->initialized ) {
-			$this->logger->error( 'Opace AI Hub plugin not active; AI-Scribe cannot send requests' );
-		}
-
 		// Long-form generations (Express, body step) can exceed the WP HTTP
 		// default/HttpClient 120s on slower models — seen live as "cURL
 		// error 28" on Anthropic Express. Raise the timeout for provider
@@ -115,10 +103,6 @@ class AI_Scribe_AI_Core_Adapter {
 	 */
 	public function generate_text( $model, array $messages, array $parameters = array() ) {
 		try {
-			if ( ! $this->initialized ) {
-				return new WP_Error( 'ai_core_hub_missing', 'The Opace AI Hub plugin is not active. AI-Scribe sends every request through Opace AI Hub — please activate it.' );
-			}
-
 			$this->logger->debug(
 				"Generating text with model: {$model}",
 				array(
@@ -253,10 +237,6 @@ class AI_Scribe_AI_Core_Adapter {
 	 */
 	public function generate_image( $prompt, array $options = array() ) {
 		try {
-			if ( ! $this->initialized ) {
-				return new WP_Error( 'ai_core_hub_missing', 'The Opace AI Hub plugin is not active. AI-Scribe sends every request through Opace AI Hub — please activate it.' );
-			}
-
 			$model    = $options['model'] ?? 'gpt-image-1';
 			$provider = $options['provider'] ?? 'openai';
 
@@ -461,9 +441,10 @@ class AI_Scribe_AI_Core_Adapter {
 	 * @return array Health status
 	 */
 	public function get_health_status() {
+		$hub_loaded = function_exists( 'ai_core' );
 		$status = array(
 			'ai_core_loaded'      => class_exists( 'AICore\AICore' ),
-			'initialized'         => $this->initialized,
+			'initialized'         => $hub_loaded,
 			'providers_available' => array(
 				'openai'       => class_exists( 'AICore\Providers\OpenAIProvider' ),
 				'anthropic'    => class_exists( 'AICore\Providers\AnthropicProvider' ),
@@ -480,7 +461,7 @@ class AI_Scribe_AI_Core_Adapter {
 			$status['api_keys_configured'][ $provider ] = $validation['configured'];
 		}
 
-		if ( $this->initialized ) {
+		if ( $hub_loaded ) {
 			try {
 				$status['provider_status'] = AICore\AICore::getProviderStatus();
 			} catch ( Exception $e ) {

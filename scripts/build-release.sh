@@ -20,6 +20,12 @@ if [[ -z "$VERSION" ]]; then
 	exit 1
 fi
 
+CONST_VERSION="$(sed -n "s/.*define( 'AI_SCRIBE_VERSION', '\([^']*\)' ).*/\1/p" "$REPO_ROOT/article_builder.php" | head -1)"
+if [[ "$CONST_VERSION" != "$VERSION" ]]; then
+	echo "ERROR: AI_SCRIBE_VERSION ($CONST_VERSION) != plugin version ($VERSION)" >&2
+	exit 1
+fi
+
 STABLE_TAG="$(sed -n 's/^Stable tag:[[:space:]]*//p' "$REPO_ROOT/readme.txt" | head -1 | tr -d '[:space:]')"
 if [[ "$STABLE_TAG" != "$VERSION" ]]; then
 	echo "ERROR: readme.txt stable tag ($STABLE_TAG) != plugin version ($VERSION)" >&2
