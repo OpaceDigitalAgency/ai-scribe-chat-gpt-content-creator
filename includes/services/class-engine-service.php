@@ -121,7 +121,9 @@ class AI_Scribe_Engine_Service extends AI_Scribe_Base_Service {
 	 */
 	public function handle_engine_request() {
 		// Verify nonce using Security Service
-		if ( ! $this->security_service->verify_nonce( $_POST['security'] ?? '', 'ai_scribe_nonce' ) ) {
+		// phpcs:disable WordPress.Security.NonceVerification -- The custom Security Service performs the equivalent wp_verify_nonce() check.
+		$nonce = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
+		if ( ! $this->security_service->verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
 			wp_send_json_error(
 				array(
 					'msg'           => 'Security nonce is missing or invalid. Please refresh the page.',
@@ -132,7 +134,9 @@ class AI_Scribe_Engine_Service extends AI_Scribe_Base_Service {
 		}
 
 		// Sanitize and validate input data
-		$request_data = $this->sanitize_request_data( $_POST );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- The custom Security Service verified the nonce immediately above.
+		$request_data = $this->sanitize_request_data( wp_unslash( $_POST ) );
+		// phpcs:enable WordPress.Security.NonceVerification
 
 		if ( is_wp_error( $request_data ) ) {
 			wp_send_json_error(

@@ -663,9 +663,11 @@ Does the article provide an original, interesting and engaging perspective on th
 			'claude-3-5-sonnet-20250514' => 'claude-sonnet-4-5',
 		);
 		$remap_from = '';
+		$remap_reason = '';
 		if ( isset( $merged['model'], $retired_models[ $merged['model'] ] ) ) {
 			$remap_from      = $merged['model'];
 			$merged['model'] = $retired_models[ $merged['model'] ];
+			$remap_reason    = 'retired';
 		}
 
 		// Versions before 3.2.27 wrote gpt-4o-mini into the grouped option
@@ -679,6 +681,7 @@ Does the article provide an original, interesting and engaging perspective on th
 			if ( '' !== $hub_model ) {
 				$remap_from      = $remap_from ?: $merged['model'];
 				$merged['model'] = $hub_model;
+				$remap_reason    = $remap_reason ?: 'legacy_default';
 			}
 		}
 
@@ -689,8 +692,9 @@ Does the article provide an original, interesting and engaging perspective on th
 			update_option(
 				self::REMAP_NOTICE_OPTION,
 				array(
-					'from' => $remap_from,
-					'to'   => $merged['model'],
+					'from'   => $remap_from,
+					'to'     => $merged['model'],
+					'reason' => $remap_reason ?: 'retired',
 				),
 				false
 			);

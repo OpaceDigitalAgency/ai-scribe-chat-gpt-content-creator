@@ -3,3 +3,16 @@ vendor/
 *.zip
 .DS_Store
 composer.phar
+
+# Generated Playwright artefacts (regenerated on every run)
+tests/e2e/results/
+tests/e2e/report/
+
+# Live E2E programme — session state is a bearer credential, never commit it
+test/live/session/
+test/live/screenshots/
+test/live/results/
+test/live/downloads/
+test/live/upgrade/shots/
+test/live/
+tests/e2e/screenshots/

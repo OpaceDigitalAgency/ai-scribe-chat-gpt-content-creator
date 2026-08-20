@@ -227,6 +227,7 @@ class AI_Scribe_Logger {
 
 		// Write to WordPress error log if debug enabled
 		if ( $this->debug_enabled ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Explicitly gated by the plugin's debug setting.
 			error_log( $log_entry );
 		}
 
@@ -290,6 +291,7 @@ class AI_Scribe_Logger {
 		} catch ( Exception $e ) {
 			// Fallback to WordPress error log if file writing fails
 			if ( $this->debug_enabled ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Explicitly gated by the plugin's debug setting.
 				error_log( 'AI-Scribe Logger: Failed to write to log file - ' . $e->getMessage() );
 			}
 		}

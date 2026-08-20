@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Scribe v3.0 - Premium Article Builder</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23007bff' stroke-width='2'><path d='M12 20h9'/><path d='M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z'/></svg>">
+
+    <!-- Local font loading for WordPress compliance -->
+    <link href="assets/fonts/fonts.css" rel="stylesheet">
+
+    <!-- Local Font Awesome icons only - WordPress compliant -->
+    <link href="assets/icons/fontawesome.css" rel="stylesheet">
+    <script src="assets/icons/fontawesome.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="assets/icons/lucide.js"></script>
+
+    <!-- Quill.js WYSIWYG Editor -->
+    <link href="assets/editor/quill.snow.css" rel="stylesheet">
+    <script src="assets/editor/quill.js"></script>
+
+    <!-- Main styles -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+</head>
+<body class="ai-scribe-app">
+
+    <!-- Main Application Container -->
+    <div id="ai-scribe-root" class="app-container">
+
+        <!-- Full Width Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i data-lucide="edit-3"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>AI-Scribe</h1>
+                        <span class="version">v3.0</span>
+                    </div>
+                </div>
+
+                <div class="header-center">
+                    <div class="progress-container">
+                        <div class="progress-info">
+                            <span id="progress-text">Step 1 of 11 - Title Generation</span>
+                            <span id="progress-percentage">9%</span>
+                            <button class="btn btn-outline btn-reset" onclick="window.aiScribeApp?.resetApplication()">
+                                <i data-lucide="refresh-ccw"></i>
+                                Start Again
+                            </button>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cost-display">
+                    <div class="cost-header">
+                        <span class="cost-label-main">Estimated Cost</span>
+                    </div>
+                    <div class="cost-items">
+                        <div class="cost-item">
+                            <span class="cost-label">Total:</span>
+                            <span class="cost-value" id="header-total-cost">$0.15</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">Current:</span>
+                            <span class="cost-value" id="header-current-cost">$0.05</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Full Width Step Navigation -->
+        <nav class="step-navigation" id="step-navigation">
+            <div class="steps-container">
+                <div class="step active" data-step="1" onclick="window.aiScribeApp?.views.get('workflow')?.navigateToStep(1)">
+                    <div class="step-icon"><i data-lucide="type"></i></div>
+                    <span class="step-label">Title</span>
+                </div>
+                <div class="step" data-step="2" onclick="window.aiScribeApp?.views.get('workflow')?.navigateToStep(2)">
+                    <div class="step-icon"><i data-lucide="search"></i></div>
+                    <span class="step-label">Keywords</span>
+                </div>
+                <div class="step" data-step="3" onclick="window.aiScribeApp?.views.get('workflow')?.navigateToStep(3)">
+                    <div class="step-icon"><i data-lucide="list"></i></div>
+                    <span class="step-label">Outline</span>
+                </div>
+                <div class="step" data-step="4" onclick="window.aiScribeApp?.views.get('workflow')?.navigateToStep(4)">
+                    <div class="step-icon"><i data-lucide="play-circle"></i></div>
+                    <span class="step-label">Intro</span>
+                </div>
+                <div class="step" data-step="5" onclick="window.aiScribeApp?.views.get('workflow')?.navigateToStep(5)">
+                    <div class="step-icon"><i data-lucide="tag"></i></div>
+                    <span class="step-label">Tagline</span>
+                </div>
+                <div class="step" data-step="6" onclick="window.aiScribeApp?.views.get('workflow')?.navigateToStep(6)">
+                    <div class="step-icon"><i data-lucide="file-text"></i></div>
+                    <span class="step-label">Body</span>
+                </div>
+                <div class="step" data-step="7" onclick="window.aiScribeApp?.views.get('workflow')?.navigateToStep(7)">
+                    <div class="step-icon"><i data-lucide="check-circle"></i></div>
+                    <span class="step-label">Conclusion</span>
+                </div>
+                <div class="step" data-step="8" onclick="window.aiScribeApp?.views.get('workflow')?.navigateToStep(8)">
+                    <div class="step-icon"><i data-lucide="help-circle"></i></div>
+                    <span class="step-label">Q&A</span>
+                </div>
+                <div class="step" data-step="9" onclick="window.aiScribeApp?.views.get('workflow')?.navigateToStep(9)">
+                    <div class="step-icon"><i data-lucide="database"></i></div>
+                    <span class="step-label">SEO</span>
+                </div>
+                <div class="step" data-step="10" onclick="window.aiScribeApp?.views.get('workflow')?.navigateToStep(10)">
+                    <div class="step-icon"><i data-lucide="eye"></i></div>
+                    <span class="step-label">Review</span>
+                </div>
+                <div class="step" data-step="11" onclick="window.aiScribeApp?.views.get('workflow')?.navigateToStep(11)">
+                    <div class="step-icon"><i data-lucide="bar-chart-3"></i></div>
+                    <span class="step-label">Evaluate</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Two Column Layout -->
+        <div class="two-column-layout">
+
+            <!-- Left Column - Article Generation -->
+            <div class="main-panel">
+                <div class="workflow-container" id="workflow-container">
+
+                    <!-- Step 1: Title Generation -->
+                    <div class="step-content active" data-step="1">
+                        <div class="input-section">
+                            <div class="form-group">
+                                <label for="topic-input">Article Topic</label>
+                                <div class="input-with-button">
+                                    <input type="text" id="topic-input" class="form-control" placeholder="Enter your keyword or idea to begin...">
+                                    <button class="btn btn-primary generate-btn-inline" id="generate-titles-btn">
+                                        <i data-lucide="sparkles"></i>
+                                        Generate
+                                        <span class="loading-spinner hidden">
+                                            <i data-lucide="loader"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="results-section hidden" id="titles-results">
+                            <div class="options-grid" id="titles-options">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+
+                            <div class="results-actions">
+                                <button class="btn btn-outline generate-more-btn" data-step="1">
+                                    <i data-lucide="refresh-cw"></i>
+                                    Generate More
+                                </button>
+                                <button class="btn btn-primary next-step-btn" disabled>
+                                    Continue to Keywords
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Keyword Research -->
+                    <div class="step-content" data-step="2">
+                        <!-- Step Summary -->
+                        <div class="step-summary">
+                            <div class="summary-items">
+                                <div class="collapsible-summary">
+                                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                                        <span class="collapsible-title">View Previous Selections</span>
+                                        <i class="collapsible-toggle" data-lucide="chevron-down"></i>
+                                    </div>
+                                    <div class="collapsible-content">
+                                        <div class="collapsible-inner">
+                                            <div class="selection-grid" id="previous-selections-step2">
+                                                <!-- Will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="results-section hidden" id="keywords-results">
+                            <div class="keywords-grid" id="keywords-options">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+
+                            <div class="results-actions">
+                                <button class="btn btn-outline generate-more-btn" data-step="2">
+                                    <i data-lucide="refresh-cw"></i>
+                                    Generate More
+                                </button>
+                                <button class="btn btn-primary next-step-btn" disabled>
+                                    Continue to Outline
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Article Outline -->
+                    <div class="step-content" data-step="3">
+                        <!-- Step Summary -->
+                        <div class="step-summary">
+                            <div class="summary-items">
+                                <div class="collapsible-summary">
+                                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                                        <span class="collapsible-title">View Previous Selections</span>
+                                        <i class="collapsible-toggle" data-lucide="chevron-down"></i>
+                                    </div>
+                                    <div class="collapsible-content">
+                                        <div class="collapsible-inner">
+                                            <div class="selection-grid" id="previous-selections-step3">
+                                                <!-- Will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="results-section hidden" id="outline-results">
+                            <div class="outline-options" id="outline-options">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+
+                            <div class="results-actions">
+                                <button class="btn btn-outline generate-more-btn" data-step="3">
+                                    <i data-lucide="refresh-cw"></i>
+                                    Generate More
+                                </button>
+                                <button class="btn btn-primary next-step-btn" disabled>
+                                    Continue to Introduction
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Introduction -->
+                    <div class="step-content" data-step="4">
+                        <!-- Step Summary -->
+                        <div class="step-summary">
+                            <div class="summary-items">
+                                <div class="collapsible-summary">
+                                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                                        <span class="collapsible-title">View Previous Selections</span>
+                                        <i class="collapsible-toggle" data-lucide="chevron-down"></i>
+                                    </div>
+                                    <div class="collapsible-content">
+                                        <div class="collapsible-inner">
+                                            <div class="selection-grid" id="previous-selections-step4">
+                                                <!-- Will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="results-section hidden" id="introduction-results">
+                            <div class="options-grid" id="introduction-options">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+
+                            <div class="results-actions">
+                                <button class="btn btn-outline generate-more-btn" data-step="4">
+                                    <i data-lucide="refresh-cw"></i>
+                                    Generate More
+                                </button>
+                                <button class="btn btn-primary next-step-btn" disabled>
+                                    Continue to Tagline
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Tagline -->
+                    <div class="step-content" data-step="5">
+                        <!-- Step Summary -->
+                        <div class="step-summary">
+                            <div class="summary-items">
+                                <div class="collapsible-summary">
+                                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                                        <span class="collapsible-title">View Previous Selections</span>
+                                        <i class="collapsible-toggle" data-lucide="chevron-down"></i>
+                                    </div>
+                                    <div class="collapsible-content">
+                                        <div class="collapsible-inner">
+                                            <div class="selection-grid" id="previous-selections-step5">
+                                                <!-- Will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="results-section hidden" id="tagline-results">
+                            <div class="options-grid" id="tagline-options">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+
+                            <div class="results-actions">
+                                <button class="btn btn-outline generate-more-btn" data-step="5">
+                                    <i data-lucide="refresh-cw"></i>
+                                    Generate More
+                                </button>
+                                <button class="btn btn-primary next-step-btn">
+                                    Continue to Article Body
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Article Body -->
+                    <div class="step-content" data-step="6">
+                        <!-- Step Summary -->
+                        <div class="step-summary">
+                            <div class="summary-items">
+                                <div class="collapsible-summary">
+                                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                                        <span class="collapsible-title">View Previous Selections</span>
+                                        <i class="collapsible-toggle" data-lucide="chevron-down"></i>
+                                    </div>
+                                    <div class="collapsible-content">
+                                        <div class="collapsible-inner">
+                                            <div class="selection-grid" id="previous-selections-step6">
+                                                <!-- Will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="results-section hidden" id="body-results">
+                            <div class="editor-with-gallery">
+                                <div class="image-gallery">
+                                    <div class="image-gallery-header">
+                                        <h4 class="image-gallery-title">
+                                            <i data-lucide="image"></i>
+                                            Available Images
+                                        </h4>
+                                        <span class="image-gallery-subtitle">Drag anywhere in the article to insert</span>
+                                    </div>
+                                    <div class="image-gallery-grid" id="image-gallery">
+                                        <!-- Will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                                <div class="quill-editor-container">
+                                    <div id="body-quill-editor" class="quill-editor"></div>
+                                    <div class="editor-help-text">
+                                        <i data-lucide="info"></i>
+                                        <span>Tip: Drag images from the left panel and drop them anywhere in your article</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="results-actions">
+                                <button class="btn btn-outline" onclick="window.aiScribeApp?.views.get('workflow')?.generateContent(6, 'body')">
+                                    <i data-lucide="refresh-cw"></i>
+                                    Regenerate
+                                </button>
+                                <button class="btn btn-primary next-step-btn">
+                                    Continue to Conclusion
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 7: Conclusion -->
+                    <div class="step-content" data-step="7">
+                        <!-- Step Summary -->
+                        <div class="step-summary">
+                            <div class="summary-items">
+                                <div class="collapsible-summary">
+                                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                                        <span class="collapsible-title">View Previous Selections</span>
+                                        <i class="collapsible-toggle" data-lucide="chevron-down"></i>
+                                    </div>
+                                    <div class="collapsible-content">
+                                        <div class="collapsible-inner">
+                                            <div class="selection-grid" id="previous-selections-step7">
+                                                <!-- Will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="results-section hidden" id="conclusion-results">
+                            <div class="options-grid" id="conclusion-options">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+
+                            <div class="results-actions">
+                                <button class="btn btn-outline generate-more-btn" data-step="7">
+                                    <i data-lucide="refresh-cw"></i>
+                                    Generate More
+                                </button>
+                                <button class="btn btn-primary next-step-btn" disabled>
+                                    Continue to Q&A
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 8: Q&A -->
+                    <div class="step-content" data-step="8">
+                        <!-- Step Summary -->
+                        <div class="step-summary">
+                            <div class="summary-items">
+                                <div class="collapsible-summary">
+                                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                                        <span class="collapsible-title">View Previous Selections</span>
+                                        <i class="collapsible-toggle" data-lucide="chevron-down"></i>
+                                    </div>
+                                    <div class="collapsible-content">
+                                        <div class="collapsible-inner">
+                                            <div class="selection-grid" id="previous-selections-step8">
+                                                <!-- Will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="results-section hidden" id="qa-results">
+                            <div class="qa-options" id="qa-options">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+
+                            <div class="results-actions">
+                                <button class="btn btn-outline" id="regenerate-qa-btn">
+                                    <i data-lucide="refresh-cw"></i>
+                                    Regenerate
+                                </button>
+                                <button class="btn btn-primary next-step-btn" disabled>
+                                    Continue to SEO
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 9: SEO -->
+                    <div class="step-content" data-step="9">
+                        <!-- Step Summary -->
+                        <div class="step-summary">
+                            <div class="summary-items">
+                                <div class="collapsible-summary">
+                                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                                        <span class="collapsible-title">View Previous Selections</span>
+                                        <i class="collapsible-toggle" data-lucide="chevron-down"></i>
+                                    </div>
+                                    <div class="collapsible-content">
+                                        <div class="collapsible-inner">
+                                            <div class="selection-grid" id="previous-selections-step9">
+                                                <!-- Will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="results-section hidden" id="meta-results">
+                            <div class="seo-combined-input" onclick="selectSEOOption(this)">
+                                <div class="checkbox">
+                                    <i data-lucide="check" style="display: none;"></i>
+                                </div>
+                                <div class="seo-field">
+                                    <label for="meta-title">Meta Title</label>
+                                    <input type="text" id="meta-title" placeholder="Generated meta title...">
+                                </div>
+                                <div class="seo-field">
+                                    <label for="meta-description">Meta Description</label>
+                                    <textarea id="meta-description" rows="3" placeholder="Generated meta description..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="results-actions">
+                                <button class="btn btn-outline" id="regenerate-meta-btn">
+                                    <i data-lucide="refresh-cw"></i>
+                                    Regenerate
+                                </button>
+                                <button class="btn btn-primary next-step-btn">
+                                    Continue to Review
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 10: Review -->
+                    <div class="step-content" data-step="10">
+                        <div class="review-content">
+                            <div class="review-template">
+                                <div class="review-header">
+                                    <h3>Article Review & Optimization</h3>
+                                    <p>Review your completed article and make final edits</p>
+                                </div>
+
+                                <div class="editor-with-gallery">
+                                    <div class="image-gallery">
+                                        <div class="image-gallery-header">
+                                            <h4 class="image-gallery-title">
+                                                <i data-lucide="image"></i>
+                                                Available Images
+                                            </h4>
+                                            <span class="image-gallery-subtitle">Drag anywhere in the article to insert</span>
+                                        </div>
+                                        <div class="image-gallery-grid" id="review-image-gallery">
+                                            <!-- Will be populated by JavaScript -->
+                                        </div>
+                                    </div>
+                                    <div class="quill-editor-container">
+                                        <div id="review-quill-editor" class="quill-editor"></div>
+                                        <div class="editor-help-text">
+                                            <i data-lucide="info"></i>
+                                            <span>Review and edit your complete article. Drag images from the left panel to insert them.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="review-actions">
+                                <button class="btn btn-outline btn-save" id="save-draft-btn">
+                                    <i data-lucide="save"></i>
+                                    Save as Draft
+                                </button>
+                                <button class="btn btn-outline btn-save" id="save-post-btn">
+                                    <i data-lucide="file-plus"></i>
+                                    Save as Post
+                                </button>
+                                <button class="btn btn-primary next-step-btn">
+                                    Continue to Evaluate
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 11: Evaluate -->
+                    <div class="step-content" data-step="11">
+                        <div class="evaluation-content">
+                            <div class="evaluation-header">
+                                <h3>Article Quality Analysis</h3>
+                                <p>Review the comprehensive analysis of your article's quality and optimization</p>
+                            </div>
+
+                            <div class="evaluation-table-container">
+                                <table class="evaluation-table" id="evaluation-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th>Recommendation</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="evaluation-rows">
+                                        <!-- Will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="results-actions">
+                                <button class="btn btn-primary" id="complete-btn">
+                                    <i data-lucide="check-circle"></i>
+                                    Complete Project
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+                <!-- Standalone Notification Box -->
+                <div class="standalone-notification" id="standalone-notification">
+                    <div class="notification-header">
+                        <span class="notification-badge">NEW</span>
+                        <span class="notification-content">
+                            <strong>v2.6:</strong> GPT-4.5, OpenAI o3 & Claude Sonnet 4/Opus 4 support
+                        </span>
+                        <button class="notification-close" onclick="document.getElementById('standalone-notification').style.display='none'">
+                            <i data-lucide="x"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Column - Settings Panel -->
+                <div class="settings-panel">
+                    <div class="panel-header">
+                        <h3>Settings</h3>
+                    </div>
+
+                    <div class="panel-content">
+                        <div class="settings-section">
+                            <h4>SELECTED MODEL</h4>
+                            <div class="model-info">
+                                <div class="model-details">
+                                    Provider: OpenAI | Text Model: GPT-4o | Image Model: GPT-IMAGE-1 ✓ Enabled
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h4>OPTIONS & PROMPTS</h4>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Language</label>
+                                <select class="form-control">
+                                    <option>English</option>
+                                    <option>Spanish</option>
+                                    <option>French</option>
+                                    <option>German</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Headings</label>
+                                <select class="form-control">
+                                    <option>H2, H3, H4</option>
+                                    <option>H1, H2, H3</option>
+                                    <option>Custom</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Prompts</label>
+                            <textarea class="form-control" rows="6" placeholder="Current prompt will be displayed here...">You are an expert content writer specializing in creating engaging, SEO-optimized articles. Your task is to generate high-quality content that is both informative and engaging for the target audience. Follow these guidelines:
+
+1. Write in a professional yet conversational tone
+2. Include relevant keywords naturally throughout the content
+3. Structure content with clear headings and subheadings
+4. Provide actionable insights and practical advice
+5. Maintain reader engagement throughout the article</textarea>
+                        </div>
+
+                        <button class="btn btn-primary btn-sm">Update Settings or Prompt</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="fullscreen-loading-overlay" id="fullscreen-loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <i data-lucide="loader"></i>
+        </div>
+        <div class="loading-message">
+            <p id="loading-message-text">Generating content...</p>
+            <div class="loading-progress">
+                <div class="loading-progress-bar" id="loading-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global JavaScript Functions -->
+    <script>
+        // Global function for collapsible functionality
+        function toggleCollapsible(header) {
+            const content = header.nextElementSibling;
+            const isExpanded = header.classList.contains('expanded');
+
+            if (isExpanded) {
+                header.classList.remove('expanded');
+                content.classList.remove('expanded');
+            } else {
+                header.classList.add('expanded');
+                content.classList.add('expanded');
+            }
+
+            // Re-initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        // Global function for Q&A selection
+        function selectQAOption(element) {
+            // Remove selection from any other Q&A options
+            document.querySelectorAll('.qa-combined-input').forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            // Select this option
+            element.classList.add('selected');
+
+            // Enable next button
+            const nextBtn = document.querySelector('.step-content[data-step="8"] .next-step-btn');
+            if (nextBtn) {
+                nextBtn.disabled = false;
+            }
+
+            // Store selection in app state
+            if (window.aiScribeApp?.views.get('workflow')) {
+                const workflowView = window.aiScribeApp.views.get('workflow');
+                const stepData = workflowView.appState.getStateSlice('stepData') || {};
+                if (stepData[8] && stepData[8].generatedQA) {
+                    if (!stepData[8]) stepData[8] = {};
+                    stepData[8].selectedQA = stepData[8].generatedQA;
+                    workflowView.appState.setStateSlice('stepData', stepData);
+                    console.log('Q&A selection stored in app state');
+                }
+            }
+
+            // Re-initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        // Test function to generate Q&A immediately
+        function testQAGeneration() {
+            console.log('Testing Q&A generation...');
+            if (window.aiScribeApp?.views.get('workflow')) {
+                window.aiScribeApp.views.get('workflow').generateContent(8, 'qa');
+            } else {
+                console.error('Workflow view not available');
+            }
+        }
+
+        // Global function for SEO selection
+        function selectSEOOption(element) {
+            // Remove selection from any other SEO options
+            document.querySelectorAll('.seo-combined-input').forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            // Select this option
+            element.classList.add('selected');
+
+            // Enable next button
+            const nextBtn = document.querySelector('.step-content[data-step="9"] .next-step-btn');
+            if (nextBtn) {
+                nextBtn.disabled = false;
+            }
+
+            // Re-initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+    </script>
+
+    <!-- Enhanced Global Functions -->
+    <script>
+        // Enhanced save functions with loading states
+        async function saveToPost(button) {
+            const originalText = button.querySelector('.btn-text');
+            const spinner = button.querySelector('.btn-spinner');
+
+            // Show loading state
+            button.classList.add('btn-loading');
+            originalText.style.display = 'none';
+            spinner.style.display = 'flex';
+
+            try {
+                // Simulate save operation
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                // Success state
+                button.classList.remove('btn-loading');
+                button.classList.add('btn-success');
+                originalText.innerHTML = '<i data-lucide="check"></i> Saved to Post';
+                originalText.style.display = 'flex';
+                spinner.style.display = 'none';
+
+                // Show success notification
+                showSaveNotification('Article saved to WordPress post successfully!');
+
+                // Reset after delay
+                setTimeout(() => {
+                    button.classList.remove('btn-success');
+                    originalText.innerHTML = '<i data-lucide="save"></i> Save to Post';
+                }, 3000);
+
+            } catch (error) {
+                // Error state
+                button.classList.remove('btn-loading');
+                originalText.style.display = 'flex';
+                spinner.style.display = 'none';
+
+                // Show error notification
+                showSaveNotification('Error saving article. Please try again.', 'error');
+            }
+
+            // Re-initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        async function saveAsShortcode(button) {
+            const originalText = button.querySelector('.btn-text');
+            const spinner = button.querySelector('.btn-spinner');
+
+            // Show loading state
+            button.classList.add('btn-loading');
+            originalText.style.display = 'none';
+            spinner.style.display = 'flex';
+
+            try {
+                // Simulate save operation
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                // Success state
+                button.classList.remove('btn-loading');
+                button.classList.add('btn-success');
+                originalText.innerHTML = '<i data-lucide="check"></i> Saved as Shortcode';
+                originalText.style.display = 'flex';
+                spinner.style.display = 'none';
+
+                // Show success notification
+                showSaveNotification('Article saved as shortcode successfully!');
+
+                // Reset after delay
+                setTimeout(() => {
+                    button.classList.remove('btn-success');
+                    originalText.innerHTML = '<i data-lucide="code"></i> Save as Shortcode';
+                }, 3000);
+
+            } catch (error) {
+                // Error state
+                button.classList.remove('btn-loading');
+                originalText.style.display = 'flex';
+                spinner.style.display = 'none';
+
+                // Show error notification
+                showSaveNotification('Error saving shortcode. Please try again.', 'error');
+            }
+
+            // Re-initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        function showSaveNotification(message, type = 'success') {
+            // Remove existing notifications
+            const existing = document.querySelector('.success-notification');
+            if (existing) {
+                existing.remove();
+            }
+
+            // Create notification
+            const notification = document.createElement('div');
+            notification.className = `success-notification ${type === 'error' ? 'error-notification' : ''}`;
+            notification.innerHTML = `
+                <i data-lucide="${type === 'error' ? 'x-circle' : 'check-circle'}"></i>
+                <span>${message}</span>
+            `;
+
+            // Add to page
+            document.body.appendChild(notification);
+
+            // Initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // Show notification
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+
+            // Auto-hide notification
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 4000);
+        }
+
+        // Review tab switching
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.review-tab')) {
+                const clickedTab = e.target.closest('.review-tab');
+                const tabName = clickedTab.dataset.tab;
+
+                // Update tab buttons
+                document.querySelectorAll('.review-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                clickedTab.classList.add('active');
+
+                // Update tab content
+                document.querySelectorAll('.review-tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.querySelector(`.review-tab-content[data-tab="${tabName}"]`).classList.add('active');
+
+                // Initialize content if needed
+                if (tabName === 'suggestions' && window.aiScribeApp?.views.get('workflow')) {
+                    window.aiScribeApp.views.get('workflow').initializeSuggestions();
+                } else if (tabName === 'seo' && window.aiScribeApp?.views.get('workflow')) {
+                    window.aiScribeApp.views.get('workflow').initializeSEOAnalysis();
+                }
+
+                // Re-initialize icons
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }
+        });
+    </script>
+
+    <!-- JavaScript Files - Proper Dependency Order -->
+
+    <!-- Configuration (First) -->
+    <script src="assets/js/config/AppConfig.js"></script>
+
+    <!-- Core (Second) -->
+    <script src="assets/js/core/AppState.js"></script>
+
+    <!-- Models (Third - Required by Controllers and Views) -->
+    <script src="assets/js/models/WorkflowModel.js"></script>
+    <script src="assets/js/models/SettingsModel.js"></script>
+    <script src="assets/js/models/CostModel.js"></script>
+    <script src="assets/js/models/ContentModel.js"></script>
+    <script src="assets/js/models/NavigationModel.js"></script>
+    <script src="assets/js/models/EditorModel.js"></script>
+
+    <!-- Utilities (Fourth - Required by Controllers and Views) -->
+    <script src="assets/js/utils/MarkdownConverter.js"></script>
+    <script src="assets/js/utils/UIUtility.js"></script>
+    <script src="assets/js/utils/StateManager.js"></script>
+    <script src="assets/js/utils/DisplayManager.js"></script>
+    <script src="assets/js/utils/SelectionHandler.js"></script>
+    <script src="assets/js/utils/OptionRenderer.js"></script>
+
+    <!-- Services (Fifth - Required by Controllers) -->
+    <script src="assets/js/services/MockDataService.js"></script>
+
+    <!-- Controllers (Sixth - Required by Views) -->
+    <script src="assets/js/controllers/WorkflowController.js"></script>
+    <script src="assets/js/controllers/SettingsController.js"></script>
+    <script src="assets/js/controllers/ModalController.js"></script>
+    <script src="assets/js/controllers/ContentController.js"></script>
+    <script src="assets/js/controllers/NavigationController.js"></script>
+    <script src="assets/js/controllers/EditorController.js"></script>
+    <script src="assets/js/controllers/ImageController.js"></script>
+
+    <!-- Views (Seventh - Depend on Controllers, Models, and Utilities) -->
+    <script src="assets/js/views/WorkflowView.js"></script>
+    <script src="assets/js/views/SettingsView.js"></script>
+    <script src="assets/js/views/ModalView.js"></script>
+
+    <!-- Main Application (Last) -->
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

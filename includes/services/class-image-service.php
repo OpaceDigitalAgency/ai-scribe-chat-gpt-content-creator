@@ -270,6 +270,8 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 	 * @return void
 	 */
 	public function generate_image() {
+		// PHPCS cannot infer nonce verification performed by Security Service.
+		// phpcs:disable WordPress.Security.NonceVerification
 		// Add error handling to catch any fatal errors
 		try {
 			// 🚨 CENTRALIZED DEBUG CONTROL - Only log if debug mode is enabled
@@ -278,7 +280,8 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 			}
 
 			// Verify nonce using Security Service
-			if ( ! $this->security_service->verify_nonce( $_POST['security'] ?? '', 'ai_scribe_nonce' ) ) {
+			$nonce = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
+			if ( ! $this->security_service->verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
 				if ( AI_Scribe_Utility_Service::is_global_debug_enabled() ) {
 					ai_scribe_debug_log( '[AI_SCRIBE_IMAGE_DEBUG] Security check failed - invalid nonce' );
 				}
@@ -440,7 +443,11 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 			$response = $this->ai_core_adapter->generate_image( $prompt, $image_options );
 
 			if ( AI_Scribe_Utility_Service::is_global_debug_enabled() ) {
-				ai_scribe_debug_log( '[AI_SCRIBE_IMAGE_DEBUG] Opace AI Hub adapter returned: ' . print_r( $response, true ) );
+				$response_kind  = is_wp_error( $response ) ? 'WP_Error' : gettype( $response );
+				$response_count = is_array( $response ) && isset( $response['data'] ) && is_array( $response['data'] )
+					? count( $response['data'] )
+					: 0;
+				ai_scribe_debug_log( '[AI_SCRIBE_IMAGE_DEBUG] Opace AI Hub response type: ' . $response_kind . '; images: ' . $response_count );
 			}
 
 			if ( is_wp_error( $response ) ) {
@@ -574,7 +581,10 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 	 * @return void
 	 */
 	public function handle_generate_section_images() {
-		if ( ! $this->security_service->verify_nonce( $_POST['security'] ?? '', 'ai_scribe_nonce' ) ) {
+		// PHPCS cannot infer nonce verification performed by Security Service.
+		// phpcs:disable WordPress.Security.NonceVerification
+		$nonce = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
+		if ( ! $this->security_service->verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
 			wp_send_json_error(
 				array(
 					'msg'           => 'Security nonce is missing or invalid. Please refresh the page.',
@@ -588,6 +598,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON is decoded and every heading is sanitised immediately below.
 		$sections_raw = isset( $_POST['sections'] ) ? wp_unslash( (string) $_POST['sections'] ) : '';
 		$decoded      = json_decode( $sections_raw, true );
 		$sections     = array();
@@ -651,12 +662,6 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 				)
 			);
 			return;
-		}
-
-		// Batch mode: iterate every section server-side.
-		if ( function_exists( 'set_time_limit' ) ) {
-			// One provider call per section; give the batch room to finish.
-			@set_time_limit( 120 * $total ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		}
 
 		$images = array();
@@ -734,6 +739,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 	 * @return array<string,string>
 	 */
 	private function request_image_overrides() {
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON values are constrained to the allow-list below.
 		$raw = isset( $_POST['image_options'] ) ? json_decode( wp_unslash( (string) $_POST['image_options'] ), true ) : array();
 		if ( ! is_array( $raw ) ) {
 			return array();
@@ -1213,18 +1219,20 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 	 */
 	public function find_recent_image() {
 		// Verify nonce
-		if ( ! wp_verify_nonce( $_POST['security'], 'ai_scribe_nonce' ) ) {
+		$nonce = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
+		if ( ! wp_verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
 			wp_send_json_error( array( 'msg' => 'Security check failed' ) );
 			return;
 		}
 
-		$title = sanitize_text_field( wp_unslash( $_POST['title'] ) );
+		$title = isset( $_POST['title'] ) ? sanitize_text_field( wp_unslash( $_POST['title'] ) ) : '';
 		if ( empty( $title ) ) {
 			wp_send_json_error( array( 'msg' => 'No title provided' ) );
 			return;
 		}
 
 		// Search for recent images with matching title
+		// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- The query is limited to five recent image attachments and this metadata is the required lookup key.
 		$args = array(
 			'post_type'      => 'attachment',
 			'post_mime_type' => 'image',
@@ -1236,6 +1244,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 					'after' => '5 minutes ago',
 				),
 			),
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Limited to five image attachments from the last five minutes.
 			'meta_query'     => array(
 				'relation' => 'OR',
 				array(
@@ -1250,6 +1259,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 
 		if ( empty( $images ) ) {
 			// Fallback: search by post title
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Clearing the bounded first query before the title fallback.
 			$args['meta_query'] = array();
 			$args['s']          = $title;
 			$images             = get_posts( $args );

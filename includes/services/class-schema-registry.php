@@ -374,8 +374,10 @@ class AI_Scribe_Schema_Registry {
 			return $text;
 		}
 
-		// Nothing that looks like Markdown structure: leave it alone.
-		if ( ! preg_match( '/^\s{0,3}#{1,6}\s+\S/m', $text ) && ! preg_match( '/^\s{0,3}[-*+]\s+\S/m', $text ) ) {
+		// Plain text is left alone, but inline-only Markdown still needs parsing.
+		$has_block_markdown  = preg_match( '/^\s{0,3}#{1,6}\s+\S/m', $text ) || preg_match( '/^\s{0,3}[-*+]\s+\S/m', $text );
+		$has_inline_markdown = preg_match( '/\*\*(?=\S).+?(?<=\S)\*\*|(?<!\*)\*(?!\s).+?(?<!\s)\*(?!\*)|`[^`]+`|\[[^\]]+\]\(https?:\/\/[^\s)]+\)/s', $text );
+		if ( ! $has_block_markdown && ! $has_inline_markdown ) {
 			return $text;
 		}
 

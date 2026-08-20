@@ -1,0 +1,21 @@
+{
+	"name": "ai-scribe-v3-tests",
+	"version": "3.0.0",
+	"private": true,
+	"description": "E2E test harness for AI-Scribe v3 (wp-env + Playwright + mock AI provider).",
+	"scripts": {
+		"env:start": "wp-env start",
+		"env:stop": "wp-env stop",
+		"env:destroy": "wp-env destroy",
+		"env:logs": "wp-env logs",
+		"test:e2e": "playwright test",
+		"test:e2e:headed": "playwright test --headed",
+		"test:e2e:setup": "playwright test tests/e2e/setup.spec.ts",
+		"test:e2e:wizard": "playwright test tests/e2e/wizard.spec.ts",
+		"sync:run": "rsync -a --delete --exclude node_modules --exclude .git \"./\" \"$HOME/ai-scribe-v3-run/\" && echo 'Synced to ~/ai-scribe-v3-run — run wp-env from there (see tests/README.md)'"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.49.0",
+		"@wordpress/env": "^10.0.0"
+	}
+}

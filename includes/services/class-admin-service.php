@@ -54,6 +54,9 @@ class AI_Scribe_Admin_Service {
 	}
 
 	public function admin_enqueue_styles( $hook ) {
+		// The menu is visible throughout wp-admin, so its alignment rule must be too.
+		$this->enqueue_style( 'ai-scribe-admin-menu', 'assets/css/admin-menu.css' );
+
 		if ( strpos( $hook, 'ai-scribe' ) === false && strpos( $hook, 'ai_scribe' ) === false ) {
 			return;
 		}

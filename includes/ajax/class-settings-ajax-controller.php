@@ -85,6 +85,10 @@ class AI_Scribe_Settings_Ajax_Controller {
 	/** Live model-list transient lifetime in seconds (UAT §12.2: ~1h + manual refresh). */
 	const MODELS_CACHE_TTL = 3600;
 
+	// PHPCS cannot follow guard() into each endpoint. Every public AJAX
+	// endpoint below calls guard() before reading or changing request data.
+	// phpcs:disable WordPress.Security.NonceVerification
+
 	/**
 	 * Contract v1.1 §9 — ai_scribe_get_available_models.
 	 *
@@ -124,6 +128,10 @@ class AI_Scribe_Settings_Ajax_Controller {
 			$listed = $this->provider_models( $provider, $refresh, $sources );
 			$described = array();
 			foreach ( $listed as $model_id ) {
+				if ( ! AI_Scribe_Model_Resolver::is_text_model( (string) $model_id )
+					&& ! AI_Scribe_Model_Resolver::is_image_model( (string) $model_id ) ) {
+					continue;
+				}
 				$described[] = $this->describe_model( (string) $model_id, $provider );
 			}
 			$described = $this->sort_models( $described );
@@ -391,6 +399,7 @@ class AI_Scribe_Settings_Ajax_Controller {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON is decoded and each recognised provider value is sanitised before storage.
 		$raw  = isset( $_POST['keys'] ) ? wp_unslash( (string) $_POST['keys'] ) : '';
 		$keys = json_decode( $raw, true );
 		if ( ! is_array( $keys ) ) {
@@ -676,6 +685,7 @@ class AI_Scribe_Settings_Ajax_Controller {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON is decoded and each supported preference is allow-listed before storage.
 		$raw   = isset( $_POST['prefs'] ) ? wp_unslash( (string) $_POST['prefs'] ) : '';
 		$prefs = json_decode( $raw, true );
 		if ( ! is_array( $prefs ) ) {

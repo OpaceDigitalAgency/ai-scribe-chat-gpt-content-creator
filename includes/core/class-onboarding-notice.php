@@ -4,8 +4,8 @@
  *
  * One dismissible admin notice on the first load after install or update:
  * what's new in 3.0, a link to the help page, and an optional Opace AI Hub
- * pitch. The hub install button sits behind the `ai_scribe_hub_install_cta`
- * feature flag which DEFAULTS OFF (the hub is not on wp.org yet). Dismissal
+ * pitch. The hub install button follows WordPress dependency availability and
+ * remains filterable through `ai_scribe_hub_install_cta`. Dismissal
  * is persisted per-site in `ai_scribe_onboarding_dismissed` and the notice
  * never re-shows once dismissed.
  *
@@ -365,6 +365,8 @@ class AI_Scribe_Onboarding_Notice {
 	private static function render_remap_notice() {
 		$remap = get_option( self::REMAP_OPTION );
 		$nonce = wp_create_nonce( self::NONCE_ACTION );
+		$legacy_default = ( isset( $remap['reason'] ) && 'legacy_default' === $remap['reason'] )
+			|| ( ! isset( $remap['reason'] ) && 'gpt-4o-mini' === $remap['from'] );
 		?>
 		<div class="notice notice-warning is-dismissible ai-scribe-notice ai-scribe-remap-notice"
 			id="ai-scribe-remap-notice"
@@ -374,12 +376,21 @@ class AI_Scribe_Onboarding_Notice {
 			<p>
 				<strong><?php esc_html_e( 'AI-Scribe model updated:', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></strong>
 				<?php
-				printf(
-					/* translators: 1: retired model id, 2: replacement model id */
-					esc_html__( 'your previously selected model %1$s has been retired by its provider, so %2$s is now selected. You can pick a different model under AI-Scribe → Settings.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
-					'<code>' . esc_html( $remap['from'] ) . '</code>',
-					'<code>' . esc_html( $remap['to'] ) . '</code>'
-				);
+				if ( $legacy_default ) {
+					printf(
+						/* translators: 1: old default model id, 2: Hub default model id */
+						esc_html__( 'the untouched legacy default %1$s was updated to match Opace AI Hub, so %2$s is now selected. You can pick a different model under AI-Scribe → Settings.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						'<code>' . esc_html( $remap['from'] ) . '</code>',
+						'<code>' . esc_html( $remap['to'] ) . '</code>'
+					);
+				} else {
+					printf(
+						/* translators: 1: retired model id, 2: replacement model id */
+						esc_html__( 'your previously selected model %1$s has been retired by its provider, so %2$s is now selected. You can pick a different model under AI-Scribe → Settings.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						'<code>' . esc_html( $remap['from'] ) . '</code>',
+						'<code>' . esc_html( $remap['to'] ) . '</code>'
+					);
+				}
 				?>
 			</p>
 		</div>

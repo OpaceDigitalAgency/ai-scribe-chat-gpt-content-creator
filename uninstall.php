@@ -93,6 +93,7 @@ foreach ( $ai_scribe_options as $ai_scribe_option ) {
 
 // Live model-list transients (ai_scribe_models_<provider>_<hash>) and
 // key-validation transients (ai_scribe_valid_<provider>_<hash>).
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Explicit transient teardown at uninstall; no stale cache should be created.
 $wpdb->query(
 	$wpdb->prepare(
 		"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s",
@@ -101,7 +102,8 @@ $wpdb->query(
 		$wpdb->esc_like( '_transient_ai_scribe_valid_' ) . '%',
 		$wpdb->esc_like( '_transient_timeout_ai_scribe_valid_' ) . '%'
 	)
-); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- transient teardown at uninstall.
+); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Explicit transient teardown at uninstall; no stale cache should be created.
+// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
 // Per-user UI preferences.
 delete_metadata( 'user', 0, 'ai_scribe_ui_prefs', '', true );

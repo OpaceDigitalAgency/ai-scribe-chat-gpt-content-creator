@@ -18,15 +18,17 @@ global $wpdb;
 $ai_scribe_table = $wpdb->prefix . 'article_builder';
 $ai_scribe_rows  = array();
 // The table exists on any install that activated 2.6.2 or v3; guard anyway.
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Read-only admin listing from the plugin-owned shortcode table.
 if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $ai_scribe_table ) ) === $ai_scribe_table ) {
 	$ai_scribe_rows = $wpdb->get_results( $wpdb->prepare( 'SELECT id, title FROM %i ORDER BY id DESC', $ai_scribe_table ) );
 }
+// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 ?>
 
 <div class="wrap ai-scribe-app" id="ai-scribe-shortcodes-root" data-testid="shortcodes-root">
 	<div class="page-brand">
-		<img class="logo-image" src="<?php echo esc_url( AI_SCRIBE_URL . 'assets/images/ai-scribe-logo-icon.png' ); ?>"
-			alt="" aria-hidden="true" width="40" height="40" data-testid="brand-logo">
+		<img class="logo-image logo-image-large" src="<?php echo esc_url( AI_SCRIBE_URL . 'assets/images/ai-scribe-logo.png' ); ?>"
+			alt="" aria-hidden="true" width="72" height="72" data-testid="brand-logo">
 		<h1><?php esc_html_e( 'Saved Shortcodes', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></h1>
 	</div>
 

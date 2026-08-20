@@ -259,8 +259,8 @@ $ai_scribe_active_tab    = isset( $ai_scribe_tabs[ $ai_scribe_requested_tab ] ) 
 	data-current-model="<?php echo esc_attr( $ai_scribe_model ); ?>"
 	data-model-params="<?php echo esc_attr( wp_json_encode( $ai_scribe_model_params ) ); ?>">
 	<div class="page-brand">
-		<img class="logo-image" src="<?php echo esc_url( AI_SCRIBE_URL . 'assets/images/ai-scribe-logo-icon.png' ); ?>"
-			alt="" aria-hidden="true" width="40" height="40" data-testid="brand-logo">
+		<img class="logo-image logo-image-large" src="<?php echo esc_url( AI_SCRIBE_URL . 'assets/images/ai-scribe-logo.png' ); ?>"
+			alt="" aria-hidden="true" width="72" height="72" data-testid="brand-logo">
 		<h1><?php esc_html_e( 'AI-Scribe Settings', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></h1>
 	</div>
 

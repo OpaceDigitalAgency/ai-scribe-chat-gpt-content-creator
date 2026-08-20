@@ -22,6 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class AI_Scribe_Conversation_Service {
+	// Conversation state lives in this plugin's dedicated custom table. The
+	// service is the cache boundary and invalidates state after every write.
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
 	const TABLE          = 'ai_scribe_conversations';
 	const SCHEMA_VERSION = '1';

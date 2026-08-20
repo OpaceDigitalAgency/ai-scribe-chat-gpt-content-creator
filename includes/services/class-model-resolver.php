@@ -26,7 +26,7 @@ class AI_Scribe_Model_Resolver {
 	 * speech, video, music, embedding and tooling models; none of them can
 	 * write an article, so none may be chosen as a text default.
 	 */
-	const NOT_TEXT = '/(^|-)(image|imagen|tts|audio|speech|embedding|embed|veo|lyria|computer-use|live|rerank|guard|nano-banana)(-|$)/i';
+	const NOT_TEXT = '/(^|-)(image|imagen|tts|audio|speech|embedding|embed|veo|lyria|sora|computer-use|live|realtime|transcribe|whisper|rerank|guard|moderation|nano-banana|robotics|aqa|research|codex|search|instruct|antigravity|omni)(-|$)/i';
 
 	/** Still-image model families supported by Opace AI Hub's image providers. */
 	const IS_IMAGE = '/(^|-)(image|imagen|dall-e|nano-banana)(-|$)/i';
@@ -93,7 +93,7 @@ class AI_Scribe_Model_Resolver {
 	 */
 	public static function is_usable( $model ) {
 		$model = trim( (string) $model );
-		if ( '' === $model ) {
+		if ( '' === $model || ! self::is_text_model( $model ) ) {
 			return false;
 		}
 
@@ -104,6 +104,56 @@ class AI_Scribe_Model_Resolver {
 
 		$hub = get_option( 'ai_core_settings', array() );
 		return is_array( $hub ) && ! empty( $hub[ $provider . '_api_key' ] );
+	}
+
+	/**
+	 * Whether the article-generation path can invoke a model as prose.
+	 *
+	 * The Hub registry is authoritative when available. The id rule remains a
+	 * defence for cached or newly announced models which have not been
+	 * registered in the current PHP request.
+	 *
+	 * @param string $model Model id.
+	 * @return bool
+	 */
+	public static function is_text_model( $model ) {
+		$model = trim( (string) $model );
+		if ( '' === $model || preg_match( self::NOT_TEXT, $model ) || preg_match( '/-chat-latest$/i', $model ) ) {
+			return false;
+		}
+
+		$provider = self::provider_of( $model );
+		if ( class_exists( 'AICore\\Registry\\ModelRegistry' )
+			&& method_exists( 'AICore\\Registry\\ModelRegistry', 'isTextGenerationModel' ) ) {
+			return AICore\Registry\ModelRegistry::isTextGenerationModel(
+				$model,
+				'' !== $provider ? $provider : null
+			);
+		}
+
+		return ! preg_match( '/^(?:babbage|davinci)-/i', $model );
+	}
+
+	/**
+	 * Whether an id names a still-image model supported by Image Studio.
+	 *
+	 * @param string $model Model id.
+	 * @return bool
+	 */
+	public static function is_image_model( $model ) {
+		$model = trim( (string) $model );
+		if ( '' === $model || preg_match( self::NOT_IMAGE, $model ) || ! preg_match( self::IS_IMAGE, $model ) ) {
+			return false;
+		}
+
+		if ( class_exists( 'AICore\\Registry\\ModelRegistry' ) ) {
+			$config = AICore\Registry\ModelRegistry::getModelConfig( $model );
+			if ( is_array( $config ) && isset( $config['category'] ) ) {
+				return 'image' === $config['category'];
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -160,7 +210,7 @@ class AI_Scribe_Model_Resolver {
 		$usable = array();
 		foreach ( $models as $id ) {
 			$id = (string) $id;
-			if ( '' !== $id && ! preg_match( self::NOT_TEXT, $id ) ) {
+			if ( '' !== $id && self::is_text_model( $id ) ) {
 				$usable[] = $id;
 			}
 		}
@@ -196,9 +246,7 @@ class AI_Scribe_Model_Resolver {
 		foreach ( $models as $id ) {
 			$id = (string) $id;
 			// Image models, but not the video, music or editing-only variants.
-			if ( '' !== $id
-				&& preg_match( self::IS_IMAGE, $id )
-				&& ! preg_match( self::NOT_IMAGE, $id ) ) {
+			if ( self::is_image_model( $id ) ) {
 				$usable[] = $id;
 			}
 		}

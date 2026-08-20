@@ -7,7 +7,7 @@
 <p align="center"><strong>SEO content creator and humaniser for WordPress, powered by OpenAI, Anthropic and Google Gemini.</strong></p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.2.27-087abd" alt="AI Scribe version 3.2.27">
+  <img src="https://img.shields.io/badge/version-3.2.29-087abd" alt="AI Scribe version 3.2.29">
   <img src="https://img.shields.io/badge/WordPress-6.5%2B-21759b" alt="Requires WordPress 6.5 or newer">
   <img src="https://img.shields.io/badge/tested%20up%20to-WordPress%207.1-21759b" alt="Tested up to WordPress 7.1">
   <img src="https://img.shields.io/badge/PHP-7.4%2B-777bb4" alt="Requires PHP 7.4 or newer">
@@ -16,17 +16,17 @@
 
 <p align="center">
   <a href="https://wordpress.org/plugins/ai-scribe-the-chatgpt-powered-seo-content-creation-wizard/">WordPress.org</a>
-  · <a href="https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin">Required Opace AI Hub</a>
   · <a href="https://github.com/OpaceDigitalAgency/ai-scribe-chat-gpt-content-creator/issues">Issues</a>
   · <a href="SECURITY.md">Security</a>
   · <a href="https://github.com/OpaceDigitalAgency">More from Opace</a>
 </p>
 
-> **AI Scribe + [Opace AI Hub](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin) are one companion WordPress AI stack, installed as two separate plugins.**
-> AI Scribe provides the writing and publishing workflow; Opace AI Hub provides encrypted provider keys,
-> live model discovery, shared prompts, usage and cost reporting. Install
-> [Opace AI Hub](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin/releases/latest)
-> first, then AI Scribe. They remain separate packages so Opace AI Hub can also support other compatible plugins.
+AI Scribe requires the separate **Opace AI Hub** plugin. Opace AI Hub centralises encrypted provider keys,
+live model discovery, shared prompts, usage and cost reporting. Its
+[public source is on GitHub](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin);
+the WordPress.org link will be added after the separately reviewed dependency is published there.
+
+AI Scribe is independently developed by Opace Digital Agency and is not affiliated with, endorsed by or sponsored by OpenAI, Anthropic or Google.
 
 **Compatibility:** requires WordPress 6.5 or newer and has been tested up to **WordPress 7.1**.
 
@@ -251,26 +251,16 @@ retained-data reinstalls fill missing settings only and never overwrite a valid 
 
 ## Installation
 
-1. Install and activate the verified [**Opace AI Hub** package](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin/releases/latest).
+1. Install and activate the verified **Opace AI Hub** package. Its public source and WordPress.org links
+   will appear above when the separate dependency has been published.
 2. In Opace AI Hub → Settings, add a key for at least one provider and press Test.
-3. Install and activate [**AI Scribe**](https://github.com/OpaceDigitalAgency/ai-scribe-chat-gpt-content-creator), following the current repository instructions.
+3. Install and activate AI Scribe.
 4. AI Scribe → Settings → Providers & Model: confirm the status chip, pick a model, then open
    Generate Article.
 
 Upgrading from 2.6.x is a normal update, but Opace AI Hub must be active first. Prompts, settings, custom
 languages, saved shortcodes and keys migrate on the first admin page load; keys are encrypted at rest
 during that migration; edited prompts are **copied** into Opace AI Hub's library, never moved.
-
----
-
-## Companion plugin
-
-- [**Opace AI Hub**](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin) — the required provider, model, prompt, usage and pricing hub.
-- [**AI Scribe**](https://github.com/OpaceDigitalAgency/ai-scribe-chat-gpt-content-creator) — the article creation, SEO, image, review and WordPress publishing workflow.
-
-The projects are developed and released together as a companion stack, but installed from separate
-ZIP packages. This avoids duplicating credentials and provider code inside AI Scribe and lets other
-WordPress plugins share the same Opace AI Hub configuration.
 
 ---
 

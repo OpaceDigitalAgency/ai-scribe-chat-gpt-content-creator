@@ -75,9 +75,6 @@ class AI_Scribe_Error_Handler {
 	private function register_error_handlers() {
 		// Register shutdown handler for fatal errors
 		register_shutdown_function( array( $this, 'handle_fatal_error' ) );
-
-		// Set custom error handler for non-fatal errors
-		set_error_handler( array( $this, 'handle_php_error' ), E_ALL & ~E_NOTICE );
 	}
 
 	/**
@@ -175,8 +172,8 @@ class AI_Scribe_Error_Handler {
 			array(
 				'error_type'  => $type,
 				'user_id'     => get_current_user_id(),
-				'request_uri' => $_SERVER['REQUEST_URI'] ?? '',
-				'user_agent'  => $_SERVER['HTTP_USER_AGENT'] ?? '',
+				'request_uri' => isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '',
+				'user_agent'  => isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '',
 			)
 		);
 

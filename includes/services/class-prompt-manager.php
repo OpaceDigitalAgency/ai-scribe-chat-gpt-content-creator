@@ -95,7 +95,7 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 	 */
 	private function load_prompt_templates() {
 		$this->log_debug( '[LOAD DEBUG] Starting to load prompt templates' );
-		$this->log_debug( '[LOAD DEBUG] Prompt files to load: ' . print_r( $this->prompt_files, true ) );
+		$this->log_debug( '[LOAD DEBUG] Prompt file groups: ' . implode( ', ', array_keys( $this->prompt_files ) ) );
 
 		foreach ( $this->prompt_files as $type => $file_path ) {
 			$full_path = AI_SCRIBE_DIR . 'includes/' . $file_path;
@@ -192,12 +192,8 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 	 * @return void
 	 */
 	public function handle_get_prompt_template() {
-		// Enhanced debugging for prompt template requests
-		$this->log_debug( '[PROMPT DEBUG] handle_get_prompt_template called' );
-		$this->log_debug( '[PROMPT DEBUG] POST data: ' . print_r( $_POST, true ) );
-
 		// Verify nonce
-		$nonce       = $_POST['security'] ?? '';
+		$nonce       = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
 		$nonce_valid = wp_verify_nonce( $nonce, 'ai_scribe_nonce' );
 
 		$this->log_debug( '[PROMPT DEBUG] Nonce validation: ' . ( $nonce_valid ? 'VALID' : 'INVALID' ) );
@@ -217,6 +213,10 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 			);
 			return;
 		}
+
+		// Enhanced debugging for prompt template requests, after verification.
+		$this->log_debug( '[PROMPT DEBUG] handle_get_prompt_template called' );
+		$this->log_debug( '[PROMPT DEBUG] POST field names: ' . implode( ', ', array_map( 'sanitize_key', array_keys( $_POST ) ) ) );
 
 		// Sanitize input
 		$category = sanitize_text_field( wp_unslash( $_POST['category'] ?? '' ) );
@@ -281,7 +281,7 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 
 		if ( $template === null ) {
 			$this->log_error( "[PROMPT DEBUG] Template not found: {$category}.{$type}" );
-			$this->log_debug( '[PROMPT DEBUG] Available prompt cache: ' . print_r( array_keys( $this->prompt_cache ), true ) );
+			$this->log_debug( '[PROMPT DEBUG] Available prompt cache: ' . implode( ', ', array_keys( $this->prompt_cache ) ) );
 
 			wp_send_json_error(
 				array(
@@ -315,7 +315,8 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 	 */
 	public function handle_save_prompt_template() {
 		// Verify nonce
-		if ( ! wp_verify_nonce( $_POST['security'] ?? '', 'ai_scribe_nonce' ) ) {
+		$nonce = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
+		if ( ! wp_verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
 			wp_send_json_error(
 				array(
 					'msg'           => 'Security nonce is missing or invalid. Please refresh the page.',
@@ -328,7 +329,7 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 		// Sanitize input - accept both 'template' and 'prompt' for backward compatibility
 		$category = sanitize_text_field( wp_unslash( $_POST['category'] ?? '' ) );
 		$type     = sanitize_text_field( wp_unslash( $_POST['type'] ?? '' ) );
-		$template = sanitize_textarea_field( $_POST['template'] ?? $_POST['prompt'] ?? '' );
+		$template = sanitize_textarea_field( wp_unslash( $_POST['template'] ?? $_POST['prompt'] ?? '' ) );
 
 		if ( empty( $category ) || empty( $type ) || empty( $template ) ) {
 			wp_send_json_error(
@@ -443,7 +444,7 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 
 		$this->log_debug( '[TEMPLATE VARS] Processing template variables' );
 		$this->log_debug( '[TEMPLATE VARS] Original template: ' . substr( $template, 0, 200 ) . '...' );
-		$this->log_debug( '[TEMPLATE VARS] Context provided: ' . print_r( array_keys( $context ), true ) );
+		$this->log_debug( '[TEMPLATE VARS] Context fields: ' . implode( ', ', array_keys( $context ) ) );
 
 		$processed_template = $template;
 
@@ -467,21 +468,14 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 			$above_below  = $context['above_below'] ?? $context['tagline_position'] ?? 'below';
 
 			$this->log_debug(
-				'[TEMPLATE VARS] Variable values: ' . print_r(
+				'[TEMPLATE VARS] Context lengths: ' . wp_json_encode(
 					array(
-						'language'          => $language,
-						'writing_style'     => $writing_style,
-						'writing_tone'      => $writing_tone,
-						'title'             => $title,
-						'selected_keywords' => $selected_keywords,
-						'heading_tag'       => $heading_tag,
-						'tagline'           => $tagline,
-						'outline'           => $outline,
-						'introduction'      => $introduction,
-						'no_headings'       => $no_headings,
-						'above_below'       => $above_below,
-					),
-					true
+						'title'             => strlen( (string) $title ),
+						'selected_keywords' => strlen( is_array( $selected_keywords ) ? implode( ',', $selected_keywords ) : (string) $selected_keywords ),
+						'tagline'           => strlen( (string) $tagline ),
+						'outline'           => strlen( is_array( $outline ) ? wp_json_encode( $outline ) : (string) $outline ),
+						'introduction'      => strlen( (string) $introduction ),
+					)
 				)
 			);
 

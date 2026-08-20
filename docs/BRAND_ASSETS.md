@@ -1,5 +1,26 @@
 # AI-Scribe upload assets
 
+Approved WordPress.org artwork prepared on 14 August 2026. Installed-plugin logo and favicon
+variants were reconciled with that artwork on 20 August 2026.
+
+## Installed plugin
+
+The release package includes these files under `assets/images/`:
+
+- `ai-scribe-logo.png` — complete approved 256px square logo;
+- `ai-scribe-logo-320.png` — complete 320px logo used on the Help screen;
+- `ai-scribe-logo-simplified.png` — centred, text-free 168px mark;
+- `ai-scribe-logo-icon.png` — centred 128px symbol retained for compact contexts;
+- `ai-scribe-logo.png` and `ai-scribe-logo-320.png` — complete approved logo and wordmark used in page headers;
+- `ai-scribe-menu-icon-20x20.png` — centred white WordPress admin-menu mark on a transparent canvas;
+- `ai-scribe-favicon-16x16.png`, `ai-scribe-favicon-32x32.png` and
+  `ai-scribe-favicon-48x48.png` — small symbol-only favicon variants;
+- `ai-scribe-favicon.ico` — 32px ICO variant.
+
+Small assets use only the central document/S mark. Do not shrink the wordmark into menu or favicon
+sizes because it becomes illegible. The plugin package includes these assets; it does not change the
+site-wide WordPress favicon selected by the site owner.
+
 ## WordPress.org
 
 Copy the contents of `.wordpress-org/` into the plugin SVN checkout's top-level `assets/` directory.
@@ -18,8 +39,20 @@ Copy the contents of `.wordpress-org/` into the plugin SVN checkout's top-level 
 - `screenshot-8.png` — evidence-led Evaluate report
 
 The screenshot set is also used by the GitHub README so both public descriptions show the same
-current workflow. Images are resized proportionally to 1600 pixels wide and use stable numbered
-names so WordPress.org captions and GitHub references remain predictable.
+current workflow. The files were curated from the latest owner-approved captures in
+`~/Desktop/ai-scribe/`, resized proportionally to 1600 pixels wide and given stable numbered names.
+The source filenames and public descriptions are:
+
+| Public file | Source capture | Description |
+|---|---|---|
+| `screenshot-1.png` | `Screenshot 2026-08-14 at 17.00.22.png` | Title Generation |
+| `screenshot-2.png` | `Screenshot 2026-08-14 at 17.00.36.png` | Keyword Research |
+| `screenshot-3.png` | `Screenshot 2026-08-14 at 17.01.02.png` | Article Outline |
+| `screenshot-4.png` | `Screenshot 2026-08-14 at 17.02.31.png` | Article Body and Image Studio |
+| `screenshot-5.png` | `Screenshot 2026-08-14 at 17.03.25.png` | Questions & Answers |
+| `screenshot-6.png` | `Screenshot 2026-08-14 at 17.03.42.png` | SEO Meta |
+| `screenshot-7.png` | `Screenshot 2026-08-14 at 16.59.06 (2).png` | Express mode |
+| `screenshot-8.png` | `Screenshot 2026-08-14 at 17.04.29.png` | Evaluate |
 
 WordPress.org limits headers to 4 MB and icons to 1 MB. Source: <https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/>.
 

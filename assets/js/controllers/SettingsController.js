@@ -79,7 +79,7 @@ class SettingsController {
             // provider's live list also carries speech, embedding and tooling
             // models that can do neither. Those belong in neither picker: one
             // of them was being offered as the default article model.
-            const textModels = this.models.filter((m) => this.category(m) === 'text');
+            const textModels = this.models.filter((m) => ['text', 'reasoning'].includes(this.category(m)));
             const imageModels = this.models.filter((m) => this.category(m) === 'image');
 
             const selected = this.view.populateModelSelect(textModels, this.providers);

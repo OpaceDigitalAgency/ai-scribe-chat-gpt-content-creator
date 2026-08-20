@@ -193,8 +193,8 @@ foreach ( $ai_scribe_steps as $ai_scribe_n => $ai_scribe_def ) {
 	<header class="app-header">
 		<div class="header-content">
 			<div class="logo-section">
-				<img class="logo-image" src="<?php echo esc_url( AI_SCRIBE_URL . 'assets/images/ai-scribe-logo-icon.png' ); ?>"
-					alt="" aria-hidden="true" width="40" height="40" data-testid="brand-logo">
+				<img class="logo-image" src="<?php echo esc_url( AI_SCRIBE_URL . 'assets/images/ai-scribe-logo.png' ); ?>"
+					alt="" aria-hidden="true" width="56" height="56" data-testid="brand-logo">
 				<div class="logo-text">
 					<h1><?php esc_html_e( 'AI-Scribe', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></h1>
 					<span class="version"><?php echo esc_html( defined( 'AI_SCRIBE_VERSION' ) ? 'v' . AI_SCRIBE_VERSION : 'v3.0' ); ?></span>
@@ -589,10 +589,7 @@ foreach ( $ai_scribe_steps as $ai_scribe_n => $ai_scribe_def ) {
 											<input type="text" class="form-control" data-publishing-tags autocomplete="off" placeholder="<?php esc_attr_e( 'Comma-separated', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>">
 										</label>
 									</div>
-									<p class="publishing-author"><?php
-										/* translators: %s is the current WordPress user's display name. */
-										echo esc_html( sprintf( __( 'Author: %s (your current WordPress account)', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), wp_get_current_user()->display_name ) );
-									?></p>
+									<p class="publishing-author"><?php echo esc_html( sprintf( /* translators: %s: current WordPress user's display name. */ __( 'Author: %s (your current WordPress account)', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), wp_get_current_user()->display_name ) ); ?></p>
 									<p class="publishing-assignment-result" data-publishing-result role="status" aria-live="polite"></p>
 								</section>
 								<?php ai_scribe_render_save_status( 'review' ); ?>

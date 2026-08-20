@@ -180,6 +180,8 @@ class AI_Scribe_Conversation_Ajax_Controller {
 		return $defaults;
 	}
 
+	// This helper is invoked only after the public endpoint has called guard().
+	// phpcs:disable WordPress.Security.NonceVerification
 	private function read_settings_from_request() {
 		$settings      = array();
 		$string_fields = array(
@@ -205,6 +207,7 @@ class AI_Scribe_Conversation_Ajax_Controller {
 			$settings['article_word_count'] = max( 400, min( 8000, (int) $_POST['article_word_count'] ) );
 		}
 		if ( isset( $_POST['options'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON is decoded here and every value is sanitised immediately below.
 			$options = json_decode( wp_unslash( (string) $_POST['options'] ), true );
 			if ( is_array( $options ) ) {
 				$settings['options'] = array_map( 'sanitize_text_field', $options );
@@ -212,6 +215,7 @@ class AI_Scribe_Conversation_Ajax_Controller {
 		}
 		return $settings;
 	}
+	// phpcs:enable WordPress.Security.NonceVerification
 
 	private function send_generation_result( array $result ) {
 		if ( ! empty( $result['success'] ) ) {
@@ -225,6 +229,9 @@ class AI_Scribe_Conversation_Ajax_Controller {
 	// ------------------------------------------------------------------
 	// Endpoints
 	// ------------------------------------------------------------------
+	// PHPCS cannot follow guard() into each endpoint. Every JSON endpoint
+	// calls guard() before reading request data; SSE calls guard_failure().
+	// phpcs:disable WordPress.Security.NonceVerification
 
 	/** Contract §1. */
 	public function handle_start_conversation() {
@@ -367,6 +374,7 @@ class AI_Scribe_Conversation_Ajax_Controller {
 		}
 		$conversation_id = isset( $_POST['conversation_id'] ) ? (int) $_POST['conversation_id'] : 0;
 		$key             = isset( $_POST['key'] ) ? sanitize_key( wp_unslash( $_POST['key'] ) ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- The value is sanitised by sanitize_deep() or wp_kses_post() before storage.
 		$raw_value       = isset( $_POST['value'] ) ? wp_unslash( $_POST['value'] ) : '';
 
 		if ( $conversation_id && ! $this->owned_conversation( $conversation_id ) ) {
@@ -611,6 +619,7 @@ class AI_Scribe_Conversation_Ajax_Controller {
 		);
 		exit;
 	}
+	// phpcs:enable WordPress.Security.NonceVerification
 
 	// ------------------------------------------------------------------
 	// SSE helpers

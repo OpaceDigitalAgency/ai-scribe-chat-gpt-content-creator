@@ -738,6 +738,9 @@ class AI_Scribe_Content_Generation_Service extends AI_Scribe_Base_Service {
 	 * @return void
 	 */
 	public function suggest_content() {
+		// This compatibility method is called only after the registered AJAX
+		// controller has verified ai_scribe_nonce and the user's capability.
+		// phpcs:disable WordPress.Security.NonceVerification
 		try {
 			// Extract data from $_POST (V3 format)
 			$action_input = sanitize_text_field( wp_unslash( $_POST['actionInput'] ?? '' ) );
@@ -839,6 +842,7 @@ class AI_Scribe_Content_Generation_Service extends AI_Scribe_Base_Service {
 
 			wp_send_json_error( 'Content generation failed: ' . $e->getMessage() );
 		}
+		// phpcs:enable WordPress.Security.NonceVerification
 	}
 
 	/**

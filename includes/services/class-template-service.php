@@ -91,8 +91,10 @@ class AI_Scribe_Template_Service extends AI_Scribe_Base_Service {
 
 		try {
 			// Sanitize input parameters
-			$page   = $this->sanitize_input( $_GET['page'] ?? '', 'text' );
-			$action = $this->sanitize_input( $_GET['action'] ?? '', 'text' );
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only routing between plugin admin views.
+			$page   = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) );
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only routing between plugin admin views.
+			$action = sanitize_text_field( wp_unslash( $_GET['action'] ?? '' ) );
 
 			$this->log_debug(
 				'Template page request',
@@ -132,7 +134,8 @@ class AI_Scribe_Template_Service extends AI_Scribe_Base_Service {
 
 		try {
 			// Sanitize input parameter
-			$page = $this->sanitize_input( $_GET['page'] ?? '', 'text' );
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only routing between plugin admin views.
+			$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) );
 
 			$this->log_debug( 'Create template page request', array( 'page' => $page ) );
 

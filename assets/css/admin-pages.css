@@ -17,11 +17,18 @@
 	border-radius: var(--radius-md, 8px);
 	display: block;
 	flex-shrink: 0;
+	object-fit: contain;
+	object-position: center;
 }
 
 .ai-scribe-app .logo-image-large {
 	width: 72px;
 	height: 72px;
+}
+
+.ai-scribe-app .app-header .logo-image {
+	width: 56px;
+	height: 56px;
 }
 
 .ai-scribe-app .page-brand {

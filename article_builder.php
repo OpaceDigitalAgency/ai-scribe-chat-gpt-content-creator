@@ -11,7 +11,7 @@
  * Tested up to:        7.1
  * Requires PHP:        7.4
  * Requires Plugins:    opace-ai-prompt-library-api-hub
- * Version:             3.2.27
+ * Version:             3.2.29
  * License:             GPL-3.0
  * License URI:         http://www.gnu.org/licenses/gpl-3.0.txt
  *
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'AI_SCRIBE_VERSION', '3.2.27' ); // Used for cache busting on every enqueue
+define( 'AI_SCRIBE_VERSION', '3.2.29' ); // Used for cache busting on every enqueue
 if ( ! defined( 'AI_SCRIBE_VER' ) ) {
 	define( 'AI_SCRIBE_VER', AI_SCRIBE_VERSION ); // Back-compat alias used by copied v4 services
 }

@@ -139,6 +139,7 @@ class AI_Scribe_Utility_Service extends AI_Scribe_Base_Service {
 		}
 
 		if ( $this->is_debug_mode_enabled() ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Explicitly debug-gated diagnostic output.
 			error_log( $message );
 		}
 	}
@@ -153,6 +154,7 @@ class AI_Scribe_Utility_Service extends AI_Scribe_Base_Service {
 		$wp_article = $table_prefix . 'article_builder';
 
 		// Check if the table exists
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- One-off activation schema check for the plugin-owned table.
 		if (
 			$wpdb->get_var(
 				$wpdb->prepare(
@@ -161,6 +163,7 @@ class AI_Scribe_Utility_Service extends AI_Scribe_Base_Service {
 				)
 			) != $wp_article
 		) {
+			// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 			$charset_collate = $wpdb->get_charset_collate();
 
 			$q = "CREATE TABLE $wp_article (

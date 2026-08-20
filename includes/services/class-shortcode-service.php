@@ -21,6 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * shortcode creation, data storage, content management, and rendering.
  */
 class AI_Scribe_Shortcode_Service extends AI_Scribe_Base_Service {
+	// This service owns a small custom shortcode table; WordPress has no
+	// equivalent CRUD API and the admin view must reflect writes immediately.
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
 	/**
 	 * WordPress adapter instance
@@ -474,9 +477,9 @@ class AI_Scribe_Shortcode_Service extends AI_Scribe_Base_Service {
 
 		try {
 			// Sanitize and validate the ID
-			$id = absint( $_POST['id'] );
+			$id = isset( $_POST['id'] ) ? absint( wp_unslash( $_POST['id'] ) ) : 0;
 			if ( ! $id ) {
-				$this->log_warning( 'Invalid ID provided for deletion', array( 'id' => $_POST['id'] ?? 'null' ) );
+				$this->log_warning( 'Invalid ID provided for deletion', array( 'id' => $id ) );
 				wp_send_json_error( array( 'msg' => 'Invalid ID' ) );
 				wp_die();
 			}
