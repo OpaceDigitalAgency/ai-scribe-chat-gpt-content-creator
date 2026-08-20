@@ -2,8 +2,8 @@
 /**
  * AI-Scribe v3 smoke test (no WordPress required).
  *
- * Defines minimal WP shims and requires article_builder.php with AI-Core
- * deliberately absent. AI-Core is an external required plugin, so this smoke
+ * Defines minimal WP shims and requires article_builder.php with Opace AI Hub
+ * deliberately absent. Opace AI Hub is an external required plugin, so this smoke
  * run verifies the dependency guard and adapter fail-closed behaviour without
  * inventing a bundled library or making a provider request. Any fatal, warning
  * or uncaught exception fails the run.
@@ -118,7 +118,7 @@ $checks['version_constant_agrees'] = defined('AI_SCRIBE_VERSION')
 $checks['version_alias_agrees'] = defined('AI_SCRIBE_VER')
     && defined('AI_SCRIBE_VERSION')
     && AI_SCRIBE_VER === AI_SCRIBE_VERSION;
-$checks['external_ai_core_declared'] = preg_match('/^\s*\* Requires Plugins:\s*opace-ai-core-integration-hub-prompt-engine\s*$/m', $plugin_source) === 1;
+$checks['external_ai_core_declared'] = preg_match('/^\s*\* Requires Plugins:\s*opace-ai-prompt-library-api-hub\s*$/m', $plugin_source) === 1;
 $checks['no_bundled_ai_core'] = !is_dir(__DIR__ . '/../ai-core');
 $checks['hub_absent_for_smoke'] = !function_exists('ai_core')
     && !AI_Scribe_Onboarding_Notice::hub_active();

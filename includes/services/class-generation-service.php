@@ -771,7 +771,7 @@ class AI_Scribe_Generation_Service {
 		}
 
 		// UAT §12.2: per-model parameters saved from the schema-generated
-		// settings panel (reasoning effort, thinking level, …). AI-Core
+		// settings panel (reasoning effort, thinking level, …). Opace AI Hub
 		// providers read options by SCHEMA key and translate to the wire
 		// request_key themselves — forwarding under the wire key (the old
 		// behaviour) meant saved parameters were silently ignored.

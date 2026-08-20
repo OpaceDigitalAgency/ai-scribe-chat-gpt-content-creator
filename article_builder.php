@@ -10,8 +10,8 @@
  * Requires at least:   6.5
  * Tested up to:        7.0.4
  * Requires PHP:        7.4
- * Requires Plugins:    opace-ai-core-integration-hub-prompt-engine
- * Version:             3.2.23
+ * Requires Plugins:    opace-ai-prompt-library-api-hub
+ * Version:             3.2.24
  * License:             GPL-3.0
  * License URI:         http://www.gnu.org/licenses/gpl-3.0.txt
  *
@@ -23,7 +23,7 @@
  * The plugin uses the external AI services you configure (OpenAI, Anthropic,
  * Google Gemini). Please review each provider's terms and privacy policy.
  *
- * AI-Core is required, not optional: from 3.0 the provider API keys, the model
+ * Opace AI Hub is required, not optional: from 3.0 the provider API keys, the model
  * lists and the usage statistics all live in the hub, so without it there is
  * nowhere to configure a model. `Requires Plugins` blocks activation on
  * WordPress 6.5+; the runtime guard below covers the hub being deactivated
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'AI_SCRIBE_VERSION', '3.2.23' ); // Used for cache busting on every enqueue
+define( 'AI_SCRIBE_VERSION', '3.2.24' ); // Used for cache busting on every enqueue
 if ( ! defined( 'AI_SCRIBE_VER' ) ) {
 	define( 'AI_SCRIBE_VER', AI_SCRIBE_VERSION ); // Back-compat alias used by copied v4 services
 }
@@ -77,7 +77,7 @@ if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
 }
 
 /*
- * The AI-Core library is NOT bundled here.
+ * The Opace AI Hub library is NOT bundled here.
  *
  * It used to be, as a fallback. Because the hub plugin's directory sorts
  * before this one, its copy always won and the bundled copy never ran — so
@@ -85,7 +85,7 @@ if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
  * silently did nothing. That is exactly how Gemini shipped unable to generate
  * at all: the fix went into the copy that never loads.
  *
- * AI-Core is a hard dependency (see the Requires Plugins header and the guard
+ * Opace AI Hub is a hard dependency (see the Requires Plugins header and the guard
  * below), so there is one copy of the library, in the hub, and no way for a
  * fix to land in the wrong one.
  */
@@ -194,7 +194,7 @@ function ai_scribe_get_container() {
 }
 
 /**
- * Hard dependency guard: no AI-Core, no AI-Scribe.
+ * Hard dependency guard: no Opace AI Hub, no AI-Scribe.
  *
  * Detection is deliberately the single mechanism used everywhere else
  * (AI_Scribe_Onboarding_Notice::hub_active()). When the hub is missing or
@@ -205,7 +205,7 @@ function ai_scribe_get_container() {
  */
 // Front-end meta output for posts generated with no SEO plugin active
 // (C-2-4/L-26). Registered before the hub guard on purpose: already-saved
-// posts must keep their title/description even while AI-Core is deactivated.
+// posts must keep their title/description even while Opace AI Hub is deactivated.
 AI_Scribe_Frontend_Meta::register();
 
 // Generated posts carry a narrowly scoped reading-layout stylesheet. Theme
@@ -264,7 +264,7 @@ add_action(
 // Post-update onboarding + model-remap notices (REFACTOR.md §15.1/§15.2)
 AI_Scribe_Onboarding_Notice::register();
 
-// Prompt Library tab: applying an AI-Core prompt to a wizard step.
+// Prompt Library tab: applying an Opace AI Hub prompt to a wizard step.
 AI_Scribe_Hub_Prompt_Reader::register();
 
 // Boot

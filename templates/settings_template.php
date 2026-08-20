@@ -6,7 +6,7 @@
  * Tabs: Providers & Model · Generation · Images · Prompt Library.
  *
  * - Provider status for the supported providers (openai, anthropic, gemini),
- *   read from AI-Core — the hub is a hard dependency and owns the keys.
+ *   read from Opace AI Hub — the hub is a hard dependency and owns the keys.
  * - Model picker fed by the live model-list AJAX (never hardcoded model ids).
  * - Honest temperature/top_p bounds — values pass through unmodified.
  * - Prompt library editor preserving the exact `ab_prompts_content` keys
@@ -25,10 +25,10 @@ $ai_scribe_content = get_option( 'ab_gpt_content_settings', array() );
 $ai_scribe_images  = get_option( 'ab_gpt_image_settings', array() );
 $ai_scribe_prompts = get_option( 'ab_prompts_content', array() );
 
-// §13.12 (AI-Imagen pattern): AI-Core is a hard dependency — the bootstrap
+// §13.12 (AI-Imagen pattern): Opace AI Hub is a hard dependency — the bootstrap
 // refuses to load AI-Scribe without it — and the hub OWNS provider
 // configuration. This screen therefore shows no key fields at all, only a
-// "Managed by AI-Core" panel with per-provider status chips and a link to the
+// "Managed by Opace AI Hub" panel with per-provider status chips and a link to the
 // hub settings. There is one place a key can be entered, and it is not here.
 $ai_scribe_hub_settings = get_option( 'ai_core_settings', array() );
 $ai_scribe_hub_settings = is_array( $ai_scribe_hub_settings ) ? $ai_scribe_hub_settings : array();
@@ -84,7 +84,7 @@ $ai_scribe_prompt_help = array(
 
 // The wizard step each prompt key drives, mirroring
 // AI_Scribe_Prompt_Manager::$step_option_keys. Only these keys can have an
-// AI-Core prompt applied — the global instructions are AI-Scribe's own.
+// Opace AI Hub prompt applied — the global instructions are AI-Scribe's own.
 $ai_scribe_prompt_steps = array(
 	'title_prompts'      => 1,
 	'Keywords_prompts'   => 2,
@@ -100,7 +100,7 @@ $ai_scribe_prompt_steps = array(
 );
 
 // The hub's prompt library, read through its own public accessor. All three
-// reads degrade to empty arrays when AI-Core is inactive — the tab then
+// reads degrade to empty arrays when Opace AI Hub is inactive — the tab then
 // renders AI-Scribe's own prompts with an explanatory empty state.
 $ai_scribe_hub_library    = class_exists( 'AI_Scribe_Hub_Prompt_Reader' ) && AI_Scribe_Hub_Prompt_Reader::library_available();
 $ai_scribe_hub_prompts    = $ai_scribe_hub_library ? AI_Scribe_Hub_Prompt_Reader::get_prompts_by_group() : array();
@@ -289,8 +289,8 @@ $ai_scribe_active_tab    = isset( $ai_scribe_tabs[ $ai_scribe_requested_tab ] ) 
 		<?php /* §13.12: hub owns provider config — no key fields here. */ ?>
 		<div class="managed-by-hub" data-testid="managed-by-hub">
 			<div class="managed-by-hub-header">
-				<h2><?php esc_html_e( 'Providers managed by AI-Core', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></h2>
-				<p class="form-hint"><?php esc_html_e( 'AI-Scribe requires the AI-Core hub plugin, so API keys, provider selection and usage statistics are configured centrally and shared by every AI-Core add-on.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></p>
+				<h2><?php esc_html_e( 'Providers managed by Opace AI Hub', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></h2>
+				<p class="form-hint"><?php esc_html_e( 'AI-Scribe requires the Opace AI Hub plugin, so API keys, provider selection and usage statistics are configured centrally and shared by every Opace AI Hub add-on.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></p>
 			</div>
 			<div class="provider-chip-row" data-testid="provider-chips">
 				<?php foreach ( $ai_scribe_providers as $ai_scribe_provider => $ai_scribe_meta ) : ?>
@@ -306,7 +306,7 @@ $ai_scribe_active_tab    = isset( $ai_scribe_tabs[ $ai_scribe_requested_tab ] ) 
 			<p>
 				<a class="btn btn-primary" data-testid="open-ai-core-settings"
 					href="<?php echo esc_url( admin_url( 'admin.php?page=ai-core-settings' ) ); ?>">
-					<?php esc_html_e( 'Open AI-Core Settings', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
+					<?php esc_html_e( 'Open Opace AI Hub Settings', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
 				</a>
 			</p>
 		</div>
@@ -480,7 +480,7 @@ $ai_scribe_active_tab    = isset( $ai_scribe_tabs[ $ai_scribe_requested_tab ] ) 
 					<?php checked( 'yes' === get_option( 'ai_scribe_delete_data_on_uninstall' ) ); ?>>
 				<?php esc_html_e( 'Permanently delete all AI-Scribe data when the plugin is deleted', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
 			</label>
-			<p class="form-hint form-error"><?php esc_html_e( 'Only enable this if you deliberately want deletion to remove settings, prompts, saved shortcodes and conversation history. AI-Core API keys are managed separately.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></p>
+			<p class="form-hint form-error"><?php esc_html_e( 'Only enable this if you deliberately want deletion to remove settings, prompts, saved shortcodes and conversation history. Opace AI Hub API keys are managed separately.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></p>
 		</div>
 	</section>
 
@@ -493,7 +493,7 @@ $ai_scribe_active_tab    = isset( $ai_scribe_tabs[ $ai_scribe_requested_tab ] ) 
 				echo esc_html(
 					class_exists( 'AI_Scribe_Image_Service' )
 						? AI_Scribe_Image_Service::image_unavailable_message()
-						: __( 'Image generation is unavailable because none of your configured providers can generate images. Add an OpenAI or Google Gemini API key on the AI-Core settings page.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' )
+						: __( 'Image generation is unavailable because none of your configured providers can generate images. Add an OpenAI or Google Gemini API key on the Opace AI Hub settings page.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' )
 				);
 				?>
 			</p>
@@ -594,19 +594,19 @@ $ai_scribe_active_tab    = isset( $ai_scribe_tabs[ $ai_scribe_requested_tab ] ) 
 			</ul>
 		</details>
 
-		<?php /* The AI-Core view: this tab reflects the hub's library and lets a
+		<?php /* The Opace AI Hub view: this tab reflects the hub's library and lets a
 			prompt from it drive a wizard step. AI-Scribe's own prompts below
 			stay put and remain the fallback — nothing is migrated or deleted. */ ?>
 		<?php if ( $ai_scribe_hub_library ) : ?>
 			<div class="managed-by-hub" data-testid="hub-prompt-library">
 				<div class="managed-by-hub-header">
-					<h2><?php esc_html_e( 'Prompts from AI-Core', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></h2>
-					<p class="form-hint"><?php esc_html_e( 'The AI-Core hub plugin is active, so its prompt library is shown here. Apply any of these prompts to a wizard step and that step will use it instead of the AI-Scribe prompt below. Your AI-Scribe prompts are kept as the fallback.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></p>
+					<h2><?php esc_html_e( 'Prompts from Opace AI Hub', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></h2>
+					<p class="form-hint"><?php esc_html_e( 'The Opace AI Hub plugin is active, so its prompt library is shown here. Apply any of these prompts to a wizard step and that step will use it instead of the AI-Scribe prompt below. Your AI-Scribe prompts are kept as the fallback.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></p>
 				</div>
 
 				<?php if ( empty( $ai_scribe_hub_prompts ) ) : ?>
 					<p class="form-hint" data-testid="hub-prompt-library-empty">
-						<?php esc_html_e( 'AI-Core has no prompts yet. Add some in AI-Core and they will appear here.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
+						<?php esc_html_e( 'Opace AI Hub has no prompts yet. Add some in Opace AI Hub and they will appear here.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
 					</p>
 				<?php else : ?>
 					<?php foreach ( $ai_scribe_hub_prompts as $ai_scribe_group_name => $ai_scribe_group_prompts ) : ?>
@@ -629,14 +629,14 @@ $ai_scribe_active_tab    = isset( $ai_scribe_tabs[ $ai_scribe_requested_tab ] ) 
 				<p>
 					<a class="btn btn-outline" data-testid="open-ai-core-prompt-library"
 						href="<?php echo esc_url( $ai_scribe_hub_prompt_url ); ?>">
-						<?php esc_html_e( 'Manage prompts in AI-Core', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
+						<?php esc_html_e( 'Manage prompts in Opace AI Hub', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
 					</a>
 				</p>
 			</div>
 		<?php else : ?>
 			<div class="state-box empty-state" data-testid="hub-prompt-library-absent">
 				<p class="state-box-message">
-					<?php esc_html_e( 'AI-Core is not active, so there is no shared prompt library to show. AI-Scribe is using its own prompts below, exactly as it always has — nothing is missing and nothing needs doing.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
+					<?php esc_html_e( 'Opace AI Hub is not active, so there is no shared prompt library to show. AI-Scribe is using its own prompts below, exactly as it always has — nothing is missing and nothing needs doing.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
 				</p>
 			</div>
 		<?php endif; ?>
@@ -671,7 +671,7 @@ $ai_scribe_active_tab    = isset( $ai_scribe_tabs[ $ai_scribe_requested_tab ] ) 
 						<label class="visually-hidden" for="hub-prompt-step-<?php echo esc_attr( (string) $ai_scribe_step ); ?>">
 							<?php
 							/* translators: %s: step label, e.g. "Step 1 — Titles". */
-							printf( esc_html__( 'AI-Core prompt for %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), esc_html( $ai_scribe_label ) );
+							printf( esc_html__( 'Opace AI Hub prompt for %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), esc_html( $ai_scribe_label ) );
 							?>
 						</label>
 						<select class="form-control hub-prompt-select"
@@ -703,8 +703,8 @@ $ai_scribe_active_tab    = isset( $ai_scribe_tabs[ $ai_scribe_requested_tab ] ) 
 						if ( $ai_scribe_applied_id ) {
 							$ai_scribe_applied_prompt = AI_Scribe_Hub_Prompt_Reader::find_prompt( $ai_scribe_applied_id );
 							printf(
-								/* translators: %s: AI-Core prompt title. */
-								esc_html__( 'This step uses the AI-Core prompt "%s". The prompt above is kept as the fallback.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+								/* translators: %s: Opace AI Hub prompt title. */
+								esc_html__( 'This step uses the Opace AI Hub prompt "%s". The prompt above is kept as the fallback.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 								esc_html( $ai_scribe_applied_prompt ? $ai_scribe_applied_prompt['title'] : '' )
 							);
 						} else {

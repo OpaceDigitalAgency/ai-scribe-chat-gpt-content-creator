@@ -251,7 +251,7 @@ class AI_Scribe_Service_Container {
 			array( 'logger' )
 		);
 
-		// Register AI-Core Adapter
+		// Register Opace AI Hub Adapter
 		$this->register(
 			'ai_core_adapter',
 			function ( $logger, $config ) {

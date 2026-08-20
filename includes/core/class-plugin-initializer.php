@@ -220,7 +220,7 @@ class AI_Scribe_Plugin_Initializer {
 			array( 'logger' )
 		);
 
-		// Register AI-Core Adapter (depends on logger and config)
+		// Register Opace AI Hub Adapter (depends on logger and config)
 		$this->container->register(
 			'ai_core_adapter',
 			function ( $logger, $config ) {
@@ -242,7 +242,7 @@ class AI_Scribe_Plugin_Initializer {
 		// v3 P4: text_adapter — the adapter generation actually uses.
 		// Routes through the WP core AI client when the user selected
 		// "WordPress AI (core)" AND the core client is present; otherwise
-		// the direct AI-Core provider path.
+		// the direct Opace AI Hub provider path.
 		$this->container->register(
 			'text_adapter',
 			function ( $logger, $config ) {
@@ -331,8 +331,8 @@ class AI_Scribe_Plugin_Initializer {
 			array( 'logger', 'ai_core_adapter', 'config', 'prompt_manager', 'security_service' )
 		);
 
-		// v3: Pricing Service DISCARDED (duplicates AI-Core Pricing/Stats — see REFACTOR.md section 7).
-		// Cost estimation will be wired to AI-Core's Pricing classes in P2.
+		// v3: Pricing Service DISCARDED (duplicates Opace AI Hub Pricing/Stats — see REFACTOR.md section 7).
+		// Cost estimation will be wired to Opace AI Hub's Pricing classes in P2.
 		// $this->container->register('pricing_service', function($logger, $config, $wordpress_adapter) {
 		//     return new AI_Scribe_Pricing_Service($logger, $config, $wordpress_adapter);
 		// }, ['logger', 'config', 'wordpress_adapter']);
@@ -400,7 +400,7 @@ class AI_Scribe_Plugin_Initializer {
 		);
 
 		// v3 P4: generation now takes text_adapter (WP core AI client when
-		// selected+available, direct AI-Core provider path otherwise).
+		// selected+available, direct Opace AI Hub provider path otherwise).
 		$this->container->register(
 			'generation_service',
 			function ( $logger, $config, $text_adapter, $prompt_manager, $conversation_service, $cost_estimator ) {
@@ -745,7 +745,7 @@ class AI_Scribe_Plugin_Initializer {
 			$utility_service = $this->container->get( 'utility_service' );
 			$utility_service->activate();
 
-			// Do not run the legacy phantom-key cleanup here. AI-Core owns API
+			// Do not run the legacy phantom-key cleanup here. Opace AI Hub owns API
 			// keys in v3, so an empty pair of legacy key options is normal. The
 			// old routine interpreted that as a fresh install and erased the
 			// saved model plus all per-model parameters on every reinstall.
@@ -1654,7 +1654,7 @@ class AI_Scribe_Plugin_Initializer {
 				return;
 			}
 
-			// Use AI Core Adapter to validate the API key
+			// Use Opace AI Hub Adapter to validate the API key
 			$ai_core_adapter   = $this->container->get( 'ai_core_adapter' );
 			$validation_result = $ai_core_adapter->validate_api_key( $api_key );
 

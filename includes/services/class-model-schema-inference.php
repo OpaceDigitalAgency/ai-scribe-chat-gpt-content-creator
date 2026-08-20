@@ -7,7 +7,7 @@
  * — no reasoning-effort control for o-series/GPT-5.x, no extended-thinking
  * toggle for Claude 4.x, an Anthropic wire-key that is plain wrong
  * (max_output_tokens), and an output default far too small for the body and
- * Express steps. The AI-Core hub is frozen, so the inference lives here in
+ * Express steps. The Opace AI Hub is frozen, so the inference lives here in
  * the AI-Scribe layer: family rules produce a corrected parameter schema and
  * re-register it into ModelRegistry, which both the settings UI panel and the
  * provider request builders read.
@@ -16,7 +16,7 @@
  * inference only fills gaps and fixes the known-wrong bits.
  *
  * The sampling knobs live here too. No provider default schema declares
- * top_p, frequency_penalty or presence_penalty, and the AI-Core providers
+ * top_p, frequency_penalty or presence_penalty, and the Opace AI Hub providers
  * build their request payload strictly from the schema — so an undeclared
  * parameter is dropped on the floor no matter what the settings screen
  * saved. Declaring them per family is what makes the controls appear and
@@ -101,7 +101,7 @@ class AI_Scribe_Model_Schema_Inference {
 			if ( ! $is_reasoning ) {
 				// Sampling family (GPT-4.1, GPT-4o, …): Top P and the two
 				// penalties are real chat-completions parameters. Declaring
-				// them is what makes them reach the wire at all — the AI-Core
+				// them is what makes them reach the wire at all — the Opace AI Hub
 				// providers build their payload from the schema and silently
 				// drop any option the schema does not name.
 				self::add_top_p( $out, 'top_p' );
@@ -290,7 +290,7 @@ class AI_Scribe_Model_Schema_Inference {
 	 * @param string      $label       UI label.
 	 * @param string      $help        UI help text.
 	 * @param int|float   $step        Control step; a step below 1 also tells
-	 *                                 the AI-Core providers to send a float.
+	 *                                 the Opace AI Hub providers to send a float.
 	 * @return array
 	 */
 	private static function number_parameter( $min, $max, $default_val, $request_key, $label, $help = '', $step = 1 ) {

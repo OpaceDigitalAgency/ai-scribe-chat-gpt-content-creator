@@ -2,13 +2,13 @@
 /**
  * Hub Prompt Reader for AI-Scribe Plugin
  *
- * A view over the AI-Core hub's prompt library, plus the per-step "applied
+ * A view over the Opace AI Hub's prompt library, plus the per-step "applied
  * prompt" mapping that lets a user drive an AI-Scribe wizard step from a
- * prompt they manage centrally in AI-Core.
+ * prompt they manage centrally in Opace AI Hub.
  *
  * Reading is the bulk of this class. The one write path is
  * write_prompt()/ensure_group(), used by the 2.6.2 migration to seed the
- * hub with the user's own prompts; both go through AI-Core's public
+ * hub with the user's own prompts; both go through Opace AI Hub's public
  * save_prompt()/save_group() API and never touch its tables directly.
  *
  * AI-Scribe's own `ab_prompts_content` store is untouched by this class —
@@ -32,13 +32,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class AI_Scribe_Hub_Prompt_Reader {
 
 	/**
-	 * Option holding the per-step applied-prompt map: step (1-11) => AI-Core
+	 * Option holding the per-step applied-prompt map: step (1-11) => Opace AI Hub
 	 * prompt id. A step with no entry uses AI-Scribe's own prompt.
 	 */
 	const APPLIED_OPTION = 'ai_scribe_hub_prompt_map';
 
 	/**
-	 * AJAX action for applying / reverting a step's AI-Core prompt.
+	 * AJAX action for applying / reverting a step's Opace AI Hub prompt.
 	 */
 	const AJAX_APPLY = 'ai_scribe_apply_hub_prompt';
 
@@ -64,18 +64,18 @@ class AI_Scribe_Hub_Prompt_Reader {
 	public static function register() {
 		add_action( 'wp_ajax_' . self::AJAX_APPLY, array( __CLASS__, 'handle_apply' ) );
 
-		// The 2.6.2 -> AI-Core prompt migration. It lives on this hook, and
+		// The 2.6.2 -> Opace AI Hub prompt migration. It lives on this hook, and
 		// not only inside AI_Scribe_Migration_Service::maybe_migrate(), so
 		// that a site already flagged as migrated by an earlier 3.x build
 		// still gets its prompts copied into the hub — and so that a site
-		// where AI-Core is activated after AI-Scribe is picked up the first
+		// where Opace AI Hub is activated after AI-Scribe is picked up the first
 		// time an admin page loads with the hub present. The service keeps
 		// its own completion flag, so this is a cheap option read once the
 		// copy is done.
 		if ( class_exists( 'AI_Scribe_Migration_Service' ) ) {
 			// API keys first: the hub is the only send path, so a 2.6.2 (or
 			// early-3.x) key still held only in AI-Scribe's options must land
-			// in AI-Core's key store even on sites already flagged as
+			// in Opace AI Hub's key store even on sites already flagged as
 			// migrated. One-shot, own flag, never overwrites a hub key.
 			add_action( 'admin_init', array( 'AI_Scribe_Migration_Service', 'maybe_migrate_keys_to_hub' ), 19 );
 			add_action( 'admin_init', array( 'AI_Scribe_Migration_Service', 'maybe_migrate_prompts_to_hub' ), 20 );
@@ -86,7 +86,7 @@ class AI_Scribe_Hub_Prompt_Reader {
 	}
 
 	/**
-	 * Is the AI-Core hub plugin active? Same detection the Providers tab
+	 * Is the Opace AI Hub plugin active? Same detection the Providers tab
 	 * uses (templates/settings_template.php, AI_Scribe_Onboarding_Notice) —
 	 * deliberately one mechanism, not two.
 	 *
@@ -109,7 +109,7 @@ class AI_Scribe_Hub_Prompt_Reader {
 
 	/**
 	 * Can prompts be written into the hub? Requires the public save API
-	 * added to AI-Core alongside this integration, so an older AI-Core
+	 * added to Opace AI Hub alongside this integration, so an older Opace AI Hub
 	 * degrades to read-only rather than erroring.
 	 *
 	 * @return bool
@@ -135,7 +135,7 @@ class AI_Scribe_Hub_Prompt_Reader {
 		try {
 			return AI_Core_Prompt_Library::get_instance();
 		} catch ( Exception $e ) {
-			ai_scribe_debug_log( 'AI-Scribe hub prompt reader: could not load AI-Core prompt library — ' . $e->getMessage() );
+			ai_scribe_debug_log( 'AI-Scribe hub prompt reader: could not load Opace AI Hub prompt library — ' . $e->getMessage() );
 			return null;
 		}
 	}
@@ -178,13 +178,13 @@ class AI_Scribe_Hub_Prompt_Reader {
 	/**
 	 * Undo the escaping that stored prompt text carries.
 	 *
-	 * AI-Core saves prompt content through wp_kses_post() on slashed $_POST,
+	 * Opace AI Hub saves prompt content through wp_kses_post() on slashed $_POST,
 	 * so a prompt typed in its own library screen lands on disk with the same
 	 * artefacts a 2.6.2 `ab_prompts_content` value has: backslash-escaped
 	 * quotes and `&` encoded as `&amp;`. AI_Scribe_Prompt_Manager already owns
 	 * the one implementation that peels those, and this delegates to it rather
 	 * than repeating the logic — one normalisation, applied on read only, with
-	 * the hub's stored row left exactly as AI-Core wrote it.
+	 * the hub's stored row left exactly as Opace AI Hub wrote it.
 	 *
 	 * @param mixed $value Stored text.
 	 * @return string
@@ -284,7 +284,7 @@ class AI_Scribe_Hub_Prompt_Reader {
 	}
 
 	/**
-	 * The saved step => AI-Core prompt id map, filtered to real steps.
+	 * The saved step => Opace AI Hub prompt id map, filtered to real steps.
 	 *
 	 * @return array int step => int prompt id
 	 */
@@ -307,11 +307,11 @@ class AI_Scribe_Hub_Prompt_Reader {
 	}
 
 	/**
-	 * The AI-Core prompt applied to a step, or null.
+	 * The Opace AI Hub prompt applied to a step, or null.
 	 *
 	 * Returns null — so the caller falls back to AI-Scribe's own prompt —
-	 * whenever the hub is inactive, the prompt has been deleted in AI-Core,
-	 * or its content is empty. Deactivating AI-Core must never break a run.
+	 * whenever the hub is inactive, the prompt has been deleted in Opace AI Hub,
+	 * or its content is empty. Deactivating Opace AI Hub must never break a run.
 	 *
 	 * @param int $step Wizard step 1-11.
 	 * @return string|null Prompt content, or null to fall back.
@@ -334,7 +334,7 @@ class AI_Scribe_Hub_Prompt_Reader {
 	/**
 	 * One prompt by id, from the per-request index.
 	 *
-	 * @param int $prompt_id AI-Core prompt id.
+	 * @param int $prompt_id Opace AI Hub prompt id.
 	 * @return array|null
 	 */
 	public static function find_prompt( $prompt_id ) {
@@ -354,11 +354,11 @@ class AI_Scribe_Hub_Prompt_Reader {
 	}
 
 	/**
-	 * Apply an AI-Core prompt to a step, or clear the step back to
+	 * Apply an Opace AI Hub prompt to a step, or clear the step back to
 	 * AI-Scribe's own prompt when $prompt_id is 0.
 	 *
 	 * @param int $step      Wizard step 1-11.
-	 * @param int $prompt_id AI-Core prompt id, or 0 to revert.
+	 * @param int $prompt_id Opace AI Hub prompt id, or 0 to revert.
 	 * @return bool|WP_Error True on success.
 	 */
 	public static function apply( $step, $prompt_id ) {
@@ -375,10 +375,10 @@ class AI_Scribe_Hub_Prompt_Reader {
 			unset( $map[ $step ] );
 		} else {
 			if ( ! self::library_available() ) {
-				return new WP_Error( 'hub_inactive', __( 'AI-Core is not active, so its prompts cannot be applied.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
+				return new WP_Error( 'hub_inactive', __( 'Opace AI Hub is not active, so its prompts cannot be applied.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 			}
 			if ( null === self::find_prompt( $prompt_id ) ) {
-				return new WP_Error( 'prompt_not_found', __( 'That prompt no longer exists in AI-Core.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
+				return new WP_Error( 'prompt_not_found', __( 'That prompt no longer exists in Opace AI Hub.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 			}
 			$map[ $step ] = $prompt_id;
 		}
@@ -392,7 +392,7 @@ class AI_Scribe_Hub_Prompt_Reader {
 	/**
 	 * The hub group with this exact name, creating it when absent.
 	 *
-	 * Goes through AI-Core's public save_group() API — the same code path its
+	 * Goes through Opace AI Hub's public save_group() API — the same code path its
 	 * own "New Group" button uses — so nothing here knows about its tables.
 	 *
 	 * @param string $name        Group name.
@@ -401,12 +401,12 @@ class AI_Scribe_Hub_Prompt_Reader {
 	 */
 	public static function ensure_group( $name, $description = '' ) {
 		if ( ! self::library_writable() ) {
-			return new WP_Error( 'hub_not_writable', __( 'AI-Core does not expose a prompt save API.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
+			return new WP_Error( 'hub_not_writable', __( 'Opace AI Hub does not expose a prompt save API.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 
 		$library = self::library();
 		if ( null === $library ) {
-			return new WP_Error( 'hub_unavailable', __( 'AI-Core prompt library unavailable.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
+			return new WP_Error( 'hub_unavailable', __( 'Opace AI Hub prompt library unavailable.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 
 		foreach ( self::get_groups() as $group ) {
@@ -457,9 +457,9 @@ class AI_Scribe_Hub_Prompt_Reader {
 	/**
 	 * Create a prompt in the hub.
 	 *
-	 * Thin wrapper over AI-Core's public save_prompt(). Deliberately create-
+	 * Thin wrapper over Opace AI Hub's public save_prompt(). Deliberately create-
 	 * only: nothing in AI-Scribe overwrites a prompt the user maintains in
-	 * AI-Core, so the caller decides what to do when one already exists.
+	 * Opace AI Hub, so the caller decides what to do when one already exists.
 	 *
 	 * @param string $title    Prompt title.
 	 * @param string $content  Prompt text.
@@ -468,12 +468,12 @@ class AI_Scribe_Hub_Prompt_Reader {
 	 */
 	public static function write_prompt( $title, $content, $group_id = 0 ) {
 		if ( ! self::library_writable() ) {
-			return new WP_Error( 'hub_not_writable', __( 'AI-Core does not expose a prompt save API.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
+			return new WP_Error( 'hub_not_writable', __( 'Opace AI Hub does not expose a prompt save API.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 
 		$library = self::library();
 		if ( null === $library ) {
-			return new WP_Error( 'hub_unavailable', __( 'AI-Core prompt library unavailable.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
+			return new WP_Error( 'hub_unavailable', __( 'Opace AI Hub prompt library unavailable.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 
 		$result = $library->save_prompt(
@@ -503,23 +503,23 @@ class AI_Scribe_Hub_Prompt_Reader {
 	 * reads verbatim as an old stock default before calling this, so a
 	 * user-edited prompt is never rewritten.
 	 *
-	 * @param int    $prompt_id AI-Core prompt id.
+	 * @param int    $prompt_id Opace AI Hub prompt id.
 	 * @param string $content   New prompt text.
 	 * @return true|WP_Error
 	 */
 	public static function update_prompt_content( $prompt_id, $content ) {
 		if ( ! self::library_writable() ) {
-			return new WP_Error( 'hub_not_writable', __( 'AI-Core does not expose a prompt save API.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
+			return new WP_Error( 'hub_not_writable', __( 'Opace AI Hub does not expose a prompt save API.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 
 		$prompt = self::find_prompt( $prompt_id );
 		if ( null === $prompt ) {
-			return new WP_Error( 'prompt_not_found', __( 'That prompt no longer exists in AI-Core.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
+			return new WP_Error( 'prompt_not_found', __( 'That prompt no longer exists in Opace AI Hub.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 
 		$library = self::library();
 		if ( null === $library ) {
-			return new WP_Error( 'hub_unavailable', __( 'AI-Core prompt library unavailable.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
+			return new WP_Error( 'hub_unavailable', __( 'Opace AI Hub prompt library unavailable.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 
 		$result = $library->save_prompt(
@@ -552,7 +552,7 @@ class AI_Scribe_Hub_Prompt_Reader {
 	}
 
 	/**
-	 * AJAX: apply or revert a step's AI-Core prompt.
+	 * AJAX: apply or revert a step's Opace AI Hub prompt.
 	 *
 	 * Applying a prompt changes what a wizard step sends, not a site
 	 * setting, so `edit_posts` is the capability — the same bar as running
@@ -601,8 +601,8 @@ class AI_Scribe_Hub_Prompt_Reader {
 				'prompt_id' => $prompt_id,
 				'title'     => $prompt ? $prompt['title'] : '',
 				'message'   => $prompt_id > 0
-					/* translators: %s: AI-Core prompt title. */
-					? sprintf( __( 'Now using the AI-Core prompt "%s" for this step.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), $prompt ? $prompt['title'] : '' )
+					/* translators: %s: Opace AI Hub prompt title. */
+					? sprintf( __( 'Now using the Opace AI Hub prompt "%s" for this step.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), $prompt ? $prompt['title'] : '' )
 					: __( 'Reverted to the AI-Scribe prompt for this step.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 			)
 		);

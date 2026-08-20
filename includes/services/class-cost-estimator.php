@@ -3,7 +3,7 @@
  * Cost Estimator for AI-Scribe Plugin
  *
  * Pre-generation cost estimates per step and per article, and actual-cost
- * calculation from provider usage blocks. Prefers the standalone AI-Core
+ * calculation from provider usage blocks. Prefers the standalone Opace AI Hub
  * plugin's Pricing class when active (shared pricing data across Opace
  * plugins); otherwise falls back to a bundled table.
  *
@@ -54,7 +54,7 @@ class AI_Scribe_Cost_Estimator {
 	/**
 	 * Bundled pricing table (USD per 1M tokens), keyed by model prefix.
 	 * Reference points verified Aug 2026 (REFACTOR.md §4) plus the
-	 * still-listed legacy models from AI-Core's pricing data.
+	 * still-listed legacy models from Opace AI Hub's pricing data.
 	 *
 	 * @var array
 	 */
@@ -221,7 +221,7 @@ class AI_Scribe_Cost_Estimator {
 		$model   = (string) $model;
 		$pricing = null;
 
-		// Prefer the standalone AI-Core plugin's pricing when active.
+		// Prefer the standalone Opace AI Hub plugin's pricing when active.
 		if ( class_exists( 'AI_Core_Pricing' ) ) {
 			try {
 				$core = AI_Core_Pricing::get_instance();

@@ -457,7 +457,7 @@ class AI_Scribe_Config_Manager {
 	/**
 	 * Get API key for specific provider.
 	 *
-	 * AI-Core is a hard dependency and owns provider configuration, so its
+	 * Opace AI Hub is a hard dependency and owns provider configuration, so its
 	 * shared keys (option `ai_core_settings`) are the authoritative source.
 	 * AI-Scribe has no key fields of its own any more.
 	 *
@@ -495,7 +495,7 @@ class AI_Scribe_Config_Manager {
 	}
 
 	/**
-	 * Read a provider key from the AI-Core hub plugin's settings.
+	 * Read a provider key from the Opace AI Hub plugin's settings.
 	 *
 	 * @param string $provider openai|anthropic|claude|gemini|google|grok|xai
 	 * @return string|null

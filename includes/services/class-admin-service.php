@@ -423,7 +423,7 @@ class AI_Scribe_Admin_Service {
 	private function localize_main_script_data() {
 		$engine_settings = get_option( 'ab_gpt_ai_engine_settings', array() );
 
-		// Hub-aware: ConfigManager::get_api_key falls back to the AI-Core
+		// Hub-aware: ConfigManager::get_api_key falls back to the Opace AI Hub
 		// hub's shared keys (ai_core_settings), so a hub-managed install
 		// reports its providers as configured (raw option reads did not).
 		$providers_configured = array();

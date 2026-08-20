@@ -2,7 +2,7 @@
 /**
  * Engine Service for AI-Scribe Plugin
  *
- * Handles AI engine operations and data processing using the existing AI-Core infrastructure,
+ * Handles AI engine operations and data processing using the existing Opace AI Hub infrastructure,
  * Config Manager, and Prompt Manager for proper modular architecture.
  *
  * Migrated from engine_request_data() and related functions in article_builder_backup.php
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class AI_Scribe_Engine_Service
  *
  * Properly refactored to use existing infrastructure:
- * - AI-Core Adapter for all API calls
+ * - Opace AI Hub Adapter for all API calls
  * - Config Manager for all settings
  * - Prompt Manager for all prompts
  * - Security Service for nonce validation
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class AI_Scribe_Engine_Service extends AI_Scribe_Base_Service {
 
 	/**
-	 * AI-Core adapter instance
+	 * Opace AI Hub adapter instance
 	 *
 	 * @var AI_Scribe_AI_Core_Adapter
 	 */
@@ -60,7 +60,7 @@ class AI_Scribe_Engine_Service extends AI_Scribe_Base_Service {
 	 * Constructor
 	 *
 	 * @param AI_Scribe_Logger $logger Logger instance
-	 * @param AI_Scribe_AI_Core_Adapter $ai_core_adapter AI-Core adapter
+	 * @param AI_Scribe_AI_Core_Adapter $ai_core_adapter Opace AI Hub adapter
 	 * @param AI_Scribe_Config_Manager $config_manager Config manager
 	 * @param AI_Scribe_Prompt_Manager $prompt_manager Prompt manager
 	 * @param AI_Scribe_Security_Service $security_service Security service
@@ -96,8 +96,8 @@ class AI_Scribe_Engine_Service extends AI_Scribe_Base_Service {
 	 */
 	public function validate_service() {
 		if ( ! $this->ai_core_adapter ) {
-			$this->log_error( 'Engine service validation failed: AI-Core adapter not available' );
-			return 'AI-Core adapter not available';
+			$this->log_error( 'Engine service validation failed: Opace AI Hub adapter not available' );
+			return 'Opace AI Hub adapter not available';
 		}
 
 		if ( ! $this->config_manager ) {
@@ -302,7 +302,7 @@ class AI_Scribe_Engine_Service extends AI_Scribe_Base_Service {
 
 		$debug_messages[] = 'Parameters: ' . json_encode( $parameters );
 
-		// Generate content using AI-Core Adapter
+		// Generate content using Opace AI Hub Adapter
 		$response = $this->ai_core_adapter->generate_text( $model, $messages, $parameters );
 
 		if ( is_wp_error( $response ) ) {

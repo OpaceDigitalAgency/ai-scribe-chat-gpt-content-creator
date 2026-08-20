@@ -641,7 +641,7 @@ foreach ( $ai_scribe_steps as $ai_scribe_n => $ai_scribe_def ) {
 						// the live label/provider) — never a stuck "Loading…".
 						$ai_scribe_engine_now  = get_option( 'ab_gpt_ai_engine_settings', array() );
 						$ai_scribe_model_now   = isset( $ai_scribe_engine_now['model'] ) ? (string) $ai_scribe_engine_now['model'] : '';
-						// AI-Core owns provider configuration. With no model of its
+						// Opace AI Hub owns provider configuration. With no model of its
 						// own — the normal state on a fresh install — show the one
 						// generation will actually use, rather than claiming none is
 						// selected beside a populated picker.

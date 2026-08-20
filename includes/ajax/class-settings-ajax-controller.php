@@ -89,7 +89,7 @@ class AI_Scribe_Settings_Ajax_Controller {
 	 * Contract v1.1 §9 — ai_scribe_get_available_models.
 	 *
 	 * UAT §12.2 dynamic model UX: for every CONFIGURED provider the list is
-	 * fetched LIVE from the provider's /models endpoint (AI-Core provider
+	 * fetched LIVE from the provider's /models endpoint (Opace AI Hub provider
 	 * getAvailableModels(), which also registers new ids in ModelRegistry),
 	 * transient-cached for an hour with a manual `refresh=1` bypass.
 	 * Unconfigured providers fall back to the registry seed so a fresh
@@ -239,7 +239,7 @@ class AI_Scribe_Settings_Ajax_Controller {
 	}
 
 	/**
-	 * Instantiate an AI-Core text provider for the live model listing.
+	 * Instantiate an Opace AI Hub text provider for the live model listing.
 	 *
 	 * @param string $provider Provider id.
 	 * @param string $key      API key (never logged).
@@ -378,13 +378,13 @@ class AI_Scribe_Settings_Ajax_Controller {
 			return;
 		}
 
-		// §13.12: with the AI-Core hub active, provider keys are managed
+		// §13.12: with the Opace AI Hub active, provider keys are managed
 		// centrally — this surface refuses key writes and points at the hub.
 		if ( function_exists( 'ai_core' ) || class_exists( 'AI_Core' ) ) {
 			wp_send_json_error(
 				array(
 					'code'      => 'managed_by_hub',
-					'message'   => 'API keys are managed by the AI-Core plugin. Configure them under AI-Core → Settings.',
+					'message'   => 'API keys are managed by the Opace AI Hub plugin. Configure them under Opace AI Hub → Settings.',
 					'retryable' => false,
 				)
 			);

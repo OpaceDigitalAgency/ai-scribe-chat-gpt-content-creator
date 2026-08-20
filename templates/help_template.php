@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<ol>
 			<li>
 				<?php if ( function_exists( 'ai_core' ) || class_exists( 'AI_Core' ) ) : ?>
-					<?php esc_html_e( 'Provider API keys are managed centrally by the AI-Core plugin (AI-Core → Settings) and shared by every AI-Core add-on. On WordPress 7.0+ you can also route through the core WordPress AI credentials.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
+					<?php esc_html_e( 'Provider API keys are managed centrally by the Opace AI Hub plugin (Opace AI Hub → Settings) and shared by every Opace AI Hub add-on. On WordPress 7.0+ you can also route through the core WordPress AI credentials.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
 				<?php else : ?>
 					<?php esc_html_e( 'Add at least one provider API key under Settings → Providers & Model (OpenAI, Anthropic or Google Gemini). On WordPress 7.0+ you can also route through the core WordPress AI credentials.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
 				<?php endif; ?>

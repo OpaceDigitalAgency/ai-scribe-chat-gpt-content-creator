@@ -743,11 +743,11 @@ Does the article provide an original, interesting and engaging perspective on th
 	 *
 	 *   1. Per-run override — what the user typed into the wizard's prompt
 	 *      box for this one generation. Never persisted.
-	 *   2. Applied AI-Core prompt — a prompt from the hub's library that the
+	 *   2. Applied Opace AI Hub prompt — a prompt from the hub's library that the
 	 *      user pinned to this step on the Prompt Library tab
 	 *      (AI_Scribe_Hub_Prompt_Reader). Resolves to null, and so falls
 	 *      through, whenever the hub is inactive or the prompt was deleted
-	 *      there — deactivating AI-Core must never break a run.
+	 *      there — deactivating Opace AI Hub must never break a run.
 	 *   3. Saved AI-Scribe prompt — the user's own `ab_prompts_content` value.
 	 *   4. AI-Scribe built-in default — get_default_prompts().
 	 *
@@ -770,7 +770,7 @@ Does the article provide an original, interesting and engaging perspective on th
 			return $override;
 		}
 
-		// 2. Applied AI-Core prompt.
+		// 2. Applied Opace AI Hub prompt.
 		if ( class_exists( 'AI_Scribe_Hub_Prompt_Reader' ) ) {
 			$applied = AI_Scribe_Hub_Prompt_Reader::get_applied_prompt( $step );
 			if ( is_string( $applied ) && trim( $applied ) !== '' ) {
@@ -1364,7 +1364,7 @@ EOT;
 			$prompt .= $this->evaluation_enhancement_clauses();
 		}
 
-		// Stable generation policies apply to upgraded, AI-Core and per-run
+		// Stable generation policies apply to upgraded, Opace AI Hub and per-run
 		// prompts without overwriting the user's saved wording.
 		if ( 1 === $step ) {
 			$year   = gmdate( 'Y' );

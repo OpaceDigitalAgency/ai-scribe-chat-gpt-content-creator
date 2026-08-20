@@ -30,7 +30,7 @@ class AI_Scribe_Service_Factory {
 	private static $logger;
 
 	/**
-	 * AI-Core adapter instance
+	 * Opace AI Hub adapter instance
 	 *
 	 * @var AI_Scribe_AI_Core_Adapter
 	 */
@@ -68,7 +68,7 @@ class AI_Scribe_Service_Factory {
 	 * Initialize the factory with core dependencies
 	 *
 	 * @param AI_Scribe_Logger $logger Logger instance
-	 * @param AI_Scribe_AI_Core_Adapter $ai_core_adapter AI-Core adapter
+	 * @param AI_Scribe_AI_Core_Adapter $ai_core_adapter Opace AI Hub adapter
 	 * @param AI_Scribe_Config_Manager $config_manager Config manager
 	 * @param AI_Scribe_Prompt_Manager $prompt_manager Prompt manager
 	 * @param AI_Scribe_Security_Service $security_service Security service

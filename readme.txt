@@ -4,8 +4,8 @@ Tags: AI Writer, Content Generator, Content Creator, AI, SEO
 Requires at least: 6.5
 Tested up to: 7.0.4
 Requires PHP: 7.4
-Requires Plugins: opace-ai-core-integration-hub-prompt-engine
-Stable tag: 3.2.23
+Requires Plugins: opace-ai-prompt-library-api-hub
+Stable tag: 3.2.24
 License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://opace.agency/get-in-touch
@@ -20,7 +20,7 @@ Version 3 is a ground-up rebuild of the plugin around one idea: the model should
 
 = Modular architecture =
 
-Version 3 splits what used to be one plugin into two. AI Scribe is the writing tool. **AI-Core** is the hub that holds provider credentials, model lists, pricing and the shared prompt library. Add a key once in AI-Core and every plugin built on the hub can use it.
+Version 3 splits what used to be one plugin into two. AI Scribe is the writing tool. **Opace AI Hub** is the hub that holds provider credentials, model lists, pricing and the shared prompt library. Add a key once in Opace AI Hub and every plugin built on the hub can use it.
 
 `
 ┌────────────────────────────────────────────────────────────────┐
@@ -34,11 +34,11 @@ Version 3 splits what used to be one plugin into two. AI Scribe is the writing t
 │     Generation · Conversation thread · Images · Cost meter     │
 │     Prompt assembly · Response schemas · SEO + post output     │
 │                             │                                  │
-│                             ▼  AI-Core adapter                 │
+│                             ▼  Opace AI Hub adapter                 │
 └─────────────────────────────┼──────────────────────────────────┘
                               │
 ┌─────────────────────────────▼──────────────────────────────────┐
-│  AI-Core  (required hub plugin — no content of its own)        │
+│  Opace AI Hub  (required hub plugin — no content of its own)        │
 │                                                                │
 │   API keys, encrypted at rest   ·   Live model discovery       │
 │   Shared prompt library         ·   Usage + cost statistics    │
@@ -52,15 +52,15 @@ Version 3 splits what used to be one plugin into two. AI Scribe is the writing t
 
 What this buys you: one place to manage keys instead of one per plugin; model lists that come from your own provider account rather than a list baked into the plugin; usage and spend recorded across every add-on together; and a prompt library shared between them. It also means a provider fix lands once, in the hub, instead of separately in each plugin.
 
-= AI-Core is required =
+= Opace AI Hub is required =
 
-AI Scribe is an add-on to the free **AI-Core** hub plugin and does nothing without it. WordPress will not let you activate AI Scribe until AI-Core is active. If AI-Core is deactivated afterwards, AI Scribe shuts itself down cleanly — no menu, no wizard, no endpoints — and shows a notice with a button to switch AI-Core back on.
+AI Scribe is an add-on to the free **Opace AI Hub** hub plugin and does nothing without it. WordPress will not let you activate AI Scribe until Opace AI Hub is active. If Opace AI Hub is deactivated afterwards, AI Scribe shuts itself down cleanly — no menu, no wizard, no endpoints — and shows a notice with a button to switch Opace AI Hub back on.
 
-AI Scribe's own Providers tab therefore has no key fields. It shows a status chip per provider — configured, not configured, or key rejected by the provider — and a link through to AI-Core's settings.
+AI Scribe's own Providers tab therefore has no key fields. It shows a status chip per provider — configured, not configured, or key rejected by the provider — and a link through to Opace AI Hub's settings.
 
 = Providers and models =
 
-Add a key for one provider or all three. The model list is fetched live from your own account and cached for an hour, with a Refresh button that bypasses the cache. AI Scribe filters the returned models by capability and preserves a valid saved choice. AI-Core's maintained registry is used only when live discovery is unavailable, so the plugin does not promise model names which a provider may rename, retire or withhold from a particular account.
+Add a key for one provider or all three. The model list is fetched live from your own account and cached for an hour, with a Refresh button that bypasses the cache. AI Scribe filters the returned models by capability and preserves a valid saved choice. Opace AI Hub's maintained registry is used only when live discovery is unavailable, so the plugin does not promise model names which a provider may rename, retire or withhold from a particular account.
 
 * **OpenAI** — text and image-capable models exposed by the configured account.
 * **Anthropic** — text-capable models exposed by the configured account. Anthropic does not provide an image model.
@@ -84,7 +84,7 @@ Provider status is a live check, not a guess. AI Scribe proves the key against t
 
 A new install starts with Auto article length, English, Business style, Professional tone, Humanizer, British spelling, five H2 sections, Q&A, table of contents, hyperlink suggestions and keyword emphasis enabled. Image generation and parallel image processing are enabled with the Photorealistic preset, but the controls remain unavailable until a configured provider exposes a compatible image model.
 
-A valid saved model always wins. When it is missing or retired, AI-Core ranks the configured account's live list inside a provider-specific family: newest Terra with medium reasoning for OpenAI writing; newest Claude Opus with medium effort for Anthropic writing; newest non-Lite Gemini Flash with medium thinking for Gemini writing; newest GPT Image for OpenAI images; and newest Gemini Flash Image / Nano Banana for Gemini images.
+A valid saved model always wins. When it is missing or retired, Opace AI Hub ranks the configured account's live list inside a provider-specific family: newest Terra with medium reasoning for OpenAI writing; newest Claude Opus with medium effort for Anthropic writing; newest non-Lite Gemini Flash with medium thinking for Gemini writing; newest GPT Image for OpenAI images; and newest Gemini Flash Image / Nano Banana for Gemini images.
 
 The maintained offline fallbacks are currently `gpt-5.6-terra`, `claude-opus-5`, `gemini-3.6-flash`, `gpt-image-2` and `gemini-3.1-flash-image` (Nano Banana 2). They do not promise that every account exposes the same list. Live discovery takes precedence, so a later model in the same preferred family becomes the default without a plugin update. Temperature and top-p begin at 0.5 only where the selected model accepts them; unsupported controls are omitted. Reactivation and retained-data reinstalls fill missing settings only and never replace a valid saved choice.
 
@@ -120,13 +120,13 @@ Three further savings: a failed or malformed response never advances the wizard 
 
 One click creates the first whole-article draft. Express mode returns the title, meta, tagline, outline, introduction, body, conclusion and Q&A together in one structured starting request. It shows the exact visible word count and preferred range; an under-target draft can be improved with a separate request without discarding the usable copy. Save the exact visible result as a draft, published post or shortcode, or refine any part in the wizard afterwards.
 
-= Prompts, shared with AI-Core =
+= Prompts, shared with Opace AI Hub =
 
-The Prompt Library tab shows AI-Core's prompt library grouped as you organised it there. Apply any of those prompts to a wizard step and that step uses it instead of AI Scribe's own. Your AI Scribe prompt stays behind it as the fallback, so deleting a prompt in AI-Core, or deactivating the hub, never leaves a step with nothing to send.
+The Prompt Library tab shows Opace AI Hub's prompt library grouped as you organised it there. Apply any of those prompts to a wizard step and that step uses it instead of AI Scribe's own. Your AI Scribe prompt stays behind it as the fallback, so deleting a prompt in Opace AI Hub, or deactivating the hub, never leaves a step with nothing to send.
 
-Upgrading from 2.6.x copies your own edited prompts into AI-Core, filed under a group called "AI-Scribe" and named per step, and points each step at its copy. Nothing is moved: the originals stay in the database as a backup, and the copy is skipped for any prompt you have already created in AI-Core under the same name.
+Upgrading from 2.6.x copies your own edited prompts into Opace AI Hub, filed under a group called "AI-Scribe" and named per step, and points each step at its copy. Nothing is moved: the originals stay in the database as a backup, and the copy is skipped for any prompt you have already created in Opace AI Hub under the same name.
 
-Precedence for a step, highest first: the prompt you typed into the wizard for this one run, then the AI-Core prompt pinned to that step, then your saved AI Scribe prompt, then the built-in default.
+Precedence for a step, highest first: the prompt you typed into the wizard for this one run, then the Opace AI Hub prompt pinned to that step, then your saved AI Scribe prompt, then the built-in default.
 
 = Custom Instructions =
 
@@ -138,7 +138,7 @@ The Humanizer and Humanizer with Personality writing modes from 2.6 are back as 
 
 = Cost transparency =
 
-A cost meter shows the estimated spend before a step runs, the actual spend after it, and the running total for the article. Pricing comes from AI-Core's live/cached pricing data and maintained fallback catalogue. When trustworthy pricing is unavailable, the interface says **Cost unavailable** rather than recording a misleading zero.
+A cost meter shows the estimated spend before a step runs, the actual spend after it, and the running total for the article. Pricing comes from Opace AI Hub's live/cached pricing data and maintained fallback catalogue. When trustworthy pricing is unavailable, the interface says **Cost unavailable** rather than recording a misleading zero.
 
 = Images =
 
@@ -164,7 +164,7 @@ Running the wizard, Express mode and the Help screen need `edit_posts`, so autho
 
 == External services ==
 
-This plugin connects only to the AI provider APIs you configure with your own API keys in AI-Core. No other outbound requests are made, and nothing is sent to Opace's servers.
+This plugin connects only to the AI provider APIs you configure with your own API keys in Opace AI Hub. No other outbound requests are made, and nothing is sent to Opace's servers.
 
 * **OpenAI API** (api.openai.com) — prompts, selected article content and generation settings are sent to generate text and images when an OpenAI model is selected, plus a model-list request used to populate the model picker and check that your key works. [Terms](https://openai.com/policies/terms-of-use) · [Privacy](https://openai.com/policies/privacy-policy)
 * **Anthropic API** (api.anthropic.com) — the same data is sent when a Claude model is selected. [Terms](https://www.anthropic.com/legal/consumer-terms) · [Privacy](https://www.anthropic.com/legal/privacy)
@@ -174,18 +174,18 @@ Requests only happen when you run the wizard, Express mode, image generation, or
 
 == Installation ==
 
-1. Install and activate the verified **AI-Core** package. AI Scribe declares it as a required plugin, so WordPress refuses to activate AI Scribe until it is there. When AI-Core is available from WordPress.org, the missing-dependency notice can install or activate it directly; until then, install the verified package supplied through AI-Core's own release channel.
-2. In AI-Core → Settings, add an API key for at least one provider: OpenAI, Anthropic or Google Gemini.
+1. Install and activate the verified **Opace AI Hub** package. AI Scribe declares it as a required plugin, so WordPress refuses to activate AI Scribe until it is there. When Opace AI Hub is available from WordPress.org, the missing-dependency notice can install or activate it directly; until then, install the verified package supplied through Opace AI Hub's own release channel.
+2. In Opace AI Hub → Settings, add an API key for at least one provider: OpenAI, Anthropic or Google Gemini.
 3. Upload AI Scribe to `/wp-content/plugins/` or install it from the Plugins screen, then activate it.
 4. Open AI Scribe → Settings → Providers & Model. Check that your provider shows as configured, pick a model (Refresh models re-fetches the live list), then open Generate Article and start writing.
 
-Upgrading from 2.6.x is a normal one-click update, but AI-Core must be installed and active or the updated plugin will not run. WordPress does not deactivate a plugin whose dependency is missing, so AI Scribe checks for itself: without AI-Core it hides its screens and endpoints, leaves your data untouched, and shows a notice to install or activate the hub. Nothing is lost — it starts working again the moment AI-Core is active. Saved prompts, content settings, custom languages, saved shortcodes and API keys are migrated the first time an admin page loads, keys carried over from 2.6.x are encrypted at rest during that migration, and your edited prompts are copied into AI-Core's library.
+Upgrading from 2.6.x is a normal one-click update, but Opace AI Hub must be installed and active or the updated plugin will not run. WordPress does not deactivate a plugin whose dependency is missing, so AI Scribe checks for itself: without Opace AI Hub it hides its screens and endpoints, leaves your data untouched, and shows a notice to install or activate the hub. Nothing is lost — it starts working again the moment Opace AI Hub is active. Saved prompts, content settings, custom languages, saved shortcodes and API keys are migrated the first time an admin page loads, keys carried over from 2.6.x are encrypted at rest during that migration, and your edited prompts are copied into Opace AI Hub's library.
 
 == Frequently Asked Questions ==
 
-= Do I really need AI-Core? =
+= Do I really need Opace AI Hub? =
 
-Yes. AI-Core stores the API keys, supplies the model lists and pricing, and holds the shared prompt library. Without it AI Scribe has nowhere to configure a model, so it will not activate, and it shuts down if AI-Core is deactivated later.
+Yes. Opace AI Hub stores the API keys, supplies the model lists and pricing, and holds the shared prompt library. Without it AI Scribe has nowhere to configure a model, so it will not activate, and it shuts down if Opace AI Hub is deactivated later.
 
 = Can I use Claude for writing and something else for images? =
 
@@ -197,11 +197,11 @@ Everything except images works normally. The image controls are hidden rather th
 
 = Which models are supported? =
 
-Whichever compatible models your configured provider account grants you. The list is fetched live and filtered by capability. AI-Core's maintained registry is the fallback when live discovery is temporarily unavailable, so this readme does not make promises about volatile provider model names.
+Whichever compatible models your configured provider account grants you. The list is fetched live and filtered by capability. Opace AI Hub's maintained registry is the fallback when live discovery is temporarily unavailable, so this readme does not make promises about volatile provider model names.
 
 = What happens to my edited prompts when I upgrade? =
 
-They are copied into AI-Core's prompt library, into a group named "AI-Scribe", with one prompt per wizard step, and each step is pointed at its copy. Your originals are left in place untouched as a backup. The copy runs once, resumes if it is interrupted, and never overwrites a prompt you already have in AI-Core with the same name. If AI-Core is not active yet, it simply waits and runs the next time an admin page loads.
+They are copied into Opace AI Hub's prompt library, into a group named "AI-Scribe", with one prompt per wizard step, and each step is pointed at its copy. Your originals are left in place untouched as a backup. The copy runs once, resumes if it is interrupted, and never overwrites a prompt you already have in Opace AI Hub with the same name. If Opace AI Hub is not active yet, it simply waits and runs the next time an admin page loads.
 
 = Is this cheaper than using ChatGPT directly? =
 
@@ -229,7 +229,7 @@ No. Requests go directly from your WordPress site to the AI provider you configu
 
 = Where did the API key fields go? =
 
-Into AI-Core. AI Scribe's Providers tab shows a status chip per provider and a link to AI-Core's settings. Keys are never rendered into the page, and AI Scribe refuses key writes while AI-Core is active.
+Into Opace AI Hub. AI Scribe's Providers tab shows a status chip per provider and a link to Opace AI Hub's settings. Keys are never rendered into the page, and AI Scribe refuses key writes while Opace AI Hub is active.
 
 = What happened to the Humanize option? =
 
@@ -268,17 +268,20 @@ Only if you opt in. Choose the delete-on-uninstall setting before deleting the p
 
 == Changelog ==
 
+= 3.2.24 =
+* Changed: the required hub plugin was renamed during WordPress.org review to Opace AI Prompt Library & API Integration Hub for OpenAI, Claude & Gemini; the dependency slug, text-domain detection and all references now use `opace-ai-prompt-library-api-hub`.
+
 = 3.2.23 =
-* Fixed: the required AI-Core slug, text-domain detection and one-click dependency route now match `opace-ai-core-integration-hub-prompt-engine`, the permanent WordPress.org submission slug.
-* Improved: the missing-dependency notice enables its install button automatically as soon as WordPress.org resolves the approved AI-Core listing.
-* Documentation: linked the separately published AI-Core source and verified GitHub release.
+* Fixed: the required Opace AI Hub slug, text-domain detection and one-click dependency route now match `opace-ai-prompt-library-api-hub`, the permanent WordPress.org submission slug.
+* Improved: the missing-dependency notice enables its install button automatically as soon as WordPress.org resolves the approved Opace AI Hub listing.
+* Documentation: linked the separately published Opace AI Hub source and verified GitHub release.
 * Compatibility: tested up to WordPress 7.0.4.
 
 = 3.2.22 =
 * Improved: fresh provider defaults are now selected dynamically from each configured account: newest Terra, Claude Opus or non-Lite Gemini Flash for writing, with medium reasoning or thinking where supported.
 * Improved: image defaults now prefer the newest GPT Image and Gemini Flash Image / Nano Banana families; the maintained offline fallbacks are GPT Image 2 and Nano Banana 2.
 * Fixed: a valid model selected by the user remains authoritative, while a missing or retired choice is replaced by the best current model in the intended provider family.
-* Fixed: the AI-Core WordPress.org install button stays disabled until the dependency has a verified public listing, avoiding a dead install action before publication.
+* Fixed: the Opace AI Hub WordPress.org install button stays disabled until the dependency has a verified public listing, avoiding a dead install action before publication.
 * Compatibility: tested up to WordPress 7.0.4.
 
 = 3.2.21 =
@@ -370,7 +373,7 @@ Only if you opt in. Choose the delete-on-uninstall setting before deleting the p
 * Fixed: redundant editor spacer blocks no longer create large blank gaps around images in Review or saved articles.
 
 = 3.2.6 =
-* Fixed: activating after a retained-data reinstall no longer resets writing style to Business or erases the selected model and thinking level on AI-Core/Gemini installations.
+* Fixed: activating after a retained-data reinstall no longer resets writing style to Business or erases the selected model and thinking level on Opace AI Hub/Gemini installations.
 * Improved: Express generation now keeps its named progress, elapsed time and provider context directly beneath the Generate controls where it remains visible.
 * Improved: Settings now state the default data-retention behaviour plainly and warn before users opt into destructive uninstall cleanup.
 * Improved: save confirmation names the selected writing style and model thinking level so users can verify the values that were stored.
@@ -448,7 +451,7 @@ Only if you opt in. Choose the delete-on-uninstall setting before deleting the p
 * Fixed: reactivating the plugin overwrote edited prompts and settings with the shipped defaults. Seeding now fills only what is missing.
 * Fixed: the writing mode text existed in two places that had drifted apart, and the personality mode was stored under two different names.
 * Fixed: live Gemini 3.x generations failed with an HTTP 400 — the thinking-level option is now sent in the format Google accepts.
-* Fixed: every generation is routed through the AI-Core hub, so usage, cost and error statistics are recorded correctly. On upgrade, keys held locally are handed to the hub (encrypted at rest).
+* Fixed: every generation is routed through the Opace AI Hub, so usage, cost and error statistics are recorded correctly. On upgrade, keys held locally are handed to the hub (encrypted at rest).
 * Fixed: selected keywords now persist and reach your SEO plugin as the focus keyword; AIOSEO v4 support rewritten; publishing after saving a draft updates the same post instead of creating a duplicate.
 * Fixed: with no SEO plugin active, the meta title and description now render on the front end and the SEO step says where they were saved.
 * New: image prompts are auto-written from each section and editable before generating; drag-and-drop insertion with visible drop zones; delete and replace controls on inserted images; the first image is set as the featured image and added to the article.
@@ -457,11 +460,11 @@ Only if you opt in. Choose the delete-on-uninstall setting before deleting the p
 * Improved: custom instructions are seeded on fresh installs, wizard state survives a page reload, settings screens work at mobile widths, and uninstall cleanup removes everything it should.
 
 = 3.0.9 =
-* Improved: the welcome notice's "Install AI-Core hub" button now performs the one-click install directly, instead of sending you to a plugin search page.
+* Improved: the welcome notice's "Install Opace AI Hub" button now performs the one-click install directly, instead of sending you to a plugin search page.
 
 = 3.0.8 =
 * Tested against WordPress 7.0.4.
-* New: when AI-Core is missing, the notice now offers a one-click **Install AI-Core now** button. WordPress does not install a dependency for you — it only blocks activation and prints a notice — so this saves going to find it manually.
+* New: when Opace AI Hub is missing, the notice now offers a one-click **Install Opace AI Hub now** button. WordPress does not install a dependency for you — it only blocks activation and prints a notice — so this saves going to find it manually.
 * New: the model list is fetched live every time the settings screen opens, instead of serving an hour-old cache until you noticed and pressed Refresh. Providers you have configured are listed first.
 * New: adding an API key now records a sensible default model for both text and images, chosen from that account's own model list. Change either afterwards; a model you pick is never overwritten.
 * Fixed: Google Gemini could not generate anything. The response schema AI-Scribe builds was discarded before the request was sent, so every step came back as prose and failed with "Response was not valid JSON".
@@ -475,7 +478,7 @@ Only if you opt in. Choose the delete-on-uninstall setting before deleting the p
 * Fixed: image generation kept requesting an OpenAI image model after the site moved to a different provider, failing every time with "OpenAI API key not configured for image generation". A saved image model is now only used while its provider still holds a key.
 * Fixed: image controls were offered whenever a provider could generate images in principle. Google grants image models per account, so the controls are now gated on your account's own model list and hidden with an explanation when it holds none.
 * Fixed: the wizard could display a different model from the one about to be billed — "GPT-5 · OpenAI" on a site holding only a Gemini key. Model resolution, ordering and display now come from one place.
-* Changed: the AI-Core library is no longer duplicated inside this plugin. The hub's copy always won, so the bundled copy was dead code that could silently receive a fix and do nothing — which is exactly how Gemini shipped unable to generate.
+* Changed: the Opace AI Hub library is no longer duplicated inside this plugin. The hub's copy always won, so the bundled copy was dead code that could silently receive a fix and do nothing — which is exactly how Gemini shipped unable to generate.
 * Images no longer require OpenAI. Google Gemini's image models are used when a Gemini key is present, and the best available image model is chosen from whichever providers you have configured.
 * On a site where no configured provider can generate images, the Add Image and Bulk Add controls are hidden and replaced with an explanation of which key to add. Previously they were offered and then failed.
 * Fixed: a failed image generation reported its error over the whole step, discarding the article you had just written. Image failures are now reported at the gallery and leave the article intact.
@@ -501,8 +504,8 @@ Only if you opt in. Choose the delete-on-uninstall setting before deleting the p
 * Fixed: the table of contents linked to headings that carried no matching ids, so its links went nowhere on posts, pages and shortcodes.
 * Fixed: a saved shortcode printed the article title twice as a heading.
 * Fixed: Custom Instructions are now applied to generation. In 2.6.2 the text was saved but never used.
-* Changed: AI-Core is now required. Provider keys, model lists, pricing and usage statistics live there, and AI-Scribe's own key fields have been removed so there is one place to configure a provider.
-* Changed: your prompts are migrated into AI-Core's Prompt Library on upgrade and can be managed alongside every other add-on's. Your existing prompts are copied, not moved, and remain untouched as a backup.
+* Changed: Opace AI Hub is now required. Provider keys, model lists, pricing and usage statistics live there, and AI-Scribe's own key fields have been removed so there is one place to configure a provider.
+* Changed: your prompts are migrated into Opace AI Hub's Prompt Library on upgrade and can be managed alongside every other add-on's. Your existing prompts are copied, not moved, and remain untouched as a backup.
 * Accessibility: the keyboard focus ring now meets the 3:1 minimum (it measured 1.63:1), hint text and status chips meet AA, and the completion of each generation is announced to screen readers.
 
 = 3.0.6 =
@@ -543,10 +546,10 @@ Only if you opt in. Choose the delete-on-uninstall setting before deleting the p
 * Requires WordPress 6.2+ (identifier placeholders in prepared statements).
 
 = 3.0.1 =
-* Settings de-duplication: with the AI-Core hub active, provider keys are managed centrally — AI-Scribe shows per-provider status chips and links to AI-Core settings.
+* Settings de-duplication: with the Opace AI Hub active, provider keys are managed centrally — AI-Scribe shows per-provider status chips and links to Opace AI Hub settings.
 * Provider status now reflects a validated key (cheap live check, cached), not mere key presence.
 * Model parameter panels: family-aware controls for current models — reasoning effort for o-series/GPT-5, extended thinking with budget for Claude 4.x — plus honest output-token caps and larger defaults for long-form steps.
-* Cost meter and estimator source AI-Core pricing and recorded actuals; the stale hardcoded pricing endpoint is removed.
+* Cost meter and estimator source Opace AI Hub pricing and recorded actuals; the stale hardcoded pricing endpoint is removed.
 * Removed the last legacy v4 script modules; the wizard model display hydrates from the live settings endpoints.
 * Design polish: rebalanced wizard layout, stronger step chips and progress bar, working dark-mode theme toggle, full dark-mode audit of every admin screen.
 
@@ -671,10 +674,10 @@ Automatically placed images now retain valid article structure beside section he
 Changing the title-step topic can no longer regenerate against an older recovered article.
 
 = 3.1.1 =
-The Evaluate, image, SEO metadata, Q&A, progress and notification workflows have been corrected and made easier to verify. Requires AI-Core 0.7.8 or later.
+The Evaluate, image, SEO metadata, Q&A, progress and notification workflows have been corrected and made easier to verify. Requires Opace AI Hub 0.7.8 or later.
 
 = 3.1.0 =
-Live Gemini generations failed outright before this release, and usage was never recorded in AI-Core. Both are fixed, along with keyword and SEO meta handling, the image workflow and progress feedback throughout. Requires AI-Core 0.7.8 or later.
+Live Gemini generations failed outright before this release, and usage was never recorded in Opace AI Hub. Both are fixed, along with keyword and SEO meta handling, the image workflow and progress feedback throughout. Requires Opace AI Hub 0.7.8 or later.
 
 = 3.0.8 =
 Images work with Gemini as well as OpenAI, key validation is now honest, and several provider request faults are fixed. Tested on WordPress 7.0.3.

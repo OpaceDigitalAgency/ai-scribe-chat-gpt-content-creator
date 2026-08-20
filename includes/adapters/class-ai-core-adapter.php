@@ -1,12 +1,12 @@
 <?php
 /**
- * AI-Core Adapter for AI-Scribe Plugin
+ * Opace AI Hub Adapter for AI-Scribe Plugin
  *
- * Thin interface to the AI-Core hub plugin's public API (ai_core()). Every
+ * Thin interface to the Opace AI Hub plugin's public API (ai_core()). Every
  * text and image request is sent through the hub — never the shared library
  * directly — so provider configuration stays in one place and every request
  * is recorded in the hub's usage statistics. Response parsing is delegated
- * to AI-Core's ResponseNormalizer instead of a hand-rolled format cascade.
+ * to Opace AI Hub's ResponseNormalizer instead of a hand-rolled format cascade.
  *
  * @package AI_Scribe
  * @subpackage Adapters
@@ -20,13 +20,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class AI_Scribe_AI_Core_Adapter
  *
- * Provides a standardized interface to AI-Core functionality
+ * Provides a standardized interface to Opace AI Hub functionality
  * with error handling, logging, and response normalization.
  */
 class AI_Scribe_AI_Core_Adapter {
 
 	/**
-	 * Supported text providers (AI-Core config-key prefixes).
+	 * Supported text providers (Opace AI Hub config-key prefixes).
 	 *
 	 * @var string[]
 	 */
@@ -47,7 +47,7 @@ class AI_Scribe_AI_Core_Adapter {
 	private $config;
 
 	/**
-	 * Whether the AI-Core hub plugin (the only send path) is active.
+	 * Whether the Opace AI Hub plugin (the only send path) is active.
 	 *
 	 * @var bool
 	 */
@@ -63,7 +63,7 @@ class AI_Scribe_AI_Core_Adapter {
 		$this->logger = $logger;
 		$this->config = $config;
 
-		// Every request is sent through the AI-Core hub plugin's public API,
+		// Every request is sent through the Opace AI Hub plugin's public API,
 		// which owns provider configuration (AICore::init from its own key
 		// store) and records usage statistics. This adapter never configures
 		// the shared library itself: a second AICore::init here would clobber
@@ -71,7 +71,7 @@ class AI_Scribe_AI_Core_Adapter {
 		// stats pipeline.
 		$this->initialized = function_exists( 'ai_core' );
 		if ( ! $this->initialized ) {
-			$this->logger->error( 'AI-Core hub plugin not active; AI-Scribe cannot send requests' );
+			$this->logger->error( 'Opace AI Hub plugin not active; AI-Scribe cannot send requests' );
 		}
 
 		// Long-form generations (Express, body step) can exceed the WP HTTP
@@ -106,7 +106,7 @@ class AI_Scribe_AI_Core_Adapter {
 	}
 
 	/**
-	 * Generate text content using AI-Core
+	 * Generate text content using Opace AI Hub
 	 *
 	 * @param string $model Model name
 	 * @param array $messages Messages array
@@ -116,7 +116,7 @@ class AI_Scribe_AI_Core_Adapter {
 	public function generate_text( $model, array $messages, array $parameters = array() ) {
 		try {
 			if ( ! $this->initialized ) {
-				return new WP_Error( 'ai_core_hub_missing', 'The AI-Core plugin is not active. AI-Scribe sends every request through AI-Core — please activate it.' );
+				return new WP_Error( 'ai_core_hub_missing', 'The Opace AI Hub plugin is not active. AI-Scribe sends every request through Opace AI Hub — please activate it.' );
 			}
 
 			$this->logger->debug(
@@ -132,7 +132,7 @@ class AI_Scribe_AI_Core_Adapter {
 
 			if ( is_wp_error( $ai_core_response ) ) {
 				$this->logger->error(
-					'AI-Core hub returned an error',
+					'Opace AI Hub returned an error',
 					array(
 						'model' => $model,
 						'error' => $ai_core_response->get_error_message(),
@@ -141,12 +141,12 @@ class AI_Scribe_AI_Core_Adapter {
 				return $ai_core_response;
 			}
 
-			// Provider-specific format handling lives in AI-Core's ResponseNormalizer;
+			// Provider-specific format handling lives in Opace AI Hub's ResponseNormalizer;
 			// the old 4-branch extraction cascade is gone.
 			if ( AICore\AICore::hasError( $ai_core_response ) ) {
 				$error_message = AICore\AICore::extractError( $ai_core_response );
 				$this->logger->error(
-					'AI-Core returned an error response',
+					'Opace AI Hub returned an error response',
 					array(
 						'model' => $model,
 						'error' => $error_message,
@@ -191,11 +191,11 @@ class AI_Scribe_AI_Core_Adapter {
 	}
 
 	/**
-	 * Send a text request through the AI-Core hub plugin.
+	 * Send a text request through the Opace AI Hub plugin.
 	 *
 	 * The hub's public API (AI_Core_API::send_text_request) is the ONLY
 	 * request path: it is the pipeline that records usage statistics
-	 * (requests, tokens, model, provider, cost) on the AI-Core Dashboard.
+	 * (requests, tokens, model, provider, cost) on the Opace AI Hub Dashboard.
 	 * There is deliberately no direct AICore\AICore::sendTextRequest()
 	 * fallback — that would bypass the stats pipeline silently. A 2.6.2
 	 * upgrade's keys are pushed into the hub's key store by
@@ -205,7 +205,7 @@ class AI_Scribe_AI_Core_Adapter {
 	 * @param string $model    Model name
 	 * @param array  $messages Messages array
 	 * @param array  $options  Prepared request options
-	 * @return array|WP_Error Raw AI-Core response or error
+	 * @return array|WP_Error Raw Opace AI Hub response or error
 	 */
 	private function send_hub_text_request( $model, array $messages, array $options ) {
 		$hub_error = $this->require_configured_hub();
@@ -222,7 +222,7 @@ class AI_Scribe_AI_Core_Adapter {
 	}
 
 	/**
-	 * Assert the AI-Core hub plugin is active and has at least one API key.
+	 * Assert the Opace AI Hub plugin is active and has at least one API key.
 	 *
 	 * @return true|WP_Error True when requests can be sent
 	 */
@@ -230,14 +230,14 @@ class AI_Scribe_AI_Core_Adapter {
 		if ( ! function_exists( 'ai_core' ) ) {
 			return new WP_Error(
 				'ai_core_hub_missing',
-				'The AI-Core plugin is not active. AI-Scribe sends every request through AI-Core — please activate it.'
+				'The Opace AI Hub plugin is not active. AI-Scribe sends every request through Opace AI Hub — please activate it.'
 			);
 		}
 
 		if ( ! ai_core()->is_configured() ) {
 			return new WP_Error(
 				'ai_core_not_configured',
-				'No AI provider is configured. Add an API key under AI-Core → Settings, then try again.'
+				'No AI provider is configured. Add an API key under Opace AI Hub → Settings, then try again.'
 			);
 		}
 
@@ -245,7 +245,7 @@ class AI_Scribe_AI_Core_Adapter {
 	}
 
 	/**
-	 * Generate image using AI-Core
+	 * Generate image using Opace AI Hub
 	 *
 	 * @param string $prompt Image prompt
 	 * @param array $options Image generation options
@@ -254,7 +254,7 @@ class AI_Scribe_AI_Core_Adapter {
 	public function generate_image( $prompt, array $options = array() ) {
 		try {
 			if ( ! $this->initialized ) {
-				return new WP_Error( 'ai_core_hub_missing', 'The AI-Core plugin is not active. AI-Scribe sends every request through AI-Core — please activate it.' );
+				return new WP_Error( 'ai_core_hub_missing', 'The Opace AI Hub plugin is not active. AI-Scribe sends every request through Opace AI Hub — please activate it.' );
 			}
 
 			$model    = $options['model'] ?? 'gpt-image-1';
@@ -271,7 +271,7 @@ class AI_Scribe_AI_Core_Adapter {
 			$image_params = $this->prepare_image_parameters( $prompt, $options );
 
 			// Route via the hub plugin — the only send path — so the request
-			// is recorded in AI-Core's usage statistics (see
+			// is recorded in Opace AI Hub's usage statistics (see
 			// send_hub_text_request for why no direct fallback exists).
 			$hub_error = $this->require_configured_hub();
 			if ( is_wp_error( $hub_error ) ) {
@@ -281,7 +281,7 @@ class AI_Scribe_AI_Core_Adapter {
 
 			if ( is_wp_error( $response ) ) {
 				$this->logger->error(
-					'AI-Core hub returned an image error',
+					'Opace AI Hub returned an image error',
 					array(
 						'model' => $model,
 						'error' => $response->get_error_message(),
@@ -456,7 +456,7 @@ class AI_Scribe_AI_Core_Adapter {
 	}
 
 	/**
-	 * Get AI-Core health status
+	 * Get Opace AI Hub health status
 	 *
 	 * @return array Health status
 	 */
@@ -492,7 +492,7 @@ class AI_Scribe_AI_Core_Adapter {
 	}
 
 	/**
-	 * Test AI-Core functionality
+	 * Test Opace AI Hub functionality
 	 *
 	 * Uses a cheap probe model per configured provider purely as a
 	 * connectivity check (never used for content generation).
@@ -505,7 +505,7 @@ class AI_Scribe_AI_Core_Adapter {
 		$test_messages = array(
 			array(
 				'role'    => 'user',
-				'content' => 'Say "Hello, AI-Core test successful!"',
+				'content' => 'Say "Hello, Opace AI Hub test successful!"',
 			),
 		);
 
@@ -533,7 +533,7 @@ class AI_Scribe_AI_Core_Adapter {
 	}
 
 	/**
-	 * Get AI-Core version information
+	 * Get Opace AI Hub version information
 	 *
 	 * @return array Version information
 	 */

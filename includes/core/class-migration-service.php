@@ -34,9 +34,9 @@ class AI_Scribe_Migration_Service {
 	const REMAP_NOTICE_OPTION = 'ai_scribe_model_remap_notice';
 
 	/**
-	 * Completion flag for the separate prompts -> AI-Core copy. Deliberately
+	 * Completion flag for the separate prompts -> Opace AI Hub copy. Deliberately
 	 * its own option rather than a bump of MIGRATION_VERSION: the hub copy
-	 * can only run when AI-Core is present, so it has to be able to complete
+	 * can only run when Opace AI Hub is present, so it has to be able to complete
 	 * on a site whose option migration finished long ago.
 	 */
 	const HUB_MIGRATED_OPTION   = 'ai_scribe_hub_prompts_migrated';
@@ -50,7 +50,7 @@ class AI_Scribe_Migration_Service {
 	const HUB_REFRESH_VERSION = '2';
 
 	/**
-	 * Completion flag for the API-key -> AI-Core copy. Its own option for the
+	 * Completion flag for the API-key -> Opace AI Hub copy. Its own option for the
 	 * same reason as HUB_MIGRATED_OPTION: the hand-off can only run with the
 	 * hub active, so it must be able to complete on a site whose option
 	 * migration finished long ago (including 3.0.x sites that upgraded while
@@ -60,8 +60,8 @@ class AI_Scribe_Migration_Service {
 	const HUB_KEYS_VERSION = '1';
 
 	/**
-	 * The AI-Core group migrated prompts are filed under, so a user opening
-	 * AI-Core's Prompt Library can see at a glance where they came from.
+	 * The Opace AI Hub group migrated prompts are filed under, so a user opening
+	 * Opace AI Hub's Prompt Library can see at a glance where they came from.
 	 */
 	const HUB_GROUP_NAME = 'AI-Scribe';
 
@@ -143,12 +143,12 @@ class AI_Scribe_Migration_Service {
 
 		update_option( self::MIGRATED_OPTION, self::MIGRATION_VERSION );
 
-		// Prompts belong in AI-Core now, so copy them across as part of the
+		// Prompts belong in Opace AI Hub now, so copy them across as part of the
 		// same upgrade. Runs after migrate_prompts() so any gap-filled key is
 		// included, and is a no-op without the hub.
 		self::maybe_migrate_prompts_to_hub();
 
-		// API keys belong in AI-Core too: the hub is the only send path, so a
+		// API keys belong in Opace AI Hub too: the hub is the only send path, so a
 		// key left solely in AI-Scribe's options would never be used. Runs
 		// after migrate_engine_keys() so 2.6.2 plaintext has been normalised.
 		self::maybe_migrate_keys_to_hub( $config_manager );
@@ -157,7 +157,7 @@ class AI_Scribe_Migration_Service {
 	}
 
 	/**
-	 * Copy AI-Scribe's own API keys into AI-Core's key store.
+	 * Copy AI-Scribe's own API keys into Opace AI Hub's key store.
 	 *
 	 * From v3 every provider request goes through the hub's public API
 	 * (ai_core()->send_text_request() / generate_image()), which reads keys
@@ -191,7 +191,7 @@ class AI_Scribe_Migration_Service {
 
 		if ( ! function_exists( 'ai_core' ) ) {
 			// No hub, no hand-off, no error. Re-checked on the next admin
-			// page load with AI-Core active (see Hub_Prompt_Reader::register).
+			// page load with Opace AI Hub active (see Hub_Prompt_Reader::register).
 			return false;
 		}
 
@@ -243,7 +243,7 @@ class AI_Scribe_Migration_Service {
 					return false;
 				}
 			}
-			self::log( 'hub key hand-off: complete — carried key(s) for ' . implode( ', ', $carried ) . ' into AI-Core.' );
+			self::log( 'hub key hand-off: complete — carried key(s) for ' . implode( ', ', $carried ) . ' into Opace AI Hub.' );
 		}
 
 		update_option( self::HUB_KEYS_OPTION, self::HUB_KEYS_VERSION, false );
@@ -255,7 +255,7 @@ class AI_Scribe_Migration_Service {
 	 * Move hub copies of superseded stock prompts to the current wording.
 	 *
 	 * The 3.0.x hub migration copied the then-current stock defaults into
-	 * AI-Core's library and pointed the wizard steps at them, so an improved
+	 * Opace AI Hub's library and pointed the wizard steps at them, so an improved
 	 * default in get_default_prompts() would otherwise never reach a site
 	 * that migrated earlier: the hub copy wins the precedence chain. A hub
 	 * prompt whose content still reads exactly as a superseded stock default
@@ -264,7 +264,7 @@ class AI_Scribe_Migration_Service {
 	 *
 	 * One-shot (own flag), hub-gated, and hooked from
 	 * AI_Scribe_Hub_Prompt_Reader::register() so it also runs on sites whose
-	 * option migration finished before AI-Core was activated.
+	 * option migration finished before Opace AI Hub was activated.
 	 *
 	 * @return bool True when the refresh is complete (now or previously).
 	 */
@@ -341,9 +341,9 @@ class AI_Scribe_Migration_Service {
 	}
 
 	/**
-	 * Copy the user's `ab_prompts_content` prompts into AI-Core's library.
+	 * Copy the user's `ab_prompts_content` prompts into Opace AI Hub's library.
 	 *
-	 * AI-Core is a mandatory dependency from v3 and is where a user manages
+	 * Opace AI Hub is a mandatory dependency from v3 and is where a user manages
 	 * prompts, so an upgraded 2.6.2 site should find its own wording waiting
 	 * there rather than a set of factory defaults.
 	 *
@@ -357,7 +357,7 @@ class AI_Scribe_Migration_Service {
 	 *   migration, and every individual prompt is additionally matched by
 	 *   title within the AI-Scribe group before being written. A run that
 	 *   died halfway therefore resumes instead of duplicating.
-	 * - HUB-GATED. No AI-Core, or an AI-Core without the public save API, and
+	 * - HUB-GATED. No Opace AI Hub, or an Opace AI Hub without the public save API, and
 	 *   nothing happens at all: no write, no flag, no error, no notice.
 	 * - NEVER DESTRUCTIVE ON FAILURE. A prompt that fails to save is logged
 	 *   through the debug-gated logger and the run carries on with the next
@@ -365,7 +365,7 @@ class AI_Scribe_Migration_Service {
 	 *   every prompt is accounted for — so the next run finishes the job.
 	 * - NEVER OVERWRITES THE USER. An existing hub prompt of the same title
 	 *   is adopted, not rewritten, and a wizard step the user has already
-	 *   pointed at some other AI-Core prompt keeps that choice.
+	 *   pointed at some other Opace AI Hub prompt keeps that choice.
 	 *
 	 * Stored text is normalised through
 	 * AI_Scribe_Prompt_Manager::normalise_stored_text() — the single existing
@@ -381,7 +381,7 @@ class AI_Scribe_Migration_Service {
 
 		if ( ! class_exists( 'AI_Scribe_Hub_Prompt_Reader' ) || ! AI_Scribe_Hub_Prompt_Reader::library_writable() ) {
 			// No hub, no migration, no error. It will be picked up the next
-			// time an admin page loads with AI-Core active.
+			// time an admin page loads with Opace AI Hub active.
 			return false;
 		}
 
@@ -468,7 +468,7 @@ class AI_Scribe_Migration_Service {
 	/**
 	 * Which of the migrated prompt titles currently exist in the hub group.
 	 *
-	 * @param int $group_id AI-Core group id.
+	 * @param int $group_id Opace AI Hub group id.
 	 * @return array Titles present.
 	 */
 	private static function migrated_titles_present( $group_id ) {
@@ -484,17 +484,17 @@ class AI_Scribe_Migration_Service {
 	}
 
 	/**
-	 * Point each wizard step at its migrated AI-Core prompt, so the hub copy
+	 * Point each wizard step at its migrated Opace AI Hub prompt, so the hub copy
 	 * is what AI-Scribe actually sends and `ab_prompts_content` becomes the
 	 * fallback rather than the live value.
 	 *
 	 * A step the user has already mapped to a prompt that still exists in
-	 * AI-Core is left exactly as it is — this fills gaps, it does not impose.
+	 * Opace AI Hub is left exactly as it is — this fills gaps, it does not impose.
 	 * An entry pointing at a prompt that has since been deleted is repaired,
 	 * which is what makes a crash-and-resume leave a consistent map rather
 	 * than eleven steps quietly falling back.
 	 *
-	 * @param array $step_prompt_ids step => AI-Core prompt id.
+	 * @param array $step_prompt_ids step => Opace AI Hub prompt id.
 	 * @return void
 	 */
 	private static function apply_migrated_steps( $step_prompt_ids ) {

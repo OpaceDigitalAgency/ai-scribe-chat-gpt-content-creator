@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class AI_Scribe_Content_Generation_Service extends AI_Scribe_Base_Service {
 
 	/**
-	 * AI-Core adapter instance
+	 * Opace AI Hub adapter instance
 	 *
 	 * @var AI_Scribe_AI_Core_Adapter
 	 */
@@ -46,7 +46,7 @@ class AI_Scribe_Content_Generation_Service extends AI_Scribe_Base_Service {
 	 * Constructor
 	 *
 	 * @param AI_Scribe_Logger $logger Logger instance
-	 * @param AI_Scribe_AI_Core_Adapter $ai_core_adapter AI-Core adapter
+	 * @param AI_Scribe_AI_Core_Adapter $ai_core_adapter Opace AI Hub adapter
 	 * @param AI_Scribe_Config_Manager $config_manager Config manager
 	 * @param AI_Scribe_Prompt_Manager $prompt_manager Prompt manager
 	 */
@@ -78,7 +78,7 @@ class AI_Scribe_Content_Generation_Service extends AI_Scribe_Base_Service {
 	 */
 	public function validate_service() {
 		if ( ! $this->ai_core_adapter ) {
-			return array( 'error' => 'AI-Core adapter not available' );
+			return array( 'error' => 'Opace AI Hub adapter not available' );
 		}
 
 		if ( ! $this->config_manager ) {
@@ -130,7 +130,7 @@ class AI_Scribe_Content_Generation_Service extends AI_Scribe_Base_Service {
 				$prompt = $this->add_generate_more_variation( $prompt, $content_type, $existing_results );
 			}
 
-			// Prepare generation request for AI-Core
+			// Prepare generation request for Opace AI Hub
 			$ai_request = array(
 				'prompt'      => $prompt,
 				'model'       => $this->get_selected_model(),
@@ -140,19 +140,19 @@ class AI_Scribe_Content_Generation_Service extends AI_Scribe_Base_Service {
 				'options'     => $options,
 			);
 
-			// 🚨 CRITICAL FIX: Handle case where AI-Core adapter is not available
+			// 🚨 CRITICAL FIX: Handle case where Opace AI Hub adapter is not available
 			if ( ! $this->ai_core_adapter ) {
 				if ( $this->logger ) {
-					$this->logger->error( 'AI-Core adapter not available for content generation' );
+					$this->logger->error( 'Opace AI Hub adapter not available for content generation' );
 				}
-				throw new Exception( esc_html( 'AI-Core adapter not available' ) );
+				throw new Exception( esc_html( 'Opace AI Hub adapter not available' ) );
 			}
 
-			// Generate content using AI-Core adapter
+			// Generate content using Opace AI Hub adapter
 			// 🚨 CRITICAL FIX: Build system message with humanize mode, custom instructions, and current year
 			$system_message = $this->build_system_message( $context );
 
-			// Convert prompt to messages format expected by AI-Core with system message
+			// Convert prompt to messages format expected by Opace AI Hub with system message
 			$messages = array();
 
 			// Add system message if available
@@ -176,7 +176,7 @@ class AI_Scribe_Content_Generation_Service extends AI_Scribe_Base_Service {
 
 			$model = $ai_request['model'];
 
-			// 🚨 CRITICAL FIX: Handle case where model is null - let AI-Core use its default
+			// 🚨 CRITICAL FIX: Handle case where model is null - let Opace AI Hub use its default
 			if ( empty( $model ) ) {
 				// Get available models and use the first suitable one
 				$available_models = $this->ai_core_adapter->get_available_models();
@@ -189,7 +189,7 @@ class AI_Scribe_Content_Generation_Service extends AI_Scribe_Base_Service {
 				}
 
 				if ( $this->logger ) {
-					$this->logger->info( 'Using default model from AI-Core', array( 'model' => $model ) );
+					$this->logger->info( 'Using default model from Opace AI Hub', array( 'model' => $model ) );
 				}
 			}
 
@@ -204,7 +204,7 @@ class AI_Scribe_Content_Generation_Service extends AI_Scribe_Base_Service {
 			}
 
 			// Process response based on content type
-			// AI-Core adapter returns: ['content' => 'generated text', 'usage' => [...]]
+			// Opace AI Hub adapter returns: ['content' => 'generated text', 'usage' => [...]]
 			$processed_result = $this->process_generation_result( $content_type, $ai_response['content'], $options );
 
 			// Calculate cost
@@ -669,7 +669,7 @@ class AI_Scribe_Content_Generation_Service extends AI_Scribe_Base_Service {
 			return $fallback_model;
 		}
 
-		// Final fallback - let AI-Core handle default model selection
+		// Final fallback - let Opace AI Hub handle default model selection
 		return null;
 	}
 
@@ -716,7 +716,7 @@ class AI_Scribe_Content_Generation_Service extends AI_Scribe_Base_Service {
 	 */
 	private function calculate_generation_cost( $ai_response ) {
 		// Basic cost calculation - should be enhanced based on actual usage
-		// AI-Core adapter returns usage in different format
+		// Opace AI Hub adapter returns usage in different format
 		$tokens_used = 1000; // Default fallback
 
 		if ( isset( $ai_response['usage']['total_tokens'] ) ) {

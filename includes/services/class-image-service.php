@@ -2,7 +2,7 @@
 /**
  * Image Service for AI-Scribe Plugin
  *
- * Handles AI image generation using the existing AI-Core infrastructure,
+ * Handles AI image generation using the existing Opace AI Hub infrastructure,
  * Config Manager, and Prompt Manager for proper modular architecture.
  *
  * Migrated from generate_gpt_image_1() function in article_builder_backup.php
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class AI_Scribe_Image_Service
  *
  * Properly refactored to use existing infrastructure:
- * - AI-Core Adapter for all API calls
+ * - Opace AI Hub Adapter for all API calls
  * - Config Manager for all settings
  * - Prompt Manager for image prompts
  * - Security Service for nonce validation
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 
 	/**
-	 * AI-Core adapter instance
+	 * Opace AI Hub adapter instance
 	 *
 	 * @var AI_Scribe_AI_Core_Adapter
 	 */
@@ -67,7 +67,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 	 * Constructor
 	 *
 	 * @param AI_Scribe_Logger $logger Logger instance
-	 * @param AI_Scribe_AI_Core_Adapter $ai_core_adapter AI-Core adapter
+	 * @param AI_Scribe_AI_Core_Adapter $ai_core_adapter Opace AI Hub adapter
 	 * @param AI_Scribe_Config_Manager $config_manager Config manager
 	 * @param AI_Scribe_Prompt_Manager $prompt_manager Prompt manager
 	 * @param AI_Scribe_Security_Service $security_service Security service
@@ -106,8 +106,8 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 	 */
 	public function validate_service() {
 		if ( ! $this->ai_core_adapter ) {
-			$this->log_error( 'Image service validation failed: AI-Core adapter not available' );
-			return 'AI-Core adapter not available';
+			$this->log_error( 'Image service validation failed: Opace AI Hub adapter not available' );
+			return 'Opace AI Hub adapter not available';
 		}
 
 		if ( ! $this->config_manager ) {
@@ -121,7 +121,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 	/**
 	 * Providers that can generate images and have a key on this site.
 	 *
-	 * Ordered best first by AI-Core, which ranks them by the priority of their
+	 * Ordered best first by Opace AI Hub, which ranks them by the priority of their
 	 * best image model. Empty means this site cannot generate images at all —
 	 * an Anthropic-only site, for instance, because Anthropic publishes no
 	 * image generation API.
@@ -177,7 +177,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 	 * @return string
 	 */
 	public static function image_unavailable_message() {
-		return __( 'Image generation is unavailable because none of your configured providers can generate images. OpenAI and Google Gemini both can; Anthropic does not offer image generation at all. Add an OpenAI or Google Gemini API key on the AI-Core settings page to turn images back on. Everything else in the wizard works without them.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' );
+		return __( 'Image generation is unavailable because none of your configured providers can generate images. OpenAI and Google Gemini both can; Anthropic does not offer image generation at all. Add an OpenAI or Google Gemini API key on the Opace AI Hub settings page to turn images back on. Everything else in the wizard works without them.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' );
 	}
 
 	/**
@@ -375,7 +375,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 					array(
 						'msg'   => sprintf(
 							/* translators: 1: provider name, 2: image model id. */
-							__( 'The %1$s API key is required to generate images with %2$s. Add it on the AI-Core settings page, or choose an image model from a provider you have configured.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+							__( 'The %1$s API key is required to generate images with %2$s. Add it on the Opace AI Hub settings page, or choose an image model from a provider you have configured.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 							self::provider_label( $image_provider ),
 							$image_model
 						),
@@ -399,7 +399,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 				'model'    => $image_model,
 				'provider' => $image_provider,
 				'size'     => $image_size,
-				'format'   => $image_format, // CRITICAL FIX: Pass format to AI-Core
+				'format'   => $image_format, // CRITICAL FIX: Pass format to Opace AI Hub
 				'n'        => 1,
 			);
 
@@ -433,19 +433,19 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 
 			$debug_messages[] = 'Image generation options: ' . json_encode( $image_options );
 
-			// Generate image using AI-Core Adapter
-			ai_scribe_debug_log( '[AI_SCRIBE_IMAGE_DEBUG] About to call AI-Core adapter for image generation' );
+			// Generate image using Opace AI Hub Adapter
+			ai_scribe_debug_log( '[AI_SCRIBE_IMAGE_DEBUG] About to call Opace AI Hub adapter for image generation' );
 			ai_scribe_debug_log( '[AI_SCRIBE_IMAGE_DEBUG] Image options: ' . json_encode( $image_options ) );
 
 			$response = $this->ai_core_adapter->generate_image( $prompt, $image_options );
 
 			if ( AI_Scribe_Utility_Service::is_global_debug_enabled() ) {
-				ai_scribe_debug_log( '[AI_SCRIBE_IMAGE_DEBUG] AI-Core adapter returned: ' . print_r( $response, true ) );
+				ai_scribe_debug_log( '[AI_SCRIBE_IMAGE_DEBUG] Opace AI Hub adapter returned: ' . print_r( $response, true ) );
 			}
 
 			if ( is_wp_error( $response ) ) {
 				if ( AI_Scribe_Utility_Service::is_global_debug_enabled() ) {
-					ai_scribe_debug_log( '[AI_SCRIBE_IMAGE_DEBUG] AI-Core returned WP_Error: ' . $response->get_error_message() );
+					ai_scribe_debug_log( '[AI_SCRIBE_IMAGE_DEBUG] Opace AI Hub returned WP_Error: ' . $response->get_error_message() );
 				}
 				$this->handle_image_error( $response, $debug_messages );
 				return;
@@ -783,7 +783,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 
 	/**
 	 * Whether a provider failure is safe to repeat without user changes.
-	 * AI-Core currently normalises provider exceptions to WP_Error and some
+	 * Opace AI Hub currently normalises provider exceptions to WP_Error and some
 	 * providers expose the HTTP status only in the message, so both structured
 	 * data and a narrow transient-message allowlist are inspected.
 	 *
@@ -1341,7 +1341,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 			'model'    => $image_model,
 			'provider' => $image_provider,
 			'size'     => $this->config_manager->get( 'image.size', '1024x1024' ),
-			'format'   => $image_format, // CRITICAL FIX: Pass format to AI-Core
+			'format'   => $image_format, // CRITICAL FIX: Pass format to Opace AI Hub
 			'n'        => 1,
 		);
 
@@ -1358,7 +1358,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 			}
 		}
 
-		// Generate image using AI-Core Adapter
+		// Generate image using Opace AI Hub Adapter
 		return $this->ai_core_adapter->generate_image( $prompt, $image_options );
 	}
 

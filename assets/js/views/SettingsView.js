@@ -120,7 +120,7 @@ class SettingsView {
     }
 
     /**
-     * Pin an AI-Core prompt to a wizard step, or (promptId 0) hand the step
+     * Pin an Opace AI Hub prompt to a wizard step, or (promptId 0) hand the step
      * back to the AI-Scribe prompt above it.
      *
      * The choice persists immediately rather than waiting for Save Settings:
@@ -130,7 +130,7 @@ class SettingsView {
      * controller holds — assets/js never calls fetch directly.
      *
      * @param {number} step     Wizard step 1-11.
-     * @param {number} promptId AI-Core prompt id, 0 to revert.
+     * @param {number} promptId Opace AI Hub prompt id, 0 to revert.
      */
     applyHubPrompt(step, promptId) {
         const api = this.controller && this.controller.api;
@@ -248,7 +248,7 @@ class SettingsView {
     /**
      * §13 addendum: the text-model picker is GROUPED by provider; only
      * models from validated providers are selectable; unconfigured/invalid
-     * providers render greyed out with a "configure in AI-Core" affordance.
+     * providers render greyed out with a "configure in Opace AI Hub" affordance.
      * Returns the value actually selected (after any dead-selection
      * fallback) so the controller can announce it.
      */
@@ -313,7 +313,7 @@ class SettingsView {
             const baseLabel = providerLabels[providerId] || providerId;
             group.label = groupEnabled
                 ? baseLabel
-                : `${baseLabel} — not configured (add a key in AI-Core)`;
+                : `${baseLabel} — not configured (add a key in Opace AI Hub)`;
             grouped[providerId].forEach((model) => {
                 const option = document.createElement('option');
                 option.value = model.id;
@@ -455,7 +455,7 @@ class SettingsView {
         // the wire for every model. The two sampling parameters are only ever
         // dropped together (Model_Schema_Inference::infer() unsets
         // temperature and top_p in one statement for the OpenAI reasoning
-        // family; the AI-Core adapter does the same for the o-series), so
+        // family; the Opace AI Hub adapter does the same for the o-series), so
         // temperature support is the honest signal for both. Without this the
         // Top P control could never render for any model.
         const hasSchema = Object.keys(schema).length > 0;

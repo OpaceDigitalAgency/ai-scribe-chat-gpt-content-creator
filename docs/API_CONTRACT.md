@@ -413,9 +413,9 @@ boolean); it never appears on WP < 7.0. Requires `edit_posts`.
 
 Write-only key storage for installs where AI-Scribe still owns keys. Requires `manage_options`.
 
-**With AI-Core active this endpoint refuses every write** and returns
+**With Opace AI Hub active this endpoint refuses every write** and returns
 `{ code: "managed_by_hub", retryable: false }` — the hub owns provider configuration, and the
-settings screen renders no key fields at all. Since AI-Core is a required plugin, that is the
+settings screen renders no key fields at all. Since Opace AI Hub is a required plugin, that is the
 normal case; the branch below only runs where the hub is missing or deactivated.
 
 | Field | Type | Notes |
@@ -498,19 +498,19 @@ modified globally.
 
 ### 13.1 `ai_scribe_apply_hub_prompt`
 
-Pins an AI-Core prompt to a wizard step, or clears it. Changing what a step sends is an authoring
+Pins an Opace AI Hub prompt to a wizard step, or clears it. Changing what a step sends is an authoring
 action, not a site setting, so the bar is `edit_posts` — the same as running the wizard.
 
 | Field | Type | Notes |
 |---|---|---|
 | `step` | int 1–11 | required; anything else returns `invalid_step` |
-| `prompt_id` | int | AI-Core prompt id, or `0` to revert the step to AI-Scribe's own prompt |
+| `prompt_id` | int | Opace AI Hub prompt id, or `0` to revert the step to AI-Scribe's own prompt |
 
 Response `data`: `{ "step": 6, "prompt_id": 12, "title": "House body prompt", "message": "..." }`.
-Errors: `hub_inactive` when AI-Core is not running, `prompt_not_found` when the id is gone.
+Errors: `hub_inactive` when Opace AI Hub is not running, `prompt_not_found` when the id is gone.
 
 The map lives in the `ai_scribe_hub_prompt_map` option. Reads are defensive: a step whose pinned
-prompt has been deleted in AI-Core, or whose content is empty, silently falls back to AI-Scribe's
+prompt has been deleted in Opace AI Hub, or whose content is empty, silently falls back to AI-Scribe's
 own prompt.
 
 The same map is written once by the upgrade. `Migration_Service::maybe_migrate_prompts_to_hub()`
@@ -525,7 +525,7 @@ overwrites a hub prompt of the same title, and does nothing at all without a wri
 `PromptManager::resolve_step_prompt()` is the only place this is decided. Highest wins:
 
 1. `prompt_override` sent with this one `run_step` / `stream_step` call. Never persisted.
-2. The AI-Core prompt pinned to the step (§13.1).
+2. The Opace AI Hub prompt pinned to the step (§13.1).
 3. The site's saved `ab_prompts_content` value.
 4. The built-in default.
 

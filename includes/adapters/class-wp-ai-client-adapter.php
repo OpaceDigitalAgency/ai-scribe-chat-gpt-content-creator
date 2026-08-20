@@ -282,7 +282,7 @@ class AI_Scribe_WP_AI_Client_Adapter {
 
 	/**
 	 * Image generation is not routed through core in v3 — the ImageService
-	 * keeps its direct AI-Core path. Returns WP_Error so callers fall back.
+	 * keeps its direct Opace AI Hub path. Returns WP_Error so callers fall back.
 	 *
 	 * @param string $prompt
 	 * @param array  $options

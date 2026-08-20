@@ -28,7 +28,7 @@ class AI_Scribe_Model_Resolver {
 	 */
 	const NOT_TEXT = '/(^|-)(image|imagen|tts|audio|speech|embedding|embed|veo|lyria|computer-use|live|rerank|guard|nano-banana)(-|$)/i';
 
-	/** Still-image model families supported by AI-Core's image providers. */
+	/** Still-image model families supported by Opace AI Hub's image providers. */
 	const IS_IMAGE = '/(^|-)(image|imagen|dall-e|nano-banana)(-|$)/i';
 
 	/** Image-adjacent families that cannot create a new still image. */
