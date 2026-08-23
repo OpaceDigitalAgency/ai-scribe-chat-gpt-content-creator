@@ -226,22 +226,6 @@ class AI_Scribe_Model_Schema_Inference {
 					'Gemini 3.x reasoning depth.'
 				);
 			}
-		} elseif ( 'grok' === $provider ) {
-			// xAI marks max_tokens "[DEPRECATED] … in favor of
-			// max_completion_tokens"; the new name is accepted on every model.
-			$out['max_tokens'] = self::number_parameter(
-				1,
-				self::pick_max( $schema, 64000 ),
-				self::pick_default( $schema, 8192 ),
-				'max_completion_tokens',
-				'Max Output Tokens'
-			);
-			// xAI documents no restriction on temperature or top_p for any
-			// model, but reasoning models reject the penalties and stop.
-			self::add_top_p( $out, 'top_p' );
-			if ( ! preg_match( '/reasoning|-mini|think/i', $id ) ) {
-				self::add_penalties( $out, 'frequency_penalty', 'presence_penalty' );
-			}
 		}
 
 		$result = array( 'parameters' => $out );

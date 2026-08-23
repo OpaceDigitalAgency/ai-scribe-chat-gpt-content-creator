@@ -2,16 +2,15 @@
 /*
  * Contributors:        OPACE LTD
  * Plugin Name:         Opace AI Scribe: SEO Content Creator & Humanizer for OpenAI, Anthropic & Gemini
- * Description:         AI SEO content creator and humaniser for OpenAI, Anthropic and Gemini models. 11-step wizard, editable prompts, Express mode. Works with Yoast, Rank Math, AIOSEO & SEOPress.
+ * Description:         AI SEO writer and humaniser for OpenAI, Anthropic and Gemini, with an 11-step wizard, Express mode and SEO plugin integration.
  * Plugin URI:          https://opace.agency/services/web-design/wordpress-development/
  * Text Domain:         ai-scribe-the-chatgpt-powered-seo-content-creation-wizard
  * Author URI:          https://opace.agency
  * Author:              Opace Digital Agency
  * Requires at least:   6.5
- * Tested up to:        7.1
  * Requires PHP:        7.4
  * Requires Plugins:    opace-ai-prompt-library-api-hub
- * Version:             3.2.29
+ * Version:             3.2.30
  * License:             GPL-3.0
  * License URI:         http://www.gnu.org/licenses/gpl-3.0.txt
  *
@@ -36,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'AI_SCRIBE_VERSION', '3.2.29' ); // Used for cache busting on every enqueue
+define( 'AI_SCRIBE_VERSION', '3.2.30' ); // Used for cache busting on every enqueue
 if ( ! defined( 'AI_SCRIBE_VER' ) ) {
 	define( 'AI_SCRIBE_VER', AI_SCRIBE_VERSION ); // Back-compat alias used by copied v4 services
 }

@@ -30,7 +30,7 @@ class AI_Scribe_AI_Core_Adapter {
 	 *
 	 * @var string[]
 	 */
-	private $providers = array( 'openai', 'anthropic', 'gemini', 'grok' );
+	private $providers = array( 'openai', 'anthropic', 'gemini' );
 
 	/**
 	 * Logger instance
@@ -82,7 +82,6 @@ class AI_Scribe_AI_Core_Adapter {
 			'api.openai.com',
 			'api.anthropic.com',
 			'generativelanguage.googleapis.com',
-			'api.x.ai',
 		);
 		if ( in_array( $host, $provider_hosts, true ) ) {
 			$timeout = isset( $args['timeout'] ) ? (int) $args['timeout'] : 0;
@@ -449,7 +448,6 @@ class AI_Scribe_AI_Core_Adapter {
 				'openai'       => class_exists( 'AICore\Providers\OpenAIProvider' ),
 				'anthropic'    => class_exists( 'AICore\Providers\AnthropicProvider' ),
 				'gemini'       => class_exists( 'AICore\Providers\GeminiProvider' ),
-				'grok'         => class_exists( 'AICore\Providers\GrokProvider' ),
 				'openai_image' => class_exists( 'AICore\Providers\OpenAIImageProvider' ),
 				'gemini_image' => class_exists( 'AICore\Providers\GeminiImageProvider' ),
 			),
@@ -494,7 +492,6 @@ class AI_Scribe_AI_Core_Adapter {
 			'openai'    => 'gpt-4o-mini',
 			'anthropic' => 'claude-haiku-4-5',
 			'gemini'    => 'gemini-2.5-flash',
-			'grok'      => 'grok-4-fast',
 		);
 
 		foreach ( $probe_models as $provider => $probe_model ) {

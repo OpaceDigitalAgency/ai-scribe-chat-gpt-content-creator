@@ -258,9 +258,8 @@ class AI_Scribe_Schema_Registry {
 	 * OpenAI:  response_format json_schema (chat) / text.format (responses).
 	 * Anthropic: tool-forcing (tools + tool_choice).
 	 * Gemini:  generationConfig.responseSchema + responseMimeType.
-	 * Grok:    OpenAI-shaped response_format.
 	 *
-	 * @param string $provider openai|anthropic|gemini|grok
+	 * @param string $provider openai|anthropic|gemini
 	 * @param array  $schema_def ['name' => ..., 'schema' => ...]
 	 * @return array Options to merge into the adapter request.
 	 */
@@ -292,7 +291,6 @@ class AI_Scribe_Schema_Registry {
 					),
 				);
 
-			case 'grok':
 			case 'openai':
 			default:
 				// Chat Completions shape; the OpenAI provider translates to

@@ -33,7 +33,6 @@ export const settings = {
 	openaiKey: '[data-testid="api-key-openai"]',
 	anthropicKey: '[data-testid="api-key-anthropic"]',
 	geminiKey: '[data-testid="api-key-gemini"]',
-	grokKey: '[data-testid="api-key-grok"]',
 	keyStatus: ( provider: string ) => `[data-testid="key-status-${ provider }"]`,
 	modelSelect: '[data-testid="model-select"]',
 	modelListStatus: '[data-testid="model-list-status"]',

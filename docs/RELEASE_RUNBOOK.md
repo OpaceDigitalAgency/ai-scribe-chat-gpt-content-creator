@@ -3,12 +3,13 @@
 Nothing in this repository publishes automatically. Building a ZIP, committing Git and publishing to
 WordPress.org are separate gates. Record the exact commit and package hash at each gate.
 
-Last reconciled with AI-Scribe 3.2.29 on 20 August 2026.
+Last reconciled with the held AI-Scribe 3.2.30 candidate on 23 August 2026.
 
 ## 1. Freeze scope and dependency
 
 - Confirm the worktree, branch and current version in `article_builder.php`.
-- Confirm the required Opace AI Hub release is available under the declared `ai-core` slug.
+- Confirm the required Opace AI Hub release is available under the declared
+  `opace-ai-prompt-library-api-hub` slug and has cleared its delayed rollout window.
 - Review unresolved status documents and user acceptance notes.
 - Search the repository and history for keys, tokens, credentials, browser storage and customer data.
   Rotate any exposed secret outside Git before continuing; never document the value.

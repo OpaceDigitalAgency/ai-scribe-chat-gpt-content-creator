@@ -18,8 +18,6 @@ class SettingsView {
      * @return {string} Display label.
      */
     static providerLabel(provider) {
-        // xAI Grok is withheld until tested, so it is not offered anywhere and
-        // needs no label. See ModelRegistry::getSupportedProviders().
         const labels = {
             openai: 'OpenAI',
             anthropic: 'Anthropic',

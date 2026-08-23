@@ -66,6 +66,8 @@ class AI_Scribe_Config_Manager {
 		'openai_api_key',
 		'claude_api_key',
 		'gemini_api_key',
+		// Legacy-only: retained so old stored data remains encrypted and can be
+		// scrubbed from responses. Grok has no supported request path.
 		'grok_api_key',
 	);
 
@@ -477,8 +479,6 @@ class AI_Scribe_Config_Manager {
 			'claude'    => 'ai_engine.anthropic_api_key',
 			'gemini'    => 'ai_engine.gemini_api_key',
 			'google'    => 'ai_engine.gemini_api_key',
-			'grok'      => 'ai_engine.grok_api_key',
-			'xai'       => 'ai_engine.grok_api_key',
 		);
 
 		if ( ! isset( $key_map[ $provider ] ) ) {
@@ -497,7 +497,7 @@ class AI_Scribe_Config_Manager {
 	/**
 	 * Read a provider key from the Opace AI Hub plugin's settings.
 	 *
-	 * @param string $provider openai|anthropic|claude|gemini|google|grok|xai
+	 * @param string $provider openai|anthropic|claude|gemini|google
 	 * @return string|null
 	 */
 	private function get_hub_api_key( $provider ) {
@@ -514,8 +514,6 @@ class AI_Scribe_Config_Manager {
 			'claude'    => 'anthropic_api_key',
 			'gemini'    => 'gemini_api_key',
 			'google'    => 'gemini_api_key',
-			'grok'      => 'grok_api_key',
-			'xai'       => 'grok_api_key',
 		);
 		if ( isset( $hub_map[ $provider ] ) && ! empty( $hub[ $hub_map[ $provider ] ] ) && is_string( $hub[ $hub_map[ $provider ] ] ) ) {
 			return $hub[ $hub_map[ $provider ] ];
@@ -647,7 +645,7 @@ class AI_Scribe_Config_Manager {
 		// plaintext key saved before encryption covered this provider.
 		$decoded_data = base64_decode( $encrypted_value, true );
 		if ( $decoded_data === false ) {
-			// Not base64 at all: stored plaintext (pre-hardening gemini/grok).
+			// Not base64 at all: stored plaintext (pre-hardening provider key).
 			return $encrypted_value;
 		}
 

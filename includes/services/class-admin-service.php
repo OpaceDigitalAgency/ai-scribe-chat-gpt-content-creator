@@ -430,7 +430,7 @@ class AI_Scribe_Admin_Service {
 		// hub's shared keys (ai_core_settings), so a hub-managed install
 		// reports its providers as configured (raw option reads did not).
 		$providers_configured = array();
-		foreach ( array( 'openai', 'anthropic', 'gemini', 'grok' ) as $provider ) {
+		foreach ( array( 'openai', 'anthropic', 'gemini' ) as $provider ) {
 			$key = $this->config ? $this->config->get_api_key( $provider ) : '';
 			$providers_configured[ $provider ] = is_string( $key ) && '' !== $key;
 		}
@@ -439,7 +439,6 @@ class AI_Scribe_Admin_Service {
 				'openai'    => (bool) get_option( 'ab_api_key', '' ),
 				'anthropic' => (bool) get_option( 'ab_anthropic_api_key', '' ),
 				'gemini'    => ! empty( $engine_settings['gemini_api_key'] ),
-				'grok'      => ! empty( $engine_settings['grok_api_key'] ),
 			);
 		}
 

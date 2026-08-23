@@ -1,9 +1,9 @@
 # AI-Scribe v3.0.2 — Compliance & Security Report (P8, REFACTOR.md §14)
 
 > **Archive notice (14 August 2026):** this report is retained as package-specific evidence for
-> 3.0.2. It is not the current security, Plugin Check, regression or release record for 3.2.22.
+> 3.0.2. It is not the current security, Plugin Check, regression or release record for 3.2.30.
 > Current commands and release gates live in `TESTING.md` and `docs/RELEASE_RUNBOOK.md`; the exact
-> 3.2.22 package evidence is recorded in the project status documents. No number below should be
+> 3.2.30 package evidence is recorded in the project status documents. No number below should be
 > copied into current public documentation without rerunning the named check on the current ZIP.
 
 Date: 2026-08-10 · Auditor: P8 compliance agent · Scope: `dist/ai-scribe-3.0.2.zip` as packaged (the bytes a wp.org reviewer sees)

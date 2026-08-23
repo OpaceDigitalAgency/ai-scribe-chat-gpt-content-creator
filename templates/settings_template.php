@@ -46,9 +46,6 @@ $ai_scribe_providers = array(
 		! empty( $ai_scribe_hub_settings['gemini_api_key'] ),
 		__( 'Google Gemini', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 	),
-	// xAI Grok is withheld until it has been tested against a live key — see
-	// AICore\Registry\ModelRegistry::getSupportedProviders(). Nothing offers it
-	// as a choice, so nothing reports on it here either.
 );
 
 // Whether this site can generate images at all, and why not when it cannot.

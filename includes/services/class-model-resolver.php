@@ -20,6 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class AI_Scribe_Model_Resolver {
+	/** Providers AI Scribe can invoke for article or still-image generation. */
+	const PROVIDERS = array( 'openai', 'anthropic', 'gemini' );
 
 	/**
 	 * Ids that name another modality. A provider's model list carries image,
@@ -167,7 +169,7 @@ class AI_Scribe_Model_Resolver {
 
 		if ( class_exists( 'AICore\\Registry\\ModelRegistry' ) ) {
 			$provider = (string) AICore\Registry\ModelRegistry::getProvider( $model );
-			if ( '' !== $provider ) {
+			if ( in_array( $provider, self::PROVIDERS, true ) ) {
 				return $provider;
 			}
 		}
@@ -178,9 +180,6 @@ class AI_Scribe_Model_Resolver {
 		}
 		if ( preg_match( '/^(gemini-|gemma-|imagen-|models\/gemini-|nano-banana)/i', $model ) ) {
 			return 'gemini';
-		}
-		if ( preg_match( '/^grok-/i', $model ) ) {
-			return 'grok';
 		}
 		if ( preg_match( '/^(gpt-|o[0-9]|chatgpt-|codex-|dall-e)/i', $model ) ) {
 			return 'openai';
@@ -419,10 +418,10 @@ class AI_Scribe_Model_Resolver {
 		if ( class_exists( 'AICore\\Registry\\ModelRegistry' ) ) {
 			$providers = AICore\Registry\ModelRegistry::getSupportedProviders();
 			if ( is_array( $providers ) && ! empty( $providers ) ) {
-				return $providers;
+				return array_values( array_intersect( self::PROVIDERS, $providers ) );
 			}
 		}
 
-		return array( 'openai', 'anthropic', 'gemini' );
+		return self::PROVIDERS;
 	}
 }

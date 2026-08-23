@@ -131,12 +131,12 @@ try {
         $adapter = $container->get('ai_core_adapter');
         $checks['adapter_resolves'] = $adapter instanceof AI_Scribe_AI_Core_Adapter;
         $health = $adapter->get_health_status();
-        $checks['adapter_four_providers'] = isset(
+        $checks['adapter_three_providers'] = isset(
             $health['providers_available']['openai'],
             $health['providers_available']['anthropic'],
-            $health['providers_available']['gemini'],
-            $health['providers_available']['grok']
+            $health['providers_available']['gemini']
         );
+        $checks['adapter_has_no_grok'] = !isset($health['providers_available']['grok']);
         $missing_hub = $adapter->generate_text('smoke-model', [['role' => 'user', 'content' => 'No request must be sent.']]);
         $checks['adapter_fails_closed'] = is_wp_error($missing_hub)
             && $missing_hub->get_error_code() === 'ai_core_hub_missing';

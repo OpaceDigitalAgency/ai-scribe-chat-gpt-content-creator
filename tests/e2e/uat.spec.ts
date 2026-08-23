@@ -63,15 +63,15 @@ test.describe( 'UAT §12.1 — hub architecture', () => {
 	} );
 
 	test( 'keys entered in the hub flow through to AI-Scribe', async () => {
-		// Give the hub a grok key AI-Scribe itself does not have.
-		wpCli( `wp option patch insert ai_core_settings grok_api_key xai-hub-shared-key-e2e` );
+		// Give the hub a Gemini key AI-Scribe itself does not have.
+		wpCli( `wp option patch insert ai_core_settings gemini_api_key gemini-hub-shared-key-e2e` );
 		try {
 			const models = wpCli(
-				`wp eval '$c = ai_scribe_get_container(); echo (string) $c->get("config")->get_api_key("grok");'`
+				`wp eval '$c = ai_scribe_get_container(); echo (string) $c->get("config")->get_api_key("gemini");'`
 			);
-			expect( models ).toBe( 'xai-hub-shared-key-e2e' );
+			expect( models ).toBe( 'gemini-hub-shared-key-e2e' );
 		} finally {
-			wpCliTry( 'wp option patch delete ai_core_settings grok_api_key' );
+			wpCliTry( 'wp option patch delete ai_core_settings gemini_api_key' );
 		}
 	} );
 } );

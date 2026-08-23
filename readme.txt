@@ -1,11 +1,11 @@
 === Opace AI Scribe: SEO Content Creator & Humanizer for OpenAI, Anthropic & Gemini ===
 Contributors: opacewebdesign
-Tags: AI Writer, Content Generator, Content Creator, AI, SEO
+Tags: AI Writer, Content Generator, AI, SEO
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: opace-ai-prompt-library-api-hub
-Stable tag: 3.2.29
+Stable tag: 3.2.30
 License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://opace.agency/get-in-touch
@@ -24,33 +24,7 @@ Version 3 is a ground-up rebuild of the plugin around one idea: the model should
 
 Version 3 splits what used to be one plugin into two. AI Scribe is the writing tool. **Opace AI Hub** is the hub that holds provider credentials, model lists, pricing and the shared prompt library. Add a key once in Opace AI Hub and every plugin built on the hub can use it.
 
-`
-┌────────────────────────────────────────────────────────────────┐
-│  AI Scribe  (this plugin — the writing tool)                   │
-│                                                                │
-│   Wizard UI (11 steps)  ·  Express mode  ·  Saved shortcodes   │
-│   ────────────────────────────────────────────────────────     │
-│   Browser controllers  →  AJAX endpoints (nonce + capability)  │
-│   ────────────────────────────────────────────────────────     │
-│   Services                                                     │
-│     Generation · Conversation thread · Images · Cost meter     │
-│     Prompt assembly · Response schemas · SEO + post output     │
-│                             │                                  │
-│                             ▼  Opace AI Hub adapter                 │
-└─────────────────────────────┼──────────────────────────────────┘
-                              │
-┌─────────────────────────────▼──────────────────────────────────┐
-│  Opace AI Hub  (required hub plugin — no content of its own)        │
-│                                                                │
-│   API keys, encrypted at rest   ·   Live model discovery       │
-│   Shared prompt library         ·   Usage + cost statistics    │
-│   Per-provider request builders ·   Response normaliser        │
-└───────┬──────────────────────┬──────────────────────┬──────────┘
-        │                      │                      │
-        ▼                      ▼                      ▼
-     OpenAI                Anthropic               Gemini
-  text + images            text only            text + images
-`
+AI Scribe sends writing and image requests through Opace AI Hub's public API. The Hub owns provider keys, live discovery, shared prompts, normalisation, usage and cost records.
 
 What this buys you: one place to manage keys instead of one per plugin; model lists that come from your own provider account rather than a list baked into the plugin; usage and spend recorded across every add-on together; and a prompt library shared between them. It also means a provider fix lands once, in the hub, instead of separately in each plugin.
 
@@ -64,9 +38,13 @@ AI Scribe's own Providers tab therefore has no key fields. It shows a status chi
 
 Add a key for one provider or all three. The model list is fetched live from your own account and cached for an hour, with a Refresh button that bypasses the cache. AI Scribe filters the returned models by capability and preserves a valid saved choice. Opace AI Hub's maintained registry is used only when live discovery is unavailable, so the plugin does not promise model names which a provider may rename, retire or withhold from a particular account.
 
+**Live catalogue snapshot: 23 August 2026 at 13:03 BST (UTC+1); AI Scribe compatibility checked at 13:33 BST.** That Hub refresh returned 132 OpenAI, 10 Anthropic Claude and 50 Google Gemini identifiers. The list below is every writing or still-image identifier AI Scribe can select from that snapshot. Your Settings screen remains the authority because access varies by account, region and provider rollout.
+
 * **OpenAI** — text and image-capable models exposed by the configured account.
 * **Anthropic** — text-capable models exposed by the configured account. Anthropic does not provide an image model.
 * **Google Gemini** — text and image-capable models exposed by the configured account.
+
+The complete dated list is in the FAQ below, grouped into multimodal writing, text/reasoning and still-image models. It includes GPT-5.6 Sol, Terra and Luna. Audio, speech, realtime, embeddings, video, code, research, search, moderation, computer-use and other specialist Hub identifiers are not selectable or invoked by AI Scribe.
 
 = Which combination should I use? =
 
@@ -94,17 +72,7 @@ Three parameters from 2.6.2 — frequency penalty, presence penalty and Best Of 
 
 = The 11-step wizard =
 
-1. **Titles** – generate title options from your idea
-2. **Keywords** – SEO keyword suggestions, multi-select, skippable
-3. **Outline** – section headings you can trim or extend
-4. **Introduction** – long-form prose
-5. **Tagline** – with above/below-introduction placement
-6. **Article body** – full article in a rich editor with an image gallery
-7. **Conclusion** – written with the complete body in context
-8. **Q&A** – optional block, placed above or below the conclusion
-9. **SEO meta** – meta title and description with SERP-length counters
-10. **Review** – compile, edit, insert a table of contents, then save
-11. **Evaluate & enhance** – quality checks against your chosen options
+The guided stages cover titles, keywords, outline, introduction, tagline, article body, conclusion, Q&A, SEO meta, Review and Evaluate. Results stay editable and the model receives the accumulated article context.
 
 Choose Auto, a preset or a custom word target for each article. Body and Review show the measured count, target, preferred range and shortfall. A retained under-target draft can be improved without replacing existing wording, and accepted additions must be balanced across existing sections.
 
@@ -168,15 +136,15 @@ Running the wizard, Express mode and the Help screen need `edit_posts`, so autho
 
 This plugin connects only to the AI provider APIs you configure with your own API keys in Opace AI Hub. No other outbound requests are made, and nothing is sent to Opace's servers.
 
-* **OpenAI API** (api.openai.com) — prompts, selected article content and generation settings are sent to generate text and images when an OpenAI model is selected, plus a model-list request used to populate the model picker and check that your key works. [Terms](https://openai.com/policies/terms-of-use) · [Privacy](https://openai.com/policies/privacy-policy)
-* **Anthropic API** (api.anthropic.com) — the same data is sent when a Claude model is selected. [Terms](https://www.anthropic.com/legal/consumer-terms) · [Privacy](https://www.anthropic.com/legal/privacy)
-* **Google Gemini API** (generativelanguage.googleapis.com) — the same data is sent when a Gemini model is selected. [Terms](https://ai.google.dev/gemini-api/terms) · [Privacy](https://policies.google.com/privacy)
+* **OpenAI API** ([api.openai.com](https://api.openai.com/)) — prompts, selected article content and generation settings are sent to generate text and images when an OpenAI model is selected, plus a model-list request used to populate the model picker and check that your key works. [Terms](https://openai.com/policies/terms-of-use) · [Privacy](https://openai.com/policies/privacy-policy)
+* **Anthropic API** ([api.anthropic.com](https://api.anthropic.com/)) — the same data is sent when a Claude model is selected. [Terms](https://www.anthropic.com/legal/consumer-terms) · [Privacy](https://www.anthropic.com/legal/privacy)
+* **Google Gemini API** ([generativelanguage.googleapis.com](https://generativelanguage.googleapis.com/)) — the same data is sent when a Gemini model is selected. [Terms](https://ai.google.dev/gemini-api/terms) · [Privacy](https://policies.google.com/privacy)
 
 Requests only happen when you run the wizard, Express mode, image generation, or open a screen that lists models or checks key status; no data is transmitted in the background.
 
 == Installation ==
 
-1. Install and activate the verified **Opace AI Hub** package. AI Scribe declares it as a required plugin, so WordPress refuses to activate AI Scribe until it is there. When Opace AI Hub is available from WordPress.org, the missing-dependency notice can install or activate it directly; until then, install the verified package supplied through Opace AI Hub's own release channel.
+1. Install and activate [Opace AI Hub from WordPress.org](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/). AI Scribe declares the approved dependency slug, so WordPress can install or activate the Hub from the missing-dependency notice and refuses to activate AI Scribe until it is present.
 2. In Opace AI Hub → Settings, add an API key for at least one provider: OpenAI, Anthropic or Google Gemini.
 3. Upload AI Scribe to `/wp-content/plugins/` or install it from the Plugins screen, then activate it.
 4. Open AI Scribe → Settings → Providers & Model. Check that your provider shows as configured, pick a model (Refresh models re-fetches the live list), then open Generate Article and start writing.
@@ -199,7 +167,33 @@ Everything except images works normally. The image controls are hidden rather th
 
 = Which models are supported? =
 
-Whichever compatible models your configured provider account grants you. The list is fetched live and filtered by capability. Opace AI Hub's maintained registry is the fallback when live discovery is temporarily unavailable, so this readme does not make promises about volatile provider model names.
+Whichever compatible writing and still-image models your configured OpenAI, Anthropic or Google Gemini account grants you. The dated snapshot above names every currently selectable identifier, including GPT-5.6 Sol, Terra and Luna. The list is still fetched live and filtered by capability, so Settings is authoritative if a provider changes access after that snapshot.
+
+= Which models were in the dated live snapshot? =
+
+**Multimodal writing models**
+
+* **OpenAI (45):** `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, `gpt-5.5-pro`, `gpt-5.5-pro-2026-04-23`, `gpt-5.5`, `gpt-5.5-2026-04-23`, `gpt-5.4-pro`, `gpt-5.4-pro-2026-03-05`, `gpt-5.4`, `gpt-5.4-2026-03-05`, `gpt-5.4-mini`, `gpt-5.4-mini-2026-03-17`, `gpt-5.4-nano`, `gpt-5.4-nano-2026-03-17`, `gpt-5.2-pro`, `gpt-5.2-pro-2025-12-11`, `gpt-5.2`, `gpt-5.2-2025-12-11`, `gpt-5.1`, `gpt-5.1-2025-11-13`, `gpt-5-pro`, `gpt-5-pro-2025-10-06`, `gpt-5`, `gpt-5-2025-08-07`, `gpt-5-mini-2025-08-07`, `gpt-5-mini`, `gpt-5-nano-2025-08-07`, `gpt-4.1-2025-04-14`, `gpt-4.1`, `gpt-4.1-mini-2025-04-14`, `gpt-4.1-mini`, `gpt-4.1-nano`, `gpt-4.1-nano-2025-04-14`, `gpt-4o-2024-05-13`, `gpt-4o-2024-08-06`, `gpt-4o-2024-11-20`, `gpt-4-0613`, `gpt-4o`, `gpt-4-turbo`, `gpt-4-turbo-2024-04-09`, `gpt-4o-mini-2024-07-18`, `gpt-4o-mini`, `o3`, `o3-mini`
+* **Anthropic Claude (7):** `claude-opus-5`, `claude-opus-4-8`, `claude-opus-4-7`, `claude-opus-4-6`, `claude-sonnet-4-6`, `claude-opus-4-5-20251101`, `claude-sonnet-4-5-20250929`
+* **Google Gemini (6):** `gemini-3.6-flash`, `gemini-3.1-pro-preview`, `gemini-3.1-pro-preview-customtools`, `gemini-2.5-pro`, `gemini-2.5-flash`, `gemini-pro-latest`
+
+**Text and reasoning models**
+
+* **OpenAI (17):** `gpt-5-nano`, `gpt-4`, `gpt-3.5-turbo-0125`, `gpt-3.5-turbo-1106`, `gpt-3.5-turbo-16k`, `gpt-3.5-turbo`, `o4-mini-2025-04-16`, `o4-mini`, `o3-pro`, `o3-pro-2025-06-10`, `o3-2025-04-16`, `o3-mini-2025-01-31`, `o1-pro`, `o1-pro-2025-03-19`, `o1`, `o1-2024-12-17`, `chat-latest`
+* **Anthropic Claude (3):** `claude-sonnet-5`, `claude-fable-5`, `claude-haiku-4-5-20251001`
+* **Google Gemini (11):** `gemini-3.7-flash`, `gemini-3.5-flash`, `gemini-3.5-flash-lite`, `gemini-3.1-flash-lite-preview`, `gemini-3.1-flash-lite`, `gemini-3-flash-preview`, `gemini-2.5-flash-lite`, `gemini-flash-latest`, `gemini-flash-lite-latest`, `gemma-4-26b-a4b-it`, `gemma-4-31b-it`
+
+**Still-image generation models**
+
+* **OpenAI (6):** `gpt-image-2`, `gpt-image-2-2026-04-21`, `gpt-image-1.5`, `gpt-image-1`, `gpt-image-1-mini`, `chatgpt-image-latest`
+* **Google Gemini (7):** `gemini-3.1-flash-image`, `gemini-3.1-flash-image-preview`, `gemini-3.1-flash-lite-image`, `gemini-3-pro-image`, `gemini-3-pro-image-preview`, `gemini-2.5-flash-image`, `nano-banana-pro-preview`
+* **Anthropic Claude:** no still-image generation model was returned.
+
+The [complete live Hub catalogue](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/#description) also groups the specialist identifiers which AI Scribe deliberately excludes.
+
+= Why did I see an "AI-Scribe model updated" notice after installing? =
+
+That notice is for retained data, not a genuinely clean install. It appears when an upgrade or reinstall still holds the untouched legacy `gpt-4o-mini` default, or when a previously selected model has been retired. AI Scribe then follows Opace AI Hub's current valid default and names both models in the notice. A valid model you explicitly saved is never overwritten, and a fresh install starts provider-neutral until the Hub selects from your live account.
 
 = What happens to my edited prompts when I upgrade? =
 
@@ -270,6 +264,12 @@ Only if you opt in. Choose the delete-on-uninstall setting before deleting the p
 
 == Changelog ==
 
+= 3.2.30 =
+* Fixed: removed the dormant Grok/xAI provider route so runtime behaviour now matches the documented OpenAI, Anthropic and Google Gemini service disclosure.
+* Added: a dated, complete snapshot of every writing and still-image model AI Scribe can select, including GPT-5.6 Sol, Terra and Luna, with specialist Hub-only categories clearly separated.
+* Changed: linked the live Opace AI Hub dependency and provider hosts directly; clarified the retained-data model-update notice and current one-click dependency installation.
+* Compliance: shortened the plugin header description, removed the unsupported main-header `Tested up to` field and retained WordPress 7.1 compatibility in this directory readme.
+
 = 3.2.29 =
 * Changed: plugin page headings now use the complete approved AI-Scribe logo, while the WordPress sidebar uses a centred white 20px symbol on transparency.
 * Fixed: inline-only Markdown such as `**bold**` is converted before generated text reaches the editor instead of being displayed as markup characters.
@@ -310,6 +310,9 @@ Only if you opt in. Choose the delete-on-uninstall setting before deleting the p
 (Full historical changelog is available in the GitHub release history and earlier releases.)
 
 == Upgrade Notice ==
+
+= 3.2.30 =
+Aligns runtime providers with the published privacy disclosure, documents the complete current selectable model snapshot and updates live dependency links.
 
 = 3.2.29 =
 Uses the complete approved page logo, a white WordPress sidebar symbol and correct formatting for inline-only Markdown.

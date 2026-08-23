@@ -19,7 +19,7 @@ class WizardFlowController {
 
     /**
      * Human-readable provider name. Providers brand themselves in ways a
-     * naive ucfirst() gets wrong ("Openai", "Xai"), so map the known ones.
+     * naive ucfirst() gets wrong ("Openai"), so map the known ones.
      *
      * @param {string} provider Provider slug from the models endpoint.
      * @return {string} Display label.
@@ -29,7 +29,6 @@ class WizardFlowController {
             openai: 'OpenAI',
             anthropic: 'Anthropic',
             gemini: 'Google Gemini',
-            grok: 'xAI Grok',
             wordpress: 'WordPress AI',
         };
         const key = String(provider || '').toLowerCase();

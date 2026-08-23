@@ -25,7 +25,7 @@ class AI_Scribe_Settings_Ajax_Controller {
 	const NONCE_ACTION = 'ai_scribe_nonce';
 
 	/** Providers whose keys this surface manages. */
-	const PROVIDERS = array( 'openai', 'anthropic', 'gemini', 'grok' );
+	const PROVIDERS = array( 'openai', 'anthropic', 'gemini' );
 
 	/** @var AI_Scribe_Logger|null */
 	private $logger;
@@ -180,7 +180,7 @@ class AI_Scribe_Settings_Ajax_Controller {
 	 * unconfigured ones. The live fetch also registers previously-unknown
 	 * ids into ModelRegistry so describe_model() has metadata.
 	 *
-	 * @param string $provider  openai|anthropic|gemini|grok
+	 * @param string $provider  openai|anthropic|gemini
 	 * @param bool   $refresh   Bypass the transient cache.
 	 * @param array  $sources   By-ref map provider => live|live-cached|registry.
 	 * @return array Model id list.
@@ -258,7 +258,6 @@ class AI_Scribe_Settings_Ajax_Controller {
 			'openai'    => 'AICore\\Providers\\OpenAIProvider',
 			'anthropic' => 'AICore\\Providers\\AnthropicProvider',
 			'gemini'    => 'AICore\\Providers\\GeminiProvider',
-			'grok'      => 'AICore\\Providers\\GrokProvider',
 		);
 		if ( ! isset( $classes[ $provider ] ) || ! class_exists( $classes[ $provider ] ) ) {
 			return null;
@@ -377,7 +376,7 @@ class AI_Scribe_Settings_Ajax_Controller {
 	/**
 	 * Contract v1.1 §10 — ai_scribe_save_api_keys.
 	 *
-	 * Payload: keys JSON {openai, anthropic, gemini, grok}. Empty string or
+	 * Payload: keys JSON {openai, anthropic, gemini}. Empty string or
 	 * absent = leave unchanged; a single dash "-" = clear the stored key.
 	 * Keys are stored server-side only and never echoed back.
 	 */
@@ -445,7 +444,7 @@ class AI_Scribe_Settings_Ajax_Controller {
 	 * Persist one provider key server-side.
 	 *
 	 * openai/anthropic keep their legacy individual options (plus the grouped
-	 * mirror, matching 2.6.2 behaviour); gemini/grok live in the
+	 * mirror, matching 2.6.2 behaviour); Gemini lives in the
 	 * ab_gpt_ai_engine_settings group (ConfigManager::get_api_key reads both).
 	 */
 	private function store_key( $provider, $value ) {
@@ -469,9 +468,6 @@ class AI_Scribe_Settings_Ajax_Controller {
 				break;
 			case 'gemini':
 				$engine['gemini_api_key'] = $stored;
-				break;
-			case 'grok':
-				$engine['grok_api_key'] = $stored;
 				break;
 			default:
 				return;
@@ -641,7 +637,8 @@ class AI_Scribe_Settings_Ajax_Controller {
 
 		$engine = get_option( 'ab_gpt_ai_engine_settings', array() );
 		$engine = is_array( $engine ) ? $engine : array();
-		// Never ship key material — masked status only.
+		// Never ship key material — masked status only. The retired Grok field
+		// is scrubbed too if retained pre-3.2.30 data still contains it.
 		unset( $engine['api_key'], $engine['anthropic_api_key'], $engine['gemini_api_key'], $engine['grok_api_key'] );
 
 		// U-01: text carried over from 2.6.2 (keywords-to-avoid, prompt

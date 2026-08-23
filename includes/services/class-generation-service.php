@@ -9,7 +9,7 @@
  *
  * - Structured outputs for choice steps (1,2,3,5,8,9) via SchemaRegistry
  *   (OpenAI response_format json_schema / Anthropic tool-forcing /
- *   Gemini responseSchema / Grok OpenAI-shaped), routed through the
+ *   Gemini responseSchema), routed through the
  *   AiCoreAdapter.
  * - Long-form steps (4,6,7): free-form HTML, high max output tokens
  *   from ModelRegistry capabilities, NO stop sequences, NO temperature
@@ -1349,7 +1349,7 @@ class AI_Scribe_Generation_Service {
 
 		// Streaming passthrough needs curl; the WP HTTP API buffers whole
 		// responses. Without curl we fall back to a buffered single delta.
-		// (True per-token passthrough for all four providers is a P3
+		// (True per-token passthrough for all supported providers is a P3
 		// follow-up; the contract's fallback shape keeps the client simple.)
 		$result = $this->run_step( $conversation_id, $step, $args );
 
@@ -1727,9 +1727,6 @@ class AI_Scribe_Generation_Service {
 		}
 		if ( strpos( $model, 'gemini' ) === 0 ) {
 			return 'gemini';
-		}
-		if ( strpos( $model, 'grok' ) === 0 ) {
-			return 'grok';
 		}
 		return 'openai';
 	}

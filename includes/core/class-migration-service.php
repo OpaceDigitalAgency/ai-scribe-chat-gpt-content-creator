@@ -207,7 +207,6 @@ class AI_Scribe_Migration_Service {
 			'openai'    => 'ai_engine.api_key',
 			'anthropic' => 'ai_engine.anthropic_api_key',
 			'gemini'    => 'ai_engine.gemini_api_key',
-			'grok'      => 'ai_engine.grok_api_key',
 		);
 
 		// Read through the hub's option filter, so stored ciphertext arrives
@@ -728,6 +727,8 @@ Does the article provide an original, interesting and engaging perspective on th
 			? $config_manager
 			: new AI_Scribe_Config_Manager();
 
+		// Encrypt a retained legacy Grok value as a data-safety measure, but do
+		// not copy it to the Hub or make it available to runtime provider code.
 		$sensitive = array( 'api_key', 'anthropic_api_key', 'openai_api_key', 'claude_api_key', 'gemini_api_key', 'grok_api_key' );
 
 		// 1. Keys inside the grouped engine option (the 2.6.2 location).

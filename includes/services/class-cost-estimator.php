@@ -166,23 +166,6 @@ class AI_Scribe_Cost_Estimator {
 			'input'  => 0.30,
 			'output' => 2.50,
 		),
-		// xAI
-		'grok-4.20'             => array(
-			'input'  => 5.00,
-			'output' => 15.00,
-		),
-		'grok-4.3'              => array(
-			'input'  => 1.25,
-			'output' => 2.50,
-		),
-		'grok-4-fast'           => array(
-			'input'  => 0.20,
-			'output' => 0.50,
-		),
-		'grok-4'                => array(
-			'input'  => 3.00,
-			'output' => 15.00,
-		),
 		// Provider-family fallbacks
 		'gpt-'                  => array(
 			'input'  => 2.50,
@@ -194,10 +177,6 @@ class AI_Scribe_Cost_Estimator {
 		),
 		'gemini-'               => array(
 			'input'  => 0.30,
-			'output' => 2.50,
-		),
-		'grok-'                 => array(
-			'input'  => 1.25,
 			'output' => 2.50,
 		),
 	);

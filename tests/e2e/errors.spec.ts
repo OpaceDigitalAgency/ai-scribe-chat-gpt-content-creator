@@ -39,7 +39,7 @@ test.describe( 'Wizard — provider failure modes', () => {
 		}
 
 		const configured = wpCli(
-			`wp eval '$s=get_option("ai_core_settings",array());echo (!empty($s["openai_api_key"])||!empty($s["anthropic_api_key"])||!empty($s["gemini_api_key"])||!empty($s["grok_api_key"])) ? "yes" : "no";'`
+			`wp eval '$s=get_option("ai_core_settings",array());echo (!empty($s["openai_api_key"])||!empty($s["anthropic_api_key"])||!empty($s["gemini_api_key"])) ? "yes" : "no";'`
 		);
 		if ( configured === 'yes' ) {
 			return;

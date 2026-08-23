@@ -7,7 +7,7 @@
 <p align="center"><strong>SEO content creator and humaniser for WordPress, powered by OpenAI, Anthropic and Google Gemini.</strong></p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.2.29-087abd" alt="AI Scribe version 3.2.29">
+  <img src="https://img.shields.io/badge/version-3.2.30-087abd" alt="AI Scribe version 3.2.30">
   <img src="https://img.shields.io/badge/WordPress-6.5%2B-21759b" alt="Requires WordPress 6.5 or newer">
   <img src="https://img.shields.io/badge/tested%20up%20to-WordPress%207.1-21759b" alt="Tested up to WordPress 7.1">
   <img src="https://img.shields.io/badge/PHP-7.4%2B-777bb4" alt="Requires PHP 7.4 or newer">
@@ -22,9 +22,9 @@
 </p>
 
 AI Scribe requires the separate **Opace AI Hub** plugin. Opace AI Hub centralises encrypted provider keys,
-live model discovery, shared prompts, usage and cost reporting. Its
-[public source is on GitHub](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin);
-the WordPress.org link will be added after the separately reviewed dependency is published there.
+live model discovery, shared prompts, usage and cost reporting. Install it from
+[WordPress.org](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/) or review its
+[public source on GitHub](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin).
 
 AI Scribe is independently developed by Opace Digital Agency and is not affiliated with, endorsed by or sponsored by OpenAI, Anthropic or Google.
 
@@ -135,11 +135,39 @@ that bypasses the cache. AI Scribe filters those lists by capability, preserves 
 and uses Opace AI Hub's maintained registry only when live discovery is unavailable. This avoids promising
 model names which a provider may rename, retire or withhold from a particular account.
 
+**Live catalogue snapshot: 23 August 2026 at 13:03 BST (UTC+1); AI Scribe compatibility checked at
+13:33 BST.** That Hub refresh returned 132 OpenAI, 10 Anthropic Claude and 50 Google Gemini identifiers.
+The list below is every writing or still-image identifier AI Scribe can select from that snapshot. Your
+screen remains the authority because access varies by account, region and provider rollout.
+
 | Provider | Text | Images |
 |---|---|---|
 | **OpenAI** | Models exposed by the configured account and recognised as text-capable | Image-capable models exposed by the account |
 | **Anthropic** | Models exposed by the configured account and recognised as text-capable | none — Anthropic does not provide an image model |
 | **Google Gemini** | Models exposed by the configured account and recognised as text-capable | Image-capable models exposed by the account |
+
+**Multimodal writing models**
+
+- **OpenAI (45):** `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, `gpt-5.5-pro`, `gpt-5.5-pro-2026-04-23`, `gpt-5.5`, `gpt-5.5-2026-04-23`, `gpt-5.4-pro`, `gpt-5.4-pro-2026-03-05`, `gpt-5.4`, `gpt-5.4-2026-03-05`, `gpt-5.4-mini`, `gpt-5.4-mini-2026-03-17`, `gpt-5.4-nano`, `gpt-5.4-nano-2026-03-17`, `gpt-5.2-pro`, `gpt-5.2-pro-2025-12-11`, `gpt-5.2`, `gpt-5.2-2025-12-11`, `gpt-5.1`, `gpt-5.1-2025-11-13`, `gpt-5-pro`, `gpt-5-pro-2025-10-06`, `gpt-5`, `gpt-5-2025-08-07`, `gpt-5-mini-2025-08-07`, `gpt-5-mini`, `gpt-5-nano-2025-08-07`, `gpt-4.1-2025-04-14`, `gpt-4.1`, `gpt-4.1-mini-2025-04-14`, `gpt-4.1-mini`, `gpt-4.1-nano`, `gpt-4.1-nano-2025-04-14`, `gpt-4o-2024-05-13`, `gpt-4o-2024-08-06`, `gpt-4o-2024-11-20`, `gpt-4-0613`, `gpt-4o`, `gpt-4-turbo`, `gpt-4-turbo-2024-04-09`, `gpt-4o-mini-2024-07-18`, `gpt-4o-mini`, `o3`, `o3-mini`
+- **Anthropic Claude (7):** `claude-opus-5`, `claude-opus-4-8`, `claude-opus-4-7`, `claude-opus-4-6`, `claude-sonnet-4-6`, `claude-opus-4-5-20251101`, `claude-sonnet-4-5-20250929`
+- **Google Gemini (6):** `gemini-3.6-flash`, `gemini-3.1-pro-preview`, `gemini-3.1-pro-preview-customtools`, `gemini-2.5-pro`, `gemini-2.5-flash`, `gemini-pro-latest`
+
+**Text and reasoning models**
+
+- **OpenAI (17):** `gpt-5-nano`, `gpt-4`, `gpt-3.5-turbo-0125`, `gpt-3.5-turbo-1106`, `gpt-3.5-turbo-16k`, `gpt-3.5-turbo`, `o4-mini-2025-04-16`, `o4-mini`, `o3-pro`, `o3-pro-2025-06-10`, `o3-2025-04-16`, `o3-mini-2025-01-31`, `o1-pro`, `o1-pro-2025-03-19`, `o1`, `o1-2024-12-17`, `chat-latest`
+- **Anthropic Claude (3):** `claude-sonnet-5`, `claude-fable-5`, `claude-haiku-4-5-20251001`
+- **Google Gemini (11):** `gemini-3.7-flash`, `gemini-3.5-flash`, `gemini-3.5-flash-lite`, `gemini-3.1-flash-lite-preview`, `gemini-3.1-flash-lite`, `gemini-3-flash-preview`, `gemini-2.5-flash-lite`, `gemini-flash-latest`, `gemini-flash-lite-latest`, `gemma-4-26b-a4b-it`, `gemma-4-31b-it`
+
+**Still-image generation models**
+
+- **OpenAI (6):** `gpt-image-2`, `gpt-image-2-2026-04-21`, `gpt-image-1.5`, `gpt-image-1`, `gpt-image-1-mini`, `chatgpt-image-latest`
+- **Google Gemini (7):** `gemini-3.1-flash-image`, `gemini-3.1-flash-image-preview`, `gemini-3.1-flash-lite-image`, `gemini-3-pro-image`, `gemini-3-pro-image-preview`, `gemini-2.5-flash-image`, `nano-banana-pro-preview`
+- **Anthropic Claude:** no still-image generation model was returned.
+
+Audio, speech, realtime, embeddings, video, code, research, search, moderation, computer-use and
+other specialist identifiers are catalogued by the Hub but are not selectable or invoked by AI Scribe.
+The [complete live Hub catalogue](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/#description)
+lists those identifiers by category as well.
 
 ### Any combination works
 
@@ -251,8 +279,8 @@ retained-data reinstalls fill missing settings only and never overwrite a valid 
 
 ## Installation
 
-1. Install and activate the verified **Opace AI Hub** package. Its public source and WordPress.org links
-   will appear above when the separate dependency has been published.
+1. Install and activate [Opace AI Hub from WordPress.org](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/).
+   WordPress can install or activate it directly because AI Scribe declares the approved dependency slug.
 2. In Opace AI Hub → Settings, add a key for at least one provider and press Test.
 3. Install and activate AI Scribe.
 4. AI Scribe → Settings → Providers & Model: confirm the status chip, pick a model, then open

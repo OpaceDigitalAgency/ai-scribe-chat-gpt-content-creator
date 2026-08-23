@@ -43,7 +43,6 @@ final class AI_Scribe_Mock_Provider {
 		'api.openai.com',
 		'api.anthropic.com',
 		'generativelanguage.googleapis.com',
-		'api.x.ai',
 	);
 
 	/**
@@ -169,8 +168,6 @@ final class AI_Scribe_Mock_Provider {
 		switch ( $host ) {
 			case 'api.openai.com':
 				return self::openai( $path, $method, $args, $empty );
-			case 'api.x.ai':
-				return self::openai( $path, $method, $args, $empty, 'grok-4.3' );
 			case 'api.anthropic.com':
 				return self::anthropic( $path, $method, $args, $empty );
 			case 'generativelanguage.googleapis.com':
@@ -202,7 +199,7 @@ final class AI_Scribe_Mock_Provider {
 		return in_array( $opt, self::MODES, true ) ? $opt : 'ok';
 	}
 
-	/* ---------------------------------------------------------------- OpenAI / xAI (OpenAI-compatible) */
+	/* ---------------------------------------------------------------- OpenAI */
 
 	private static function openai( $path, $method, $args, $empty, $default_model = 'gpt-5-mini' ) {
 		// Image generation (gpt-image-1 / GPT Image 2 / DALL-E): return a
@@ -224,16 +221,14 @@ final class AI_Scribe_Mock_Provider {
 		if ( 'GET' === $method && false !== strpos( $path, '/models' ) ) {
 			// Real live-family ids (P6 live smoke; §13 addendum: the mock must
 			// mirror the REAL /models surface — no speculative gpt-5.6 names).
-			$ids = 'grok-4.3' === $default_model
-				? array( 'grok-4.20', 'grok-4.3' )
-				: array( 'gpt-5', 'gpt-5-mini', 'gpt-5-nano', 'o4-mini', 'gpt-4.1-mini', 'gpt-image-1' );
+			$ids = array( 'gpt-5', 'gpt-5-mini', 'gpt-5-nano', 'o4-mini', 'gpt-4.1-mini', 'gpt-image-1' );
 			$data = array();
 			foreach ( $ids as $id ) {
 				$data[] = array(
 					'id'       => $id,
 					'object'   => 'model',
 					'created'  => 1751932800,
-					'owned_by' => 'grok-4.3' === $default_model ? 'xai' : 'openai',
+					'owned_by' => 'openai',
 				);
 			}
 			return self::response( 200, wp_json_encode( array( 'object' => 'list', 'data' => $data ) ) );

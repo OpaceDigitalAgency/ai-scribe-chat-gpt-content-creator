@@ -337,7 +337,7 @@ class AI_Scribe_Onboarding_Notice {
 				 */
 				?>
 				<p class="ai-scribe-notice__summary">
-					<?php esc_html_e( 'New in 3.0: four providers, Express mode, whole-article context, live model lists and per-step costs.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
+					<?php esc_html_e( 'New in 3.0: three API providers plus WordPress core AI, Express mode, whole-article context, live model lists and per-step costs.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
 				</p>
 				<p class="ai-scribe-notice__actions">
 					<a class="button button-primary" href="<?php echo esc_url( $help_url ); ?>">

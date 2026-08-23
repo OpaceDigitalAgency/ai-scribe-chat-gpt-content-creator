@@ -371,7 +371,7 @@ Live model list — the UI never hardcodes model ids.
 
 | Field | Type | Notes |
 |---|---|---|
-| `provider` | string | optional `openai\|anthropic\|gemini\|grok\|WordPress`; omit for all |
+| `provider` | string | optional `openai\|anthropic\|gemini\|WordPress`; omit for all |
 | `refresh` | truthy | optional — bypass the one-hour per-provider transient and re-fetch live |
 
 Response `data`:
@@ -420,7 +420,7 @@ normal case; the branch below only runs where the hub is missing or deactivated.
 
 | Field | Type | Notes |
 |---|---|---|
-| `keys` | JSON | `{openai, anthropic, gemini, grok}` — empty string/absent = leave unchanged; `"-"` = clear |
+| `keys` | JSON | `{openai, anthropic, gemini}` — empty string/absent = leave unchanged; `"-"` = clear |
 
 Response `data`: `{ "updated": ["openai"], "cleared": [], "providers": { <see §11> } }`.
 Values are encrypted before storage (`aisenc1:` AES-256-CBC, key derived from the site salts) and

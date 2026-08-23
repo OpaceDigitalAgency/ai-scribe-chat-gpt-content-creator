@@ -1151,8 +1151,8 @@ test_section('P8 — key storage hardening (§14.3): encrypted at rest, never le
 test_reset_options();
 $p8_config = new AI_Scribe_Config_Manager($logger);
 
-// 1. Every provider key round-trips through encryption and the stored bytes
-//    carry the versioned marker + never contain the plaintext.
+// 1. Supported provider keys, plus a retained legacy Grok field, round-trip
+//    through encryption and never leave plaintext in stored options.
 $p8_secrets = [
     'ai_engine.api_key'           => 'sk-p8-openai-test-key-123456789012345678901234',
     'ai_engine.anthropic_api_key' => 'sk-ant-p8-anthropic-test-key-abcdefghijklmnopqrs',
@@ -1168,6 +1168,8 @@ foreach ($p8_secrets as $p8_key => $p8_plain) {
     test_assert(strpos($p8_stored, $p8_plain) === false, "{$p8_subkey} plaintext absent from stored option");
     test_assert(strpos((string) json_encode($p8_stored_group), $p8_plain) === false, "{$p8_subkey} plaintext absent from whole option group");
 }
+test_assert($p8_config->get_api_key('grok') === null, 'retained Grok data has no runtime provider-key path');
+test_assert($p8_config->get_api_key('xai') === null, 'xAI alias has no runtime provider-key path');
 
 // 2. Reads decrypt back to the exact plaintext (fresh instance = fresh cache).
 //    openai/anthropic reads prefer the legacy individual options, which the
@@ -1211,7 +1213,10 @@ test_assert_contains("unset( \$engine['api_key'], \$engine['anthropic_api_key'],
 $p8_uninstall = file_get_contents(dirname(__DIR__, 2) . '/uninstall.php');
 test_assert_contains('ab_api_key', $p8_uninstall, 'uninstall wipes the OpenAI key option');
 test_assert_contains('ab_anthropic_api_key', $p8_uninstall, 'uninstall wipes the Anthropic key option');
-test_assert_contains('ab_gpt_ai_engine_settings', $p8_uninstall, 'uninstall wipes the grouped engine settings (gemini/grok keys)');
+test_assert_contains('ab_gpt_ai_engine_settings', $p8_uninstall, 'uninstall wipes grouped provider settings, including retained legacy fields');
+$p8_adapter_src = file_get_contents(dirname(__DIR__, 2) . '/includes/adapters/class-ai-core-adapter.php');
+test_assert_not_contains('api.x.ai', $p8_adapter_src, 'adapter has no xAI outbound host');
+test_assert_not_contains('GrokProvider', $p8_adapter_src, 'adapter cannot instantiate a Grok provider');
 $p8_init_src = file_get_contents(dirname(__DIR__, 2) . '/includes/core/class-plugin-initializer.php');
 test_assert_not_contains("register_ajax_action( 'al_scribe_engine_request_data'", $p8_init_src, 'legacy plaintext-key endpoint al_scribe_engine_request_data unregistered');
 test_assert_not_contains("register_ajax_action( 'save_engine_settings'", $p8_init_src, 'legacy plaintext-key endpoint save_engine_settings unregistered');
@@ -1300,9 +1305,9 @@ test_assert(AI_Scribe_Onboarding_Notice::should_show_remap() === true, 'remap no
 update_option(AI_Scribe_Onboarding_Notice::REMAP_OPTION, ['bad' => 'shape']);
 test_assert(AI_Scribe_Onboarding_Notice::should_show_remap() === false, 'malformed remap payload never renders');
 
-// Opace AI Hub does not yet have a verified public WordPress.org listing, so the
-// direct install CTA stays off until a distributor explicitly opts in.
-test_assert(AI_Scribe_Onboarding_Notice::hub_install_cta_enabled() === false, 'hub install CTA defaults OFF until the dependency has a verified public listing');
+// This isolated harness does not load WordPress's dependency resolver, so the
+// install CTA stays off here. Runtime availability comes from the live listing.
+test_assert(AI_Scribe_Onboarding_Notice::hub_install_cta_enabled() === false, 'hub install CTA stays off when the WordPress dependency resolver is unavailable');
 // The filter escape hatch is asserted statically: this harness stubs
 // add_filter(), so exercising it at runtime would prove nothing.
 $p9_notice_src_cta = file_get_contents(dirname(__DIR__, 2) . '/includes/core/class-onboarding-notice.php');
@@ -1345,7 +1350,7 @@ if (!class_exists('AI_Scribe_Test_Stub_Hub')) {
         {
             $s = get_option('ai_core_settings', []);
             return !empty($s['openai_api_key']) || !empty($s['anthropic_api_key'])
-                || !empty($s['gemini_api_key']) || !empty($s['grok_api_key']);
+                || !empty($s['gemini_api_key']);
         }
     }
 }
@@ -1490,6 +1495,10 @@ set_transient(AI_Scribe_Model_Resolver::cache_key('openai', $openai_test_key), $
 test_assert(AI_Scribe_Model_Resolver::best_live_model('openai') === 'gpt-5.7-terra', 'resolver dynamically selects the newest available OpenAI Terra writing model');
 test_assert(AI_Scribe_Model_Resolver::best_live_image_model('openai') === 'gpt-image-3', 'resolver dynamically selects the newest available GPT Image model');
 test_assert(AI_Scribe_Model_Resolver::resolve('gpt-5.7-mini') === 'gpt-5.7-mini', 'resolver preserves an explicit valid saved model');
+test_assert(AI_Scribe_Model_Resolver::is_text_model('gpt-5.6-sol') === true, 'GPT-5.6 Sol is selectable for writing');
+test_assert(AI_Scribe_Model_Resolver::is_text_model('gpt-5.6-terra') === true, 'GPT-5.6 Terra is selectable for writing');
+test_assert(AI_Scribe_Model_Resolver::is_text_model('gpt-5.6-luna') === true, 'GPT-5.6 Luna is selectable for writing');
+test_assert(AI_Scribe_Model_Resolver::provider_of('grok-4') === '', 'unsupported Grok ids have no provider route');
 test_assert_contains('_live_gemini_', AI_Core_Model_Defaults::cache_key('gemini', $gemini_test_key), 'Opace AI Hub mock and live model caches are isolated');
 
 $gemini_provider_source = file_get_contents(dirname(__DIR__, 3) . '/AI CORE MODULAR/ai-core-standalone/lib/src/Providers/GeminiProvider.php');
