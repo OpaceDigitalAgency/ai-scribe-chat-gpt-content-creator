@@ -206,6 +206,12 @@ working, and only a genuine authentication failure marks a key as bad.
   contents links, internal contextual links and external links are reported separately; editorial
   judgements are labelled for human confirmation rather than presented as measured facts.
 
+## Video walkthrough
+
+[![Watch the current AI Scribe v3 walkthrough](https://img.youtube.com/vi/NkXMf-rl6TE/maxresdefault.jpg)](https://www.youtube.com/watch?v=NkXMf-rl6TE)
+
+[Watch AI Scribe v3 on YouTube](https://www.youtube.com/watch?v=NkXMf-rl6TE) — Opace AI Hub setup, the guided writing workflow, Express mode, images, SEO, Review and Evaluate.
+
 ## Product tour
 
 <table>
