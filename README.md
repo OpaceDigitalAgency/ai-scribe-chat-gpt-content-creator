@@ -21,7 +21,7 @@
   · <a href="https://github.com/OpaceDigitalAgency">More from Opace</a>
 </p>
 
-AI Scribe requires the separate **Opace AI Hub** plugin. Opace AI Hub centralises encrypted provider keys,
+AI Scribe requires the separate [**Opace AI Hub**](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin) plugin. Opace AI Hub centralises encrypted provider keys,
 live model discovery, shared prompts, usage and cost reporting. Install it from
 [WordPress.org](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/) or review its
 [public source on GitHub](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin).
