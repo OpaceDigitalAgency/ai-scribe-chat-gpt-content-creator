@@ -82,6 +82,7 @@ function sanitize_key($s) { return preg_replace('/[^a-z0-9_\-]/', '', strtolower
 function sanitize_title($s) { return strtolower(preg_replace('/[^a-z0-9]+/i', '-', trim((string) $s))); }
 function wp_json_encode($data, $options = 0, $depth = 512) { return json_encode($data, $options, $depth); }
 function __($text, $domain = 'default') { return $text; }
+function _n($single, $plural, $number, $domain = 'default') { return 1 === (int) $number ? $single : $plural; }
 function _e($text, $domain = 'default') { echo $text; }
 function is_admin() { return true; }
 function current_user_can($capability, ...$args) { return array_key_exists($capability, $GLOBALS['__test_capabilities']) ? (bool) $GLOBALS['__test_capabilities'][$capability] : true; }

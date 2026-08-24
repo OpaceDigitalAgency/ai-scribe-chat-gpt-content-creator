@@ -78,15 +78,15 @@ class AI_Scribe_Content_Generation_Service extends AI_Scribe_Base_Service {
 	 */
 	public function validate_service() {
 		if ( ! $this->ai_core_adapter ) {
-			return array( 'error' => 'Opace AI Hub adapter not available' );
+			return array( 'error' => __( 'The Opace AI Hub adapter is not available.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 
 		if ( ! $this->config_manager ) {
-			return array( 'error' => 'Config manager not available' );
+			return array( 'error' => __( 'The configuration manager is not available.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 
 		if ( ! $this->prompt_manager ) {
-			return array( 'error' => 'Prompt manager not available' );
+			return array( 'error' => __( 'The prompt manager is not available.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 
 		return true;
@@ -840,7 +840,13 @@ class AI_Scribe_Content_Generation_Service extends AI_Scribe_Base_Service {
 				);
 			}
 
-			wp_send_json_error( 'Content generation failed: ' . $e->getMessage() );
+			wp_send_json_error(
+				sprintf(
+					/* translators: %s: provider or generation error message. */
+					__( 'Content generation failed: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					$e->getMessage()
+				)
+			);
 		}
 		// phpcs:enable WordPress.Security.NonceVerification
 	}

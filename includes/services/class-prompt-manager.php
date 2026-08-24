@@ -203,7 +203,7 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 			$this->log_error( '[PROMPT DEBUG] Nonce verification failed' );
 			wp_send_json_error(
 				array(
-					'msg'           => 'Security nonce is missing or invalid. Please refresh the page.',
+					'msg'           => __( 'The security nonce is missing or invalid. Please refresh the page.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'nonce_expired' => true,
 					'debug_info'    => array(
 						'provided_nonce'  => $nonce,
@@ -254,7 +254,7 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 			$this->log_error( '[PROMPT DEBUG] Missing required parameters' );
 			wp_send_json_error(
 				array(
-					'msg'        => 'Category and type are required',
+					'msg'        => __( 'A category and type are required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'debug_info' => array(
 						'category' => $category,
 						'type'     => $type,
@@ -285,7 +285,12 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 
 			wp_send_json_error(
 				array(
-					'msg'        => "Prompt template not found: {$category}.{$type}",
+					'msg'        => sprintf(
+						/* translators: 1: prompt category, 2: prompt type. */
+						__( 'Prompt template not found: %1$s.%2$s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$category,
+						$type
+					),
 					'debug_info' => array(
 						'category'             => $category,
 						'type'                 => $type,
@@ -319,7 +324,7 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 		if ( ! wp_verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
 			wp_send_json_error(
 				array(
-					'msg'           => 'Security nonce is missing or invalid. Please refresh the page.',
+					'msg'           => __( 'The security nonce is missing or invalid. Please refresh the page.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'nonce_expired' => true,
 				)
 			);
@@ -334,7 +339,7 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 		if ( empty( $category ) || empty( $type ) || empty( $template ) ) {
 			wp_send_json_error(
 				array(
-					'msg' => 'Category, type, and template/prompt are required',
+					'msg' => __( 'A category, type and template or prompt are required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				)
 			);
 			return;
@@ -353,7 +358,7 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 		if ( $result === true ) {
 			wp_send_json_success(
 				array(
-					'msg'      => 'Prompt template saved successfully',
+					'msg'      => __( 'Prompt template saved successfully.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'category' => $category,
 					'type'     => $type,
 				)
@@ -361,7 +366,11 @@ class AI_Scribe_Prompt_Manager extends AI_Scribe_Base_Service {
 		} else {
 			wp_send_json_error(
 				array(
-					'msg' => 'Failed to save prompt template: ' . $result,
+					'msg' => sprintf(
+						/* translators: %s: prompt-template save error message. */
+						__( 'Failed to save the prompt template: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$result
+					),
 				)
 			);
 		}

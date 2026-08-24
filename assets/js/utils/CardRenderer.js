@@ -128,7 +128,12 @@ class CardRenderer {
             trendsLink.target = '_blank';
             trendsLink.rel = 'noopener noreferrer';
             trendsLink.setAttribute('aria-label', `Open ${keywordText} in Google Trends (opens in a new tab)`);
-            trendsLink.innerHTML = 'Open in Google Trends <span aria-hidden="true">↗</span>';
+            const trendsLabel = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.openGoogleTrends) || 'Open in Google Trends';
+            trendsLink.textContent = trendsLabel + ' ';
+            const trendsIcon = document.createElement('span');
+            trendsIcon.setAttribute('aria-hidden', 'true');
+            trendsIcon.textContent = '↗';
+            trendsLink.appendChild(trendsIcon);
             row.appendChild(trendsLink);
             container.appendChild(row);
         });

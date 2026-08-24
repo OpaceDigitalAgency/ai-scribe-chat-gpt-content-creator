@@ -10,7 +10,7 @@
  * Requires at least:   6.5
  * Requires PHP:        7.4
  * Requires Plugins:    opace-ai-prompt-library-api-hub
- * Version:             3.2.30
+ * Version:             3.2.31
  * License:             GPL-3.0
  * License URI:         http://www.gnu.org/licenses/gpl-3.0.txt
  *
@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'AI_SCRIBE_VERSION', '3.2.30' ); // Used for cache busting on every enqueue
+define( 'AI_SCRIBE_VERSION', '3.2.31' ); // Used for cache busting on every enqueue
 if ( ! defined( 'AI_SCRIBE_VER' ) ) {
 	define( 'AI_SCRIBE_VER', AI_SCRIBE_VERSION ); // Back-compat alias used by copied v4 services
 }
@@ -68,7 +68,13 @@ if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
 		'admin_notices',
 		function () {
 			echo '<div class="notice notice-error"><p>';
-			echo '<strong>Opace AI Scribe:</strong> This plugin requires PHP 7.4 or higher. You are running PHP ' . esc_html( PHP_VERSION ) . '.';
+			echo '<strong>' . esc_html__( 'Opace AI Scribe:', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) . '</strong> ' . esc_html(
+				sprintf(
+					/* translators: %s: current PHP version. */
+					__( 'This plugin requires PHP 7.4 or higher. You are running PHP %s.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					PHP_VERSION
+				)
+			);
 			echo '</p></div>';
 		}
 	);
@@ -139,7 +145,13 @@ final class AI_Scribe {
 				'admin_notices',
 				function () use ( $e ) {
 					echo '<div class="notice notice-error"><p>';
-					echo '<strong>Opace AI Scribe:</strong> Plugin initialisation failed: ' . esc_html( $e->getMessage() );
+					echo '<strong>' . esc_html__( 'Opace AI Scribe:', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) . '</strong> ' . esc_html(
+						sprintf(
+							/* translators: %s: plugin initialisation error message. */
+							__( 'Plugin initialisation failed: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+							$e->getMessage()
+						)
+					);
 					echo '</p></div>';
 				}
 			);

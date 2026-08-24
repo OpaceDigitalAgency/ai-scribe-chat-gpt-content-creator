@@ -126,7 +126,7 @@ class AI_Scribe_Engine_Service extends AI_Scribe_Base_Service {
 		if ( ! $this->security_service->verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
 			wp_send_json_error(
 				array(
-					'msg'           => 'Security nonce is missing or invalid. Please refresh the page.',
+					'msg'           => __( 'The security nonce is missing or invalid. Please refresh the page.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'nonce_expired' => true,
 				)
 			);
@@ -176,7 +176,14 @@ class AI_Scribe_Engine_Service extends AI_Scribe_Base_Service {
 		$required_fields = array( 'prompt', 'action_type' );
 		foreach ( $required_fields as $field ) {
 			if ( empty( $post_data[ $field ] ) ) {
-				return new WP_Error( 'missing_field', "Required field '{$field}' is missing" );
+				return new WP_Error(
+					'missing_field',
+					sprintf(
+						/* translators: %s: required request field name. */
+						__( 'Required field "%s" is missing.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$field
+					)
+				);
 			}
 			$sanitized[ $field ] = sanitize_text_field( $post_data[ $field ] );
 		}
@@ -242,11 +249,11 @@ class AI_Scribe_Engine_Service extends AI_Scribe_Base_Service {
 		$is_anthropic_model = $this->is_anthropic_model( $model );
 
 		if ( $is_anthropic_model && ! $api_validation['anthropic']['configured'] ) {
-			return new WP_Error( 'missing_api_key', 'Anthropic API key required for Claude models' );
+			return new WP_Error( 'missing_api_key', __( 'An Anthropic API key is required for Claude models.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 
 		if ( ! $is_anthropic_model && ! $api_validation['openai']['configured'] ) {
-			return new WP_Error( 'missing_api_key', 'OpenAI API key required for GPT models' );
+			return new WP_Error( 'missing_api_key', __( 'An OpenAI API key is required for GPT models.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 
 		// Build system message based on action type

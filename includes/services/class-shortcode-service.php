@@ -203,7 +203,7 @@ class AI_Scribe_Shortcode_Service extends AI_Scribe_Base_Service {
 			$this->log_warning( 'Shortcode creation failed: Invalid nonce' );
 			wp_send_json_error(
 				array(
-					'msg'           => 'Invalid request. Please refresh the page and try again.',
+					'msg'           => __( 'Invalid request. Please refresh the page and try again.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'nonce_expired' => true,
 				)
 			);
@@ -212,7 +212,7 @@ class AI_Scribe_Shortcode_Service extends AI_Scribe_Base_Service {
 
 		// P8 §14.2: capability check (wizard save-as-shortcode).
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( array( 'msg' => 'You do not have permission to do this.' ) );
+			wp_send_json_error( array( 'msg' => __( 'You do not have permission to do this.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			return;
 		}
 
@@ -237,7 +237,7 @@ class AI_Scribe_Shortcode_Service extends AI_Scribe_Base_Service {
 				$this->log_info( 'Shortcode data saved successfully', array( 'insert_id' => $result ) );
 				wp_send_json_success(
 					array(
-						'msg'          => 'Data saved successfully.',
+						'msg'          => __( 'Data saved successfully.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 						'shortcode_id' => $result,
 					)
 				);
@@ -245,7 +245,7 @@ class AI_Scribe_Shortcode_Service extends AI_Scribe_Base_Service {
 				$this->log_error( 'Failed to save shortcode data' );
 				wp_send_json_error(
 					array(
-						'msg' => 'An error occurred while saving your data.',
+						'msg' => __( 'An error occurred while saving your data.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					)
 				);
 			}
@@ -462,7 +462,7 @@ class AI_Scribe_Shortcode_Service extends AI_Scribe_Base_Service {
 			$this->log_warning( 'Shortcode deletion failed: Invalid nonce' );
 			wp_send_json_error(
 				array(
-					'msg'           => 'Invalid request. Please refresh the page and try again.',
+					'msg'           => __( 'Invalid request. Please refresh the page and try again.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'nonce_expired' => true,
 				)
 			);
@@ -471,7 +471,7 @@ class AI_Scribe_Shortcode_Service extends AI_Scribe_Base_Service {
 
 		// P8 §14.2: capability check (shortcodes admin screen).
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'msg' => 'You do not have permission to do this.' ) );
+			wp_send_json_error( array( 'msg' => __( 'You do not have permission to do this.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			wp_die();
 		}
 
@@ -480,7 +480,7 @@ class AI_Scribe_Shortcode_Service extends AI_Scribe_Base_Service {
 			$id = isset( $_POST['id'] ) ? absint( wp_unslash( $_POST['id'] ) ) : 0;
 			if ( ! $id ) {
 				$this->log_warning( 'Invalid ID provided for deletion', array( 'id' => $id ) );
-				wp_send_json_error( array( 'msg' => 'Invalid ID' ) );
+				wp_send_json_error( array( 'msg' => __( 'Invalid ID.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				wp_die();
 			}
 
@@ -489,10 +489,10 @@ class AI_Scribe_Shortcode_Service extends AI_Scribe_Base_Service {
 
 			if ( $result !== false ) {
 				$this->log_info( 'Shortcode record deleted successfully', array( 'id' => $id ) );
-				wp_send_json_success( array( 'msg' => 'Record deleted successfully.' ) );
+				wp_send_json_success( array( 'msg' => __( 'Record deleted successfully.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			} else {
 				$this->log_error( 'Failed to delete shortcode record', array( 'id' => $id ) );
-				wp_send_json_error( array( 'msg' => 'Failed to delete the record' ) );
+				wp_send_json_error( array( 'msg' => __( 'Failed to delete the record.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			}
 		} catch ( Exception $e ) {
 			$error_response = $this->handle_error( 'Shortcode deletion failed', $e );

@@ -167,7 +167,7 @@ class SeoMetaStepView extends BaseStepView {
             button.setAttribute('aria-busy', pending ? 'true' : 'false');
         }
         if (this.optimiseStatus && pending) {
-            this.optimiseStatus.textContent = 'Asking the selected model to shorten the overlength metadata…';
+            this.optimiseStatus.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.optimisingMetadata) || 'Asking the selected model to shorten the overlength metadata…';
             this.optimiseStatus.dataset.status = 'pending';
         }
     }
@@ -208,7 +208,7 @@ class SeoMetaStepView extends BaseStepView {
         if (this.suggestedDescription) this.suggestedDescription.textContent = this.optimisedMetadata.description;
         if (this.comparison) this.comparison.hidden = false;
         if (this.optimiseStatus) {
-            this.optimiseStatus.textContent = 'Suggestion ready. Compare it with your original before applying.';
+            this.optimiseStatus.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.metadataSuggestionReady) || 'Suggestion ready. Compare it with your original before applying.';
             this.optimiseStatus.dataset.status = 'good';
         }
         this.showOptimisePending(false);
@@ -226,7 +226,7 @@ class SeoMetaStepView extends BaseStepView {
         if (undo) undo.hidden = false;
         if (this.comparison) this.comparison.hidden = true;
         if (this.optimiseStatus) {
-            this.optimiseStatus.textContent = 'Optimised metadata applied. Undo remains available until you edit or regenerate either field.';
+            this.optimiseStatus.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.metadataApplied) || 'Optimised metadata applied. Undo remains available until you edit or regenerate either field.';
             this.optimiseStatus.dataset.status = 'good';
         }
     }
@@ -236,7 +236,7 @@ class SeoMetaStepView extends BaseStepView {
         this.optimisedMetadata = null;
         this.optimisationApplied = false;
         if (this.comparison) this.comparison.hidden = true;
-        if (this.optimiseStatus) this.optimiseStatus.textContent = 'Original metadata kept.';
+        if (this.optimiseStatus) this.optimiseStatus.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.metadataOriginalKept) || 'Original metadata kept.';
         this.updateGuidance();
     }
 
@@ -253,7 +253,7 @@ class SeoMetaStepView extends BaseStepView {
         const undo = this.panel.querySelector('[data-action="undo-meta-optimisation"]');
         if (undo) undo.hidden = true;
         if (this.comparison) this.comparison.hidden = true;
-        if (this.optimiseStatus) this.optimiseStatus.textContent = 'Original metadata restored.';
+        if (this.optimiseStatus) this.optimiseStatus.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.metadataOriginalRestored) || 'Original metadata restored.';
     }
 
     renderGuidance(element, result) {
@@ -272,14 +272,14 @@ class SeoMetaStepView extends BaseStepView {
 
         const heading = document.createElement('strong');
         heading.className = 'seo-meta-keyword-heading';
-        heading.textContent = 'Selected keyword coverage';
+        heading.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.selectedKeywordCoverage) || 'Selected keyword coverage';
         this.keywordGuidance.appendChild(heading);
 
         if (!results.length) {
             const empty = document.createElement('p');
             empty.className = 'seo-meta-keyword-empty';
             empty.dataset.status = 'warning';
-            empty.textContent = 'No selected keyword is available to check. Confirm relevance manually.';
+            empty.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.noKeywordToCheck) || 'No selected keyword is available to check. Confirm relevance manually.';
             this.keywordGuidance.appendChild(empty);
             this.keywordGuidance.dataset.status = 'warning';
             return;

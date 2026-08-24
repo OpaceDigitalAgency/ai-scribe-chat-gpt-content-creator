@@ -269,8 +269,8 @@ class AI_Scribe_Admin_Service {
 	 */
 	public function render_admin_page() {
 		echo '<div class="wrap">';
-		echo '<h1>AI-Scribe Settings</h1>';
-		echo '<p>Admin interface for AI-Scribe plugin configuration.</p>';
+		echo '<h1>' . esc_html__( 'AI-Scribe Settings', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) . '</h1>';
+		echo '<p>' . esc_html__( 'Admin interface for AI-Scribe plugin configuration.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) . '</p>';
 		echo '</div>';
 	}
 
@@ -468,8 +468,58 @@ class AI_Scribe_Admin_Service {
 			'noPromptSteps'       => array( 10 ),
 			'promptsData'         => $this->getCachedPromptsData(),
 			'contentSettings'     => get_option( 'ab_gpt_content_settings', array() ),
+			'i18n'                => $this->get_js_i18n(),
 		);
 
 		wp_localize_script( 'ai-scribe-main-app', 'ai_scribe', $localized_data );
+	}
+
+	/**
+	 * Strings shared by the Wizard and Settings JavaScript bundles.
+	 *
+	 * @return array<string,string>
+	 */
+	private function get_js_i18n() {
+		return array(
+			'openGoogleTrends'          => __( 'Open in Google Trends', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'evaluationSummary'         => __( 'Evaluation summary', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'evaluationSummaryNote'     => __( 'Structural checks are measured from the final Review HTML. Editorial rows are clearly labelled AI review and should be confirmed by an editor.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'evaluationTableCaption'    => __( 'Article evaluation checks with evidence and suggested next actions', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'refreshingModels'          => __( 'Refreshing the model list from your providers…', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'modelParameters'           => __( 'Model parameters', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'configured'                => __( 'Configured', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'optimisingMetadata'        => __( 'Asking the selected model to shorten the overlength metadata…', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'metadataSuggestionReady'   => __( 'Suggestion ready. Compare it with your original before applying.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'metadataApplied'           => __( 'Optimised metadata applied. Undo remains available until you edit or regenerate either field.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'metadataOriginalKept'      => __( 'Original metadata kept.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'metadataOriginalRestored'  => __( 'Original metadata restored.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'selectedKeywordCoverage'   => __( 'Selected keyword coverage', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'noKeywordToCheck'          => __( 'No selected keyword is available to check. Confirm relevance manually.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'articleTargetNotReached'   => __( 'Article generated — target not fully reached', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'runningAmendedPrompt'      => __( 'Running your amended prompt for this step…', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'amendedPromptUsed'         => __( 'Amended prompt used.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'amendedPromptFailed'       => __( 'The amended prompt could not be run. Try again.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'amendedPromptReady'        => __( 'Your amended prompt is ready to run.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'editPromptToEnable'        => __( 'Edit the prompt to enable this button.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'enterTopicForArticle'      => __( 'Enter a topic to generate the article.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'improvingArticleLength'    => __( 'Improving article length', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'reviewSectionPrompts'      => __( 'Optional: review or edit these prompts before generating the section set.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'imageProviderStillWorking' => __( 'Still working with your image provider. Larger images can take over a minute.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'caption'                   => __( 'Caption', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'captionPlaceholder'        => __( 'Edit the caption, or clear it to remove it', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'savePrompt'                => __( 'Save prompt', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'regenerateImage'           => __( 'Regenerate image', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'placeInArticle'            => __( 'Place in article', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'notSaved'                  => __( 'Not saved', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'notSavedDetail'            => __( 'Not saved. This article currently exists only in AI-Scribe.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'unsavedChanges'            => __( 'Unsaved changes', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'unsavedChangesDetail'      => __( 'Changes made since the last save exist only in AI-Scribe. Update a destination before finishing if you want to keep them.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'saved'                     => __( 'Saved', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'discardAndStartNew'        => __( 'Discard & Start New', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'nothingToPublish'          => __( 'There is nothing to publish yet — generate the article first.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'postSaveNotConfirmed'      => __( 'WordPress did not confirm a saved post. Nothing has been marked as saved.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'nothingToSave'             => __( 'There is nothing to save yet — generate the article first.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'shortcodeSaveNotConfirmed' => __( 'WordPress did not confirm a saved shortcode. Nothing has been marked as saved.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+		);
 	}
 }

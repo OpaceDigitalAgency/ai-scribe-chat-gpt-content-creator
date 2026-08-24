@@ -251,7 +251,11 @@ class AI_Scribe_Dependency_Resolver {
 						return array(
 							'success'          => false,
 							'service_id'       => $service_id,
-							'error'            => "Failed to resolve dependency: {$dependency_id}",
+							'error'            => sprintf(
+								/* translators: %s: service dependency identifier. */
+								__( 'Failed to resolve dependency: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+								$dependency_id
+							),
 							'dependency_error' => $dep_result,
 						);
 					}
@@ -273,7 +277,11 @@ class AI_Scribe_Dependency_Resolver {
 					return array(
 						'success'          => false,
 						'service_id'       => $service_id,
-						'error'            => 'Service validation failed: ' . $error_message,
+						'error'            => sprintf(
+							/* translators: %s: service validation error message. */
+							__( 'Service validation failed: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+							$error_message
+						),
 						'validation_error' => $validation_result,
 					);
 				}
@@ -428,7 +436,7 @@ class AI_Scribe_Dependency_Resolver {
 
 			return array(
 				'valid'          => true,
-				'message'        => 'No circular dependencies detected',
+				'message'        => __( 'No circular dependencies detected.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				'services_count' => count( $this->dependency_graph ),
 			);
 

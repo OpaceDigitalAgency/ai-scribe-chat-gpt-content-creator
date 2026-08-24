@@ -5,7 +5,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: opace-ai-prompt-library-api-hub
-Stable tag: 3.2.30
+Stable tag: 3.2.31
 License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://opace.agency/get-in-touch
@@ -259,6 +259,7 @@ Please add roadmap suggestions through the support forum rather than treating th
 
 == Changelog ==
 
+* **3.2.31:** Made the complete reachable admin, Wizard, Express and generation interface translation-ready, including JavaScript feedback, validation and editorial evaluation text.
 * **3.2.30:** Aligned runtime providers and disclosures; restored complete public documentation; added dated model totals and current-family highlights.
 * **3.2.29:** Added approved page/sidebar branding, normalised inline Markdown and resolved active-path Plugin Check findings.
 * **3.2.28:** Filtered models by writing/image capability, improved legacy-default migration and removed sensitive debug payload logging.
@@ -319,5 +320,5 @@ Please add roadmap suggestions through the support forum rather than treating th
 
 == Upgrade Notice ==
 
-= 3.2.30 =
-Aligns runtime providers with the published privacy disclosure, documents the complete current selectable model snapshot and updates live dependency links.
+= 3.2.31 =
+Makes the complete reachable AI Scribe interface available to WordPress language packs while retaining the provider, model and documentation updates from 3.2.30.

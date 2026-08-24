@@ -167,7 +167,13 @@ class AI_Scribe_Template_Service extends AI_Scribe_Base_Service {
 			include_once $full_path;
 		} else {
 			$this->log_error( 'Template file not found', array( 'path' => $full_path ) );
-			echo '<div class="notice notice-error"><p>Template file not found: ' . esc_html( $template_path ) . '</p></div>';
+			echo '<div class="notice notice-error"><p>' . esc_html(
+				sprintf(
+					/* translators: %s: missing template file path. */
+					__( 'Template file not found: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					$template_path
+				)
+			) . '</p></div>';
 		}
 	}
 

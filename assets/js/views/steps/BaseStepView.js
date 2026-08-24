@@ -273,7 +273,7 @@ class BaseStepView {
             notice.setAttribute('data-testid', 'article-quality-notice');
             notice.setAttribute('role', 'status');
             const title = document.createElement('strong');
-            title.textContent = 'Article generated — target not fully reached';
+            title.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.articleTargetNotReached) || 'Article generated — target not fully reached';
             const message = document.createElement('p');
             message.setAttribute('data-quality-message', '');
             notice.appendChild(title);

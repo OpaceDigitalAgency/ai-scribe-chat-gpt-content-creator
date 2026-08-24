@@ -253,7 +253,7 @@ class AI_Scribe_Utility_Service extends AI_Scribe_Base_Service {
 	public function test_ajax_handler() {
 		wp_send_json_success(
 			array(
-				'message'   => 'Test AJAX handler is working!',
+				'message'   => __( 'The test AJAX handler is working.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				'timestamp' => current_time( 'mysql' ),
 			)
 		);

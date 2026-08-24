@@ -394,7 +394,7 @@ class SettingsView {
             return;
         }
         if (state === 'loading') {
-            status.textContent = 'Refreshing model list from your providers…';
+            status.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.refreshingModels) || 'Refreshing the model list from your providers…';
             status.classList.remove('form-error');
             return;
         }
@@ -485,7 +485,7 @@ class SettingsView {
 
         const heading = document.createElement('h3');
         heading.className = 'settings-section-title';
-        heading.textContent = 'Model parameters';
+        heading.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.modelParameters) || 'Model parameters';
         panel.appendChild(heading);
 
         keys.forEach((key) => {
@@ -719,7 +719,7 @@ class SettingsView {
                 input.value = '';
                 const status = input.closest('.provider-key-row').querySelector('.key-status');
                 if (status) {
-                    status.textContent = 'Configured';
+                    status.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.configured) || 'Configured';
                     status.classList.remove('key-status-missing');
                     status.classList.add('key-status-set');
                 }

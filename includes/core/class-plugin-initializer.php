@@ -1000,23 +1000,23 @@ class AI_Scribe_Plugin_Initializer {
 	 */
 	public function show_initialization_error() {
 		echo '<div class="notice notice-error"><p>';
-		echo '<strong>AI Scribe:</strong> Plugin initialization failed.<br>';
+		echo '<strong>' . esc_html__( 'AI Scribe:', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) . '</strong> ' . esc_html__( 'Plugin initialization failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) . '<br>';
 
 		if ( $this->initialization_error ) {
-			echo '<strong>Error:</strong> ' . esc_html( $this->initialization_error->getMessage() ) . '<br>';
-			echo '<strong>File:</strong> ' . esc_html( $this->initialization_error->getFile() ) . '<br>';
-			echo '<strong>Line:</strong> ' . esc_html( $this->initialization_error->getLine() ) . '<br>';
+			echo '<strong>' . esc_html__( 'Error:', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) . '</strong> ' . esc_html( $this->initialization_error->getMessage() ) . '<br>';
+			echo '<strong>' . esc_html__( 'File:', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) . '</strong> ' . esc_html( $this->initialization_error->getFile() ) . '<br>';
+			echo '<strong>' . esc_html__( 'Line:', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) . '</strong> ' . esc_html( $this->initialization_error->getLine() ) . '<br>';
 
 			// Show first few lines of stack trace for debugging
 			$trace_lines = explode( "\n", $this->initialization_error->getTraceAsString() );
 			if ( count( $trace_lines ) > 0 ) {
-				echo '<strong>Stack trace (first 3 lines):</strong><br>';
+				echo '<strong>' . esc_html__( 'Stack trace (first 3 lines):', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) . '</strong><br>';
 				for ( $i = 0; $i < min( 3, count( $trace_lines ) ); $i++ ) {
 					echo '<code>' . esc_html( $trace_lines[ $i ] ) . '</code><br>';
 				}
 			}
 		} else {
-			echo 'Please check the error logs for details.';
+			esc_html_e( 'Please check the error logs for details.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' );
 		}
 
 		echo '</p></div>';
@@ -1098,7 +1098,7 @@ class AI_Scribe_Plugin_Initializer {
 			$engine_service->handle_engine_request();
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Content generation failed', array( 'exception' => $e->getMessage() ) );
-			wp_send_json_error( array( 'message' => 'Content generation failed' ) );
+			wp_send_json_error( array( 'message' => __( 'Content generation failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 		}
 	}
 
@@ -1150,7 +1150,7 @@ class AI_Scribe_Plugin_Initializer {
 			$nonce = $_POST['security'] ?? '';
 			if ( empty( $nonce ) ) {
 				ai_scribe_debug_log( '❌ STEP 6: No nonce provided - FATAL' );
-				wp_send_json_error( array( 'message' => 'Security nonce is required' ) );
+				wp_send_json_error( array( 'message' => __( 'A security nonce is required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 			ai_scribe_debug_log( '🔧 STEP 6: Nonce provided - OK' );
@@ -1205,7 +1205,11 @@ class AI_Scribe_Plugin_Initializer {
 			// Send proper error response
 			wp_send_json_error(
 				array(
-					'message'       => 'Content generation failed: ' . $e->getMessage(),
+					'message'       => sprintf(
+						/* translators: %s: provider or generation error message. */
+						__( 'Content generation failed: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$e->getMessage()
+					),
 					'error_details' => array(
 						'file' => basename( $e->getFile() ),
 						'line' => $e->getLine(),
@@ -1242,7 +1246,7 @@ class AI_Scribe_Plugin_Initializer {
 			}
 			wp_send_json_error(
 				array(
-					'msg'           => 'Security check failed',
+					'msg'           => __( 'Security check failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'console_debug' => '[AI_SCRIBE_IMAGE_DEBUG] ❌ Nonce verification failed',
 				)
 			);
@@ -1251,7 +1255,7 @@ class AI_Scribe_Plugin_Initializer {
 
 		// P8 §14.2: capability check (wizard image generation).
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( array( 'message' => 'You do not have permission to do this.' ) );
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to do this.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			return;
 		}
 
@@ -1271,7 +1275,7 @@ class AI_Scribe_Plugin_Initializer {
 				}
 				wp_send_json_error(
 					array(
-						'msg'           => 'Image service not available',
+						'msg'           => __( 'The image service is not available.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 						'console_debug' => '[AI_SCRIBE_IMAGE_DEBUG] ❌ Image service not found in container',
 					)
 				);
@@ -1300,7 +1304,11 @@ class AI_Scribe_Plugin_Initializer {
 			}
 			wp_send_json_error(
 				array(
-					'msg'           => 'Image generation failed: ' . $e->getMessage(),
+					'msg'           => sprintf(
+						/* translators: %s: image generation error message. */
+						__( 'Image generation failed: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$e->getMessage()
+					),
 					'console_debug' => '[AI_SCRIBE_IMAGE_DEBUG] ❌ Exception: ' . $e->getMessage(),
 					'error_trace'   => $e->getTraceAsString(),
 				)
@@ -1315,7 +1323,11 @@ class AI_Scribe_Plugin_Initializer {
 
 			wp_send_json_error(
 				array(
-					'msg'           => 'PHP Error during image generation: ' . $e->getMessage(),
+					'msg'           => sprintf(
+						/* translators: %s: PHP error message. */
+						__( 'PHP error during image generation: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$e->getMessage()
+					),
 					'console_debug' => '[AI_SCRIBE_IMAGE_DEBUG] ❌ PHP Error: ' . $e->getMessage(),
 					'error_trace'   => $e->getTraceAsString(),
 				)
@@ -1336,7 +1348,7 @@ class AI_Scribe_Plugin_Initializer {
 		try {
 			$image_service = $this->container->get( 'image_service' );
 			if ( ! $image_service ) {
-				wp_send_json_error( array( 'msg' => 'Image service not available' ) );
+				wp_send_json_error( array( 'msg' => __( 'The image service is not available.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 			$image_service->handle_generate_section_images();
@@ -1344,7 +1356,15 @@ class AI_Scribe_Plugin_Initializer {
 			if ( $this->logger ) {
 				$this->logger->error( 'Section image generation failed', array( 'exception' => $e->getMessage() ) );
 			}
-			wp_send_json_error( array( 'msg' => 'Section image generation failed: ' . $e->getMessage() ) );
+			wp_send_json_error(
+				array(
+					'msg' => sprintf(
+						/* translators: %s: section image generation error message. */
+						__( 'Section image generation failed: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$e->getMessage()
+					),
+				)
+			);
 		}
 	}
 
@@ -1355,7 +1375,7 @@ class AI_Scribe_Plugin_Initializer {
 	public function handle_check_recent_images() {
 		// Verify nonce
 		if ( ! check_ajax_referer( 'ai_scribe_nonce', 'security', false ) ) {
-			wp_send_json_error( array( 'message' => 'Security check failed' ) );
+			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			return;
 		}
 
@@ -1364,7 +1384,7 @@ class AI_Scribe_Plugin_Initializer {
 			$per_page      = intval( $_POST['per_page'] ?? 10 );
 
 			if ( empty( $article_title ) ) {
-				wp_send_json_error( array( 'message' => 'Article title is required' ) );
+				wp_send_json_error( array( 'message' => __( 'An article title is required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
@@ -1408,7 +1428,15 @@ class AI_Scribe_Plugin_Initializer {
 			if ( AI_Scribe_Utility_Service::is_global_debug_enabled() ) {
 				ai_scribe_debug_log( 'OPACE IMAGE CHECK: Error - ' . $e->getMessage() );
 			}
-			wp_send_json_error( array( 'message' => 'Failed to check recent images: ' . $e->getMessage() ) );
+			wp_send_json_error(
+				array(
+					'message' => sprintf(
+						/* translators: %s: media-library lookup error message. */
+						__( 'Failed to check recent images: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$e->getMessage()
+					),
+				)
+			);
 		}
 	}
 
@@ -1419,7 +1447,7 @@ class AI_Scribe_Plugin_Initializer {
 	public function handle_update_image_metadata() {
 		// Verify nonce
 		if ( ! check_ajax_referer( 'ai_scribe_nonce', 'security', false ) ) {
-			wp_send_json_error( array( 'message' => 'Security check failed' ) );
+			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			return;
 		}
 
@@ -1429,12 +1457,12 @@ class AI_Scribe_Plugin_Initializer {
 			$caption       = sanitize_text_field( wp_unslash( $_POST['caption'] ?? '' ) );
 
 			if ( empty( $attachment_id ) ) {
-				wp_send_json_error( array( 'message' => 'Attachment ID is required' ) );
+				wp_send_json_error( array( 'message' => __( 'An attachment ID is required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
 			if ( empty( $alt_text ) ) {
-				wp_send_json_error( array( 'message' => 'Alt text is required' ) );
+				wp_send_json_error( array( 'message' => __( 'Alt text is required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
@@ -1455,20 +1483,28 @@ class AI_Scribe_Plugin_Initializer {
 				}
 				wp_send_json_success(
 					array(
-						'message'       => 'Image metadata updated successfully',
+						'message'       => __( 'Image metadata updated successfully.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 						'alt_text'      => $alt_text,
 						'caption'       => $caption,
 						'attachment_id' => $attachment_id,
 					)
 				);
 			} else {
-				wp_send_json_error( array( 'message' => 'Failed to update image metadata' ) );
+				wp_send_json_error( array( 'message' => __( 'Failed to update image metadata.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			}
 		} catch ( Exception $e ) {
 			if ( AI_Scribe_Utility_Service::is_global_debug_enabled() ) {
 				ai_scribe_debug_log( 'OPACE IMAGE CHECK: Error updating metadata - ' . $e->getMessage() );
 			}
-			wp_send_json_error( array( 'message' => 'Failed to update image metadata: ' . $e->getMessage() ) );
+			wp_send_json_error(
+				array(
+					'message' => sprintf(
+						/* translators: %s: image metadata update error message. */
+						__( 'Failed to update image metadata: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$e->getMessage()
+					),
+				)
+			);
 		}
 	}
 
@@ -1486,7 +1522,7 @@ class AI_Scribe_Plugin_Initializer {
 			$content_service->suggest_content();
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Content evaluation failed', array( 'exception' => $e->getMessage() ) );
-			wp_send_json_error( array( 'message' => 'Content evaluation failed' ) );
+			wp_send_json_error( array( 'message' => __( 'Content evaluation failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 		}
 	}
 
@@ -1501,7 +1537,7 @@ class AI_Scribe_Plugin_Initializer {
 			// Verify nonce - check both 'security' and 'nonce' parameters
 			$nonce = sanitize_text_field( wp_unslash( $_POST['security'] ?? $_POST['nonce'] ?? '' ) );
 			if ( ! wp_verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
-				wp_send_json_error( array( 'message' => 'Invalid nonce' ) );
+				wp_send_json_error( array( 'message' => __( 'Invalid security nonce.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
@@ -1531,13 +1567,13 @@ class AI_Scribe_Plugin_Initializer {
 
 			wp_send_json_success(
 				array(
-					'message' => 'Settings updated successfully',
+					'message' => __( 'Settings updated successfully.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'debug'   => $debug_info,
 				)
 			);
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Style/tone update failed', array( 'exception' => $e->getMessage() ) );
-			wp_send_json_error( array( 'message' => 'Update failed' ) );
+			wp_send_json_error( array( 'message' => __( 'Update failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 		}
 	}
 
@@ -1548,7 +1584,7 @@ class AI_Scribe_Plugin_Initializer {
 		wp_send_json_success(
 			array(
 				'nonce'   => wp_create_nonce( 'ai_scribe_nonce' ),
-				'message' => 'Nonce refreshed',
+				'message' => __( 'Security nonce refreshed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 			)
 		);
 	}
@@ -1561,14 +1597,14 @@ class AI_Scribe_Plugin_Initializer {
 			// Verify nonce - check both 'security' and 'nonce' parameters for compatibility
 			$nonce = sanitize_text_field( wp_unslash( $_POST['security'] ?? $_POST['nonce'] ?? '' ) );
 			if ( ! wp_verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
-				wp_send_json_error( array( 'message' => 'Invalid nonce' ) );
+				wp_send_json_error( array( 'message' => __( 'Invalid security nonce.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
 
 		// P8 §14.2: capability check (shortcodes admin screen).
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => 'You do not have permission to do this.' ) );
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to do this.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			return;
 		}
 
@@ -1580,11 +1616,11 @@ class AI_Scribe_Plugin_Initializer {
 				$shortcode_service = $this->container->get( 'shortcode_service' );
 				$shortcode_service->remove_short_code_content();
 			} else {
-				wp_send_json_error( array( 'message' => 'Invalid shortcode ID' ) );
+				wp_send_json_error( array( 'message' => __( 'Invalid shortcode ID.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			}
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Shortcode removal failed', array( 'exception' => $e->getMessage() ) );
-			wp_send_json_error( array( 'message' => 'Shortcode removal failed' ) );
+			wp_send_json_error( array( 'message' => __( 'Shortcode removal failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 		}
 	}
 
@@ -1599,7 +1635,7 @@ class AI_Scribe_Plugin_Initializer {
 			$shortcode_service->send_shortcode_page();
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Shortcode save failed', array( 'exception' => $e->getMessage() ) );
-			wp_send_json_error( array( 'message' => 'Shortcode save failed' ) );
+			wp_send_json_error( array( 'message' => __( 'Shortcode save failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 		}
 	}
 
@@ -1613,7 +1649,7 @@ class AI_Scribe_Plugin_Initializer {
 			$admin_service->get_article();
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Article retrieval failed', array( 'exception' => $e->getMessage() ) );
-			wp_send_json_error( array( 'message' => 'Article retrieval failed' ) );
+			wp_send_json_error( array( 'message' => __( 'Article retrieval failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 		}
 	}
 
@@ -1625,14 +1661,14 @@ class AI_Scribe_Plugin_Initializer {
 			// Verify nonce - check both 'security' and 'nonce' parameters for compatibility
 			$nonce = $_POST['security'] ?? $_POST['nonce'] ?? '';
 			if ( ! wp_verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
-				wp_send_json_error( array( 'message' => 'Invalid nonce' ) );
+				wp_send_json_error( array( 'message' => __( 'Invalid security nonce.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
 			$api_key = sanitize_text_field( wp_unslash( $_POST['api_key'] ?? '' ) );
 
 			if ( empty( $api_key ) ) {
-				wp_send_json_error( array( 'message' => 'API key is required' ) );
+				wp_send_json_error( array( 'message' => __( 'An API key is required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
@@ -1647,7 +1683,7 @@ class AI_Scribe_Plugin_Initializer {
 
 				wp_send_json_success(
 					array(
-						'message'  => 'API key is valid and has been saved',
+						'message'  => __( 'The API key is valid and has been saved.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 						'provider' => $validation_result['provider'] ?? 'unknown',
 					)
 				);
@@ -1660,7 +1696,7 @@ class AI_Scribe_Plugin_Initializer {
 			}
 		} catch ( Exception $e ) {
 			$this->logger->error( 'API key validation failed', array( 'exception' => $e->getMessage() ) );
-			wp_send_json_error( array( 'message' => 'API key validation failed' ) );
+			wp_send_json_error( array( 'message' => __( 'API key validation failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 		}
 	}
 
@@ -1672,13 +1708,13 @@ class AI_Scribe_Plugin_Initializer {
 			// Verify nonce for security
 			$nonce = $_POST['security'] ?? '';
 			if ( ! wp_verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
-				wp_send_json_error( array( 'message' => 'Security check failed' ) );
+				wp_send_json_error( array( 'message' => __( 'Security check failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
 			// P8 §14.2: wizard consumers need edit_posts (login alone is not enough).
 			if ( ! current_user_can( 'edit_posts' ) ) {
-				wp_send_json_error( array( 'message' => 'Unauthorized request' ) );
+				wp_send_json_error( array( 'message' => __( 'Unauthorised request.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
@@ -1709,7 +1745,7 @@ class AI_Scribe_Plugin_Initializer {
 
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Prompts request failed', array( 'exception' => $e->getMessage() ) );
-			wp_send_json_error( array( 'message' => 'Failed to load prompts' ) );
+			wp_send_json_error( array( 'message' => __( 'Failed to load prompts.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 		}
 	}
 
@@ -1774,7 +1810,7 @@ class AI_Scribe_Plugin_Initializer {
 			// Verify nonce - check both 'security' and 'nonce' parameters for compatibility
 			$nonce = $_POST['security'] ?? $_POST['nonce'] ?? '';
 			if ( ! wp_verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
-				wp_send_json_error( array( 'message' => 'Invalid nonce' ) );
+				wp_send_json_error( array( 'message' => __( 'Invalid security nonce.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
@@ -1914,11 +1950,19 @@ class AI_Scribe_Plugin_Initializer {
 				$this->logger->info( 'Image generation setting saved', array( 'enabled' => (bool) $_POST['enable_image_generation'] ) );
 			}
 
-			wp_send_json_success( array( 'message' => 'Settings saved successfully' ) );
+			wp_send_json_success( array( 'message' => __( 'Settings saved successfully.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Settings save failed', array( 'exception' => $e->getMessage() ) );
-			wp_send_json_error( array( 'message' => 'Settings save failed: ' . $e->getMessage() ) );
+			wp_send_json_error(
+				array(
+					'message' => sprintf(
+						/* translators: %s: settings save error message. */
+						__( 'Settings save failed: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$e->getMessage()
+					),
+				)
+			);
 		}
 	}
 
@@ -1930,7 +1974,7 @@ class AI_Scribe_Plugin_Initializer {
 			// Verify nonce - check both 'security' and 'nonce' parameters for compatibility
 			$nonce = $_POST['security'] ?? $_POST['nonce'] ?? '';
 			if ( ! wp_verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
-				wp_send_json_error( array( 'message' => 'Invalid nonce' ) );
+				wp_send_json_error( array( 'message' => __( 'Invalid security nonce.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
@@ -1954,11 +1998,11 @@ class AI_Scribe_Plugin_Initializer {
 				$config->set_group( 'engine', $sanitized_settings );
 			}
 
-			wp_send_json_success( array( 'message' => 'Engine settings saved successfully' ) );
+			wp_send_json_success( array( 'message' => __( 'Engine settings saved successfully.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Engine settings save failed', array( 'exception' => $e->getMessage() ) );
-			wp_send_json_error( array( 'message' => 'Engine settings save failed' ) );
+			wp_send_json_error( array( 'message' => __( 'Engine settings save failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 		}
 	}
 
@@ -1985,7 +2029,7 @@ class AI_Scribe_Plugin_Initializer {
 				if ( AI_Scribe_Utility_Service::is_global_debug_enabled() ) {
 					ai_scribe_debug_log( 'ANTHROPIC API: Nonce verification failed' );
 				}
-				wp_send_json_error( array( 'message' => 'Invalid nonce' ) );
+				wp_send_json_error( array( 'message' => __( 'Invalid security nonce.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
@@ -2118,8 +2162,8 @@ class AI_Scribe_Plugin_Initializer {
 
 			wp_send_json_success(
 				array(
-					'msg'     => 'Your settings have been updated successfully', // Match v2.6 response format
-					'message' => 'Settings saved successfully',
+					'msg'     => __( 'Your settings have been updated successfully.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), // Match v2.6 response format
+					'message' => __( 'Settings saved successfully.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				)
 			);
 
@@ -2131,8 +2175,12 @@ class AI_Scribe_Plugin_Initializer {
 			$this->logger->error( 'Engine request data save failed', array( 'exception' => $e->getMessage() ) );
 			wp_send_json_error(
 				array(
-					'msg'     => 'Engine settings save failed: ' . $e->getMessage(), // Match v2.6 response format
-					'message' => 'Failed to save settings',
+					'msg'     => sprintf(
+						/* translators: %s: engine settings save error message. */
+						__( 'Engine settings save failed: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$e->getMessage()
+					), // Match v2.6 response format
+					'message' => __( 'Failed to save settings.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				)
 			);
 		}
@@ -2151,7 +2199,7 @@ class AI_Scribe_Plugin_Initializer {
 			// Verify nonce - check both 'security' and 'nonce' parameters for compatibility
 			$nonce = $_POST['security'] ?? $_POST['nonce'] ?? '';
 			if ( ! wp_verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
-				wp_send_json_error( array( 'message' => 'Invalid nonce' ) );
+				wp_send_json_error( array( 'message' => __( 'Invalid security nonce.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
@@ -2161,7 +2209,7 @@ class AI_Scribe_Plugin_Initializer {
 			if ( $cleanup_result['needs_cleanup'] ) {
 				wp_send_json_success(
 					array(
-						'message'             => 'Phantom data cleanup completed successfully',
+						'message'             => __( 'Phantom data cleanup completed successfully.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 						'actions_taken'       => $cleanup_result['cleanup_actions'],
 						'before_state'        => $cleanup_result['before_state'],
 						'after_grouped_count' => $cleanup_result['after_grouped_count'],
@@ -2170,14 +2218,22 @@ class AI_Scribe_Plugin_Initializer {
 			} else {
 				wp_send_json_success(
 					array(
-						'message'      => 'No cleanup needed - data is already consistent',
+						'message'      => __( 'No cleanup is needed; the data is already consistent.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 						'before_state' => $cleanup_result['before_state'],
 					)
 				);
 			}
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Phantom data cleanup failed', array( 'exception' => $e->getMessage() ) );
-			wp_send_json_error( array( 'message' => 'Cleanup failed: ' . $e->getMessage() ) );
+			wp_send_json_error(
+				array(
+					'message' => sprintf(
+						/* translators: %s: data cleanup error message. */
+						__( 'Cleanup failed: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$e->getMessage()
+					),
+				)
+			);
 		}
 	}
 
@@ -2266,7 +2322,7 @@ class AI_Scribe_Plugin_Initializer {
 			$prompt_manager->handle_get_prompt_template();
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Get prompt template failed', array( 'exception' => $e->getMessage() ) );
-			wp_send_json_error( array( 'message' => 'Failed to get prompt template' ) );
+			wp_send_json_error( array( 'message' => __( 'Failed to get the prompt template.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 		}
 	}
 
@@ -2280,7 +2336,7 @@ class AI_Scribe_Plugin_Initializer {
 			$prompt_manager->handle_save_prompt_template();
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Save prompt template failed', array( 'exception' => $e->getMessage() ) );
-			wp_send_json_error( array( 'message' => 'Failed to save prompt template' ) );
+			wp_send_json_error( array( 'message' => __( 'Failed to save the prompt template.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 		}
 	}
 
@@ -2293,13 +2349,13 @@ class AI_Scribe_Plugin_Initializer {
 			// Verify nonce for security
 			$nonce = $_POST['security'] ?? '';
 			if ( ! wp_verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
-				wp_send_json_error( array( 'message' => 'Security check failed' ) );
+				wp_send_json_error( array( 'message' => __( 'Security check failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
 			// Check if user is logged in
 			if ( ! is_user_logged_in() ) {
-				wp_send_json_error( array( 'message' => 'Unauthorized request' ) );
+				wp_send_json_error( array( 'message' => __( 'Unauthorised request.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
@@ -2313,7 +2369,7 @@ class AI_Scribe_Plugin_Initializer {
 			}
 		} catch ( Exception $e ) {
 			$this->logger->error( 'Get template data failed', array( 'exception' => $e->getMessage() ) );
-			wp_send_json_error( array( 'message' => 'Failed to get template data' ) );
+			wp_send_json_error( array( 'message' => __( 'Failed to get template data.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 		}
 	}
 	/**
@@ -2363,14 +2419,14 @@ class AI_Scribe_Plugin_Initializer {
 		// Verify nonce
 		$nonce = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
 		if ( ! wp_verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
-			wp_send_json_error( 'Invalid security token' );
+			wp_send_json_error( __( 'Invalid security token.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 			return;
 		}
 
 
 		// P8 §14.2: capability check (settings write).
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => 'You do not have permission to do this.' ) );
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to do this.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			return;
 		}
 
@@ -2555,7 +2611,7 @@ class AI_Scribe_Plugin_Initializer {
 
 			wp_send_json_success(
 				array(
-					'message'  => 'Settings saved successfully',
+					'message'  => __( 'Settings saved successfully.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'settings' => $current_settings,
 				)
 			);
@@ -2565,7 +2621,13 @@ class AI_Scribe_Plugin_Initializer {
 				$this->logger->error( 'Failed to save content settings', array( 'error' => $e->getMessage() ) );
 			}
 
-			wp_send_json_error( 'Failed to save content settings: ' . $e->getMessage() );
+			wp_send_json_error(
+				sprintf(
+					/* translators: %s: content settings save error message. */
+					__( 'Failed to save content settings: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					$e->getMessage()
+				)
+			);
 		}
 	}
 
@@ -2596,14 +2658,14 @@ class AI_Scribe_Plugin_Initializer {
 		// Verify nonce
 		$nonce = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
 		if ( ! wp_verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
-			wp_send_json_error( 'Invalid security token' );
+			wp_send_json_error( __( 'Invalid security token.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 			return;
 		}
 
 
 		// P8 §14.2: capability check (settings write).
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => 'You do not have permission to do this.' ) );
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to do this.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			return;
 		}
 
@@ -2613,7 +2675,7 @@ class AI_Scribe_Plugin_Initializer {
 			if ( isset( $_POST['prompts'] ) ) {
 				$incoming = json_decode( wp_unslash( (string) $_POST['prompts'] ), true );
 				if ( ! is_array( $incoming ) ) {
-					wp_send_json_error( 'A prompts object is required' );
+					wp_send_json_error( __( 'A prompts object is required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 					return;
 				}
 
@@ -2634,12 +2696,12 @@ class AI_Scribe_Plugin_Initializer {
 					$this->logger->info( 'Prompt library saved', array( 'keys' => array_keys( $incoming ) ) );
 				}
 
-				wp_send_json_success( array( 'message' => 'Prompts saved successfully' ) );
+				wp_send_json_success( array( 'message' => __( 'Prompts saved successfully.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
 			if ( ! isset( $_POST['prompt_text'] ) ) {
-				wp_send_json_error( 'Prompt text is required' );
+				wp_send_json_error( __( 'Prompt text is required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 				return;
 			}
 
@@ -2654,7 +2716,7 @@ class AI_Scribe_Plugin_Initializer {
 
 			wp_send_json_success(
 				array(
-					'message' => 'Prompt saved successfully',
+					'message' => __( 'Prompt saved successfully.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				)
 			);
 
@@ -2663,7 +2725,13 @@ class AI_Scribe_Plugin_Initializer {
 				$this->logger->error( 'Failed to save prompt settings', array( 'error' => $e->getMessage() ) );
 			}
 
-			wp_send_json_error( 'Failed to save prompt settings: ' . $e->getMessage() );
+			wp_send_json_error(
+				sprintf(
+					/* translators: %s: prompt settings save error message. */
+					__( 'Failed to save prompt settings: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					$e->getMessage()
+				)
+			);
 		}
 	}
 }

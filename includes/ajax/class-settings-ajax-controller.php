@@ -63,7 +63,7 @@ class AI_Scribe_Settings_Ajax_Controller {
 			wp_send_json_error(
 				array(
 					'code'      => 'invalid_nonce',
-					'message'   => 'Security nonce is missing or invalid. Please refresh the page.',
+					'message'   => __( 'The security nonce is missing or invalid. Please refresh the page.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'retryable' => false,
 				)
 			);
@@ -73,7 +73,7 @@ class AI_Scribe_Settings_Ajax_Controller {
 			wp_send_json_error(
 				array(
 					'code'      => 'insufficient_permissions',
-					'message'   => 'You do not have permission to do this.',
+					'message'   => __( 'You do not have permission to do this.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'retryable' => false,
 				)
 			);
@@ -391,7 +391,7 @@ class AI_Scribe_Settings_Ajax_Controller {
 			wp_send_json_error(
 				array(
 					'code'      => 'managed_by_hub',
-					'message'   => 'API keys are managed by the Opace AI Hub plugin. Configure them under Opace AI Hub → Settings.',
+					'message'   => __( 'API keys are managed by the Opace AI Hub plugin. Configure them under Opace AI Hub → Settings.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'retryable' => false,
 				)
 			);
@@ -405,7 +405,7 @@ class AI_Scribe_Settings_Ajax_Controller {
 			wp_send_json_error(
 				array(
 					'code'      => 'invalid_params',
-					'message'   => 'A keys object is required.',
+					'message'   => __( 'A keys object is required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'retryable' => false,
 				)
 			);
@@ -689,7 +689,7 @@ class AI_Scribe_Settings_Ajax_Controller {
 			wp_send_json_error(
 				array(
 					'code'      => 'invalid_params',
-					'message'   => 'A prefs object is required.',
+					'message'   => __( 'A preferences object is required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'retryable' => false,
 				)
 			);

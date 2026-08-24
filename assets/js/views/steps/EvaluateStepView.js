@@ -126,9 +126,9 @@ class EvaluateStepView extends StreamingStepView {
         const heading = document.createElement('div');
         heading.className = 'evaluation-summary-heading';
         const title = document.createElement('h3');
-        title.textContent = 'Evaluation summary';
+        title.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.evaluationSummary) || 'Evaluation summary';
         const note = document.createElement('p');
-        note.textContent = 'Structural checks are measured from the final Review HTML. Editorial rows are clearly labelled AI review and should be confirmed by an editor.';
+        note.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.evaluationSummaryNote) || 'Structural checks are measured from the final Review HTML. Editorial rows are clearly labelled AI review and should be confirmed by an editor.';
         heading.appendChild(title);
         heading.appendChild(note);
         summary.appendChild(heading);
@@ -185,7 +185,7 @@ class EvaluateStepView extends StreamingStepView {
         table.setAttribute('data-testid', 'evaluation-report');
 
         const caption = document.createElement('caption');
-        caption.textContent = 'Article evaluation checks with evidence and suggested next actions';
+        caption.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.evaluationTableCaption) || 'Article evaluation checks with evidence and suggested next actions';
         table.appendChild(caption);
 
         const thead = document.createElement('thead');

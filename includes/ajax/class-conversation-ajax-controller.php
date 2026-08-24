@@ -81,14 +81,14 @@ class AI_Scribe_Conversation_Ajax_Controller {
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, self::NONCE_ACTION ) ) {
 			return array(
 				'code'      => 'invalid_nonce',
-				'message'   => 'Security nonce is missing or invalid. Please refresh the page.',
+				'message'   => __( 'The security nonce is missing or invalid. Please refresh the page.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				'retryable' => false,
 			);
 		}
 		if ( ! current_user_can( self::CAPABILITY ) ) {
 			return array(
 				'code'      => 'insufficient_permissions',
-				'message'   => 'You do not have permission to generate content.',
+				'message'   => __( 'You do not have permission to generate content.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				'retryable' => false,
 			);
 		}
@@ -126,7 +126,7 @@ class AI_Scribe_Conversation_Ajax_Controller {
 		wp_send_json_error(
 			array(
 				'code'      => 'conversation_not_found',
-				'message'   => 'Conversation not found.',
+				'message'   => __( 'Conversation not found.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				'retryable' => false,
 			)
 		);
@@ -259,7 +259,7 @@ class AI_Scribe_Conversation_Ajax_Controller {
 			wp_send_json_error(
 				array(
 					'code'      => 'invalid_params',
-					'message'   => 'conversation_id and step (1-11) are required.',
+					'message'   => __( 'A conversation ID and step number (1–11) are required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'retryable' => false,
 				)
 			);
@@ -305,7 +305,7 @@ class AI_Scribe_Conversation_Ajax_Controller {
 				wp_send_json_error(
 					array(
 						'code'      => 'invalid_params',
-						'message'   => 'An article idea is required.',
+						'message'   => __( 'An article idea is required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 						'retryable' => false,
 					)
 				);
@@ -325,7 +325,7 @@ class AI_Scribe_Conversation_Ajax_Controller {
 		}
 		$conversation_id = isset( $_POST['conversation_id'] ) ? (int) $_POST['conversation_id'] : 0;
 		if ( ! $conversation_id ) {
-			wp_send_json_error( array( 'code' => 'invalid_params', 'message' => 'conversation_id is required.', 'retryable' => false ) );
+			wp_send_json_error( array( 'code' => 'invalid_params', 'message' => __( 'Conversation ID is required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), 'retryable' => false ) );
 			return;
 		}
 		if ( ! $this->owned_conversation( $conversation_id ) ) {
@@ -345,7 +345,7 @@ class AI_Scribe_Conversation_Ajax_Controller {
 		$title           = isset( $_POST['title'] ) ? sanitize_text_field( wp_unslash( $_POST['title'] ) ) : '';
 		$description     = isset( $_POST['description'] ) ? sanitize_textarea_field( wp_unslash( $_POST['description'] ) ) : '';
 		if ( ! $conversation_id || '' === $title || '' === $description ) {
-			wp_send_json_error( array( 'code' => 'invalid_params', 'message' => 'Conversation, title and description are required.', 'retryable' => false ) );
+			wp_send_json_error( array( 'code' => 'invalid_params', 'message' => __( 'Conversation, title and description are required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), 'retryable' => false ) );
 			return;
 		}
 		if ( ! $this->owned_conversation( $conversation_id ) ) {
@@ -389,7 +389,7 @@ class AI_Scribe_Conversation_Ajax_Controller {
 				wp_send_json_error(
 					array(
 						'code'      => 'conversation_not_found',
-						'message'   => 'Conversation not found.',
+						'message'   => __( 'Conversation not found.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 						'retryable' => false,
 					)
 				);
@@ -408,7 +408,7 @@ class AI_Scribe_Conversation_Ajax_Controller {
 			wp_send_json_error(
 				array(
 					'code'      => 'invalid_params',
-					'message'   => 'conversation_id and a valid selection key are required.',
+					'message'   => __( 'A conversation ID and valid selection key are required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'retryable' => false,
 				)
 			);
@@ -427,7 +427,7 @@ class AI_Scribe_Conversation_Ajax_Controller {
 			wp_send_json_error(
 				array(
 					'code'      => 'conversation_not_found',
-					'message'   => 'Conversation not found.',
+					'message'   => __( 'Conversation not found.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'retryable' => false,
 				)
 			);
@@ -590,7 +590,7 @@ class AI_Scribe_Conversation_Ajax_Controller {
 				'error',
 				array(
 					'code'      => 'conversation_not_found',
-					'message'   => 'Conversation not found.',
+					'message'   => __( 'Conversation not found.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'retryable' => false,
 				)
 			);

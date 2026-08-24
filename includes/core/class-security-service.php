@@ -89,7 +89,7 @@ class AI_Scribe_Security_Service extends AI_Scribe_Base_Service {
 			// Check if user is logged in
 			if ( ! is_user_logged_in() ) {
 				$this->log_warning( 'Nonce refresh attempted by unauthenticated user' );
-				wp_send_json_error( array( 'msg' => 'Unauthorized request.' ) );
+				wp_send_json_error( array( 'msg' => __( 'Unauthorised request.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
@@ -98,7 +98,7 @@ class AI_Scribe_Security_Service extends AI_Scribe_Base_Service {
 
 			if ( ! $new_nonce ) {
 				$this->log_error( 'Failed to generate new nonce' );
-				wp_send_json_error( array( 'msg' => 'Failed to generate security token.' ) );
+				wp_send_json_error( array( 'msg' => __( 'Failed to generate a security token.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 				return;
 			}
 
@@ -111,7 +111,7 @@ class AI_Scribe_Security_Service extends AI_Scribe_Base_Service {
 				$e,
 				array( 'user_id' => get_current_user_id() )
 			);
-			wp_send_json_error( array( 'msg' => 'Security token refresh failed.' ) );
+			wp_send_json_error( array( 'msg' => __( 'Security token refresh failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 		}
 	}
 

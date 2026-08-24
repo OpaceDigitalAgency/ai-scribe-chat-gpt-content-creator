@@ -210,7 +210,7 @@ class AI_Scribe_WP_AI_Client_Adapter {
 			// message is the active prompt text.
 			$thread = $this->normalise_thread( $messages );
 			if ( empty( $thread ) ) {
-				return new WP_Error( 'invalid_params', 'No user prompt supplied to the WordPress AI client.' );
+				return new WP_Error( 'invalid_params', __( 'No user prompt supplied to the WordPress AI client.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 			}
 
 			$final = array_pop( $thread );

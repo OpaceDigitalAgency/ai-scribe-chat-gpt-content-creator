@@ -180,7 +180,7 @@ class AI_Scribe_Generation_Service {
 					'usage'       => $usage,
 					'error'       => array(
 						'code'      => 'empty_response',
-						'message'   => 'The model returned no content.',
+						'message'   => __( 'The model returned no content.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 						'retryable' => true,
 					),
 				)
@@ -188,7 +188,7 @@ class AI_Scribe_Generation_Service {
 			$this->record_actuals( $conversation_id, $step, $model, $usage );
 			return $this->error(
 				'empty_response',
-				'The model returned no content.',
+				__( 'The model returned no content.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				true,
 				array(
 					'step'            => $step,
@@ -214,7 +214,11 @@ class AI_Scribe_Generation_Service {
 					'usage'       => $usage,
 					'error'       => array(
 						'code'      => 'schema_validation_failed',
-						'message'   => 'Response failed validation: ' . implode( '; ', $parsed['errors'] ),
+						'message'   => sprintf(
+							/* translators: %s: semicolon-separated validation errors. */
+							__( 'Response failed validation: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+							implode( '; ', $parsed['errors'] )
+						),
 						'retryable' => true,
 					),
 				)
@@ -222,7 +226,11 @@ class AI_Scribe_Generation_Service {
 			$this->record_actuals( $conversation_id, $step, $model, $usage );
 			return $this->error(
 				'schema_validation_failed',
-				'Response failed validation: ' . implode( '; ', $parsed['errors'] ),
+				sprintf(
+					/* translators: %s: semicolon-separated validation errors. */
+					__( 'Response failed validation: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					implode( '; ', $parsed['errors'] )
+				),
 				true,
 				array(
 					'step'            => $step,
@@ -295,13 +303,13 @@ class AI_Scribe_Generation_Service {
 								'quality'     => $quality,
 								'error'       => array(
 									'code'      => 'article_structure_incomplete',
-									'message'   => 'The generated body did not preserve every selected heading after two correction attempts. Regenerate before continuing.',
+									'message'   => __( 'The generated body did not preserve every selected heading after two correction attempts. Regenerate before continuing.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 									'retryable' => true,
 								),
 							)
 						);
 						$this->record_actuals( $conversation_id, $step, $model, $usage );
-						return $this->error( 'article_structure_incomplete', 'The generated body did not preserve every selected heading after two correction attempts. Regenerate before continuing.', true );
+						return $this->error( 'article_structure_incomplete', __( 'The generated body did not preserve every selected heading after two correction attempts. Regenerate before continuing.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), true );
 					}
 				}
 			}
@@ -611,56 +619,99 @@ class AI_Scribe_Generation_Service {
 
 	/** Objective checks rendered ahead of model judgements. */
 	private function structural_evaluation_checks( array $facts ) {
-		$image_detail = $facts['image_count'] . ( 1 === $facts['image_count'] ? ' image element is' : ' image elements are' ) . ' present. ';
-		$image_detail .= $facts['images_missing_alt_count'] . ' lack an alt attribute and ' . $facts['images_empty_alt_count'] . ' use an empty alt value. Empty alt text can be correct for a decorative image; relevance and description quality are not inferred.';
+		$image_detail = sprintf(
+			/* translators: %d: number of image elements. */
+			_n( '%d image element is present. ', '%d image elements are present. ', $facts['image_count'], 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			$facts['image_count']
+		);
+		$image_detail .= sprintf(
+			/* translators: 1: number of images without an alt attribute, 2: number of images with an empty alt value. */
+			__( '%1$d lack an alt attribute and %2$d use an empty alt value. Empty alt text can be correct for a decorative image; relevance and description quality are not inferred.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			$facts['images_missing_alt_count'],
+			$facts['images_empty_alt_count']
+		);
 		$heading_ok  = $facts['heading_count'] > 0 && 1 === $facts['h1_count'] && 0 === $facts['heading_level_skip_count'];
 		$length_plan = isset( $facts['length_plan'] ) && is_array( $facts['length_plan'] ) ? $facts['length_plan'] : array();
 		$length_pass = ! empty( $length_plan['pass'] );
 		$length_range = isset( $length_plan['min_words'], $length_plan['max_words'] )
-			? $length_plan['min_words'] . '-' . $length_plan['max_words'] . ' words'
-			: 'the configured article plan';
+			? sprintf(
+				/* translators: 1: minimum planned words, 2: maximum planned words. */
+				__( '%1$d–%2$d words', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+				$length_plan['min_words'],
+				$length_plan['max_words']
+			)
+			: __( 'the configured article plan', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' );
 		return array(
 			array(
-				'label' => 'Article length',
+				'label' => __( 'Article length', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				'status' => $length_pass ? 'pass' : 'warn',
-				'detail' => 'The final article contains ' . $facts['word_count'] . ' words against the planned range of ' . $length_range . '. This measures planned depth, not editorial quality by itself.',
-				'suggestion' => $length_pass ? '' : 'Bring the useful coverage within the selected article-length plan before saving.',
+				'detail' => sprintf(
+					/* translators: 1: final article word count, 2: planned word range. */
+					__( 'The final article contains %1$d words against the planned range of %2$s. This measures planned depth, not editorial quality by itself.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					$facts['word_count'],
+					$length_range
+				),
+				'suggestion' => $length_pass ? '' : __( 'Bring the useful coverage within the selected article-length plan before saving.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 			),
 			array(
-				'label' => 'Image accessibility markup',
+				'label' => __( 'Image accessibility markup', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				'status' => 0 === $facts['image_count'] || $facts['images_missing_alt_count'] > 0 ? 'warn' : 'pass',
 				'detail' => $image_detail,
-				'suggestion' => $facts['images_missing_alt_count'] > 0 ? 'Add an alt attribute to every image, using an empty value only when the image is genuinely decorative.' : ( 0 === $facts['image_count'] ? 'Decide whether an image would materially help the reader; no image is not automatically a defect.' : '' ),
+				'suggestion' => $facts['images_missing_alt_count'] > 0 ? __( 'Add an alt attribute to every image, using an empty value only when the image is genuinely decorative.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) : ( 0 === $facts['image_count'] ? __( 'Decide whether an image would materially help the reader; no image is not automatically a defect.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) : '' ),
 			),
 			array(
-				'label' => 'Table of contents and anchor links',
+				'label' => __( 'Table of contents and anchor links', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				'status' => $facts['broken_anchor_link_count'] > 0 ? 'warn' : 'pass',
-				'detail' => $facts['anchor_link_count'] . ' in-page anchor links are present: ' . $facts['valid_anchor_link_count'] . ' resolve to an ID in this article and ' . $facts['broken_anchor_link_count'] . ' do not. These links do not count as contextual references.',
-				'suggestion' => $facts['broken_anchor_link_count'] > 0 ? 'Repair or remove anchor links whose target ID is absent.' : ( 0 === $facts['anchor_link_count'] ? 'No action is required unless the article needs in-page navigation.' : '' ),
+				'detail' => sprintf(
+					/* translators: 1: all anchor links, 2: valid anchor links, 3: broken anchor links. */
+					__( '%1$d in-page anchor links are present: %2$d resolve to an ID in this article and %3$d do not. These links do not count as contextual references.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					$facts['anchor_link_count'],
+					$facts['valid_anchor_link_count'],
+					$facts['broken_anchor_link_count']
+				),
+				'suggestion' => $facts['broken_anchor_link_count'] > 0 ? __( 'Repair or remove anchor links whose target ID is absent.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) : ( 0 === $facts['anchor_link_count'] ? __( 'No action is required unless the article needs in-page navigation.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) : '' ),
 			),
 			array(
-				'label' => 'Internal contextual links',
+				'label' => __( 'Internal contextual links', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				'status' => $facts['internal_contextual_link_count'] > 0 ? 'pass' : 'warn',
-				'detail' => $facts['internal_contextual_link_count'] . ' text links point to another location on this site. Anchor/TOC links are excluded; relevance is not inferred.',
-				'suggestion' => $facts['internal_contextual_link_count'] > 0 ? '' : 'Review whether a genuinely useful related page should be linked.',
+				'detail' => sprintf(
+					/* translators: %d: number of internal contextual links. */
+					_n( '%d text link points to another location on this site. Anchor/TOC links are excluded; relevance is not inferred.', '%d text links point to another location on this site. Anchor/TOC links are excluded; relevance is not inferred.', $facts['internal_contextual_link_count'], 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					$facts['internal_contextual_link_count']
+				),
+				'suggestion' => $facts['internal_contextual_link_count'] > 0 ? '' : __( 'Review whether a genuinely useful related page should be linked.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 			),
 			array(
-				'label' => 'External contextual links',
+				'label' => __( 'External contextual links', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				'status' => $facts['external_contextual_link_count'] > 0 ? 'pass' : 'warn',
-				'detail' => $facts['external_contextual_link_count'] . ' text links point to another website. Anchor/TOC links are excluded; authority and relevance are not inferred.',
-				'suggestion' => $facts['external_contextual_link_count'] > 0 ? '' : 'Review factual claims and add an authoritative external source where one is needed.',
+				'detail' => sprintf(
+					/* translators: %d: number of external contextual links. */
+					_n( '%d text link points to another website. Anchor/TOC links are excluded; authority and relevance are not inferred.', '%d text links point to another website. Anchor/TOC links are excluded; authority and relevance are not inferred.', $facts['external_contextual_link_count'], 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					$facts['external_contextual_link_count']
+				),
+				'suggestion' => $facts['external_contextual_link_count'] > 0 ? '' : __( 'Review factual claims and add an authoritative external source where one is needed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 			),
 			array(
-				'label' => 'Heading markup',
+				'label' => __( 'Heading markup', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				'status' => $heading_ok ? 'pass' : 'warn',
-				'detail' => 'The article contains ' . $facts['heading_count'] . ' headings, including ' . $facts['h1_count'] . ' H1 elements, with ' . $facts['heading_level_skip_count'] . ' hierarchy level skips. This checks markup order, not heading quality.',
-				'suggestion' => $heading_ok ? '' : 'Use one H1 and a logical heading order without skipping levels.',
+				'detail' => sprintf(
+					/* translators: 1: all headings, 2: H1 elements, 3: heading hierarchy skips. */
+					__( 'The article contains %1$d headings, including %2$d H1 elements, with %3$d hierarchy level skips. This checks markup order, not heading quality.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					$facts['heading_count'],
+					$facts['h1_count'],
+					$facts['heading_level_skip_count']
+				),
+				'suggestion' => $heading_ok ? '' : __( 'Use one H1 and a logical heading order without skipping levels.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 			),
 			array(
-				'label' => 'Bold markup',
+				'label' => __( 'Bold markup', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				'status' => $facts['bold_count'] > 0 ? 'pass' : 'warn',
-				'detail' => 'The final article contains ' . $facts['bold_count'] . ( 1 === $facts['bold_count'] ? ' bold element.' : ' bold elements.' ) . ' A count cannot show whether the emphasis is useful.',
-				'suggestion' => 'Use bold emphasis sparingly where it helps scanning; no fixed count is required.',
+				'detail' => sprintf(
+					/* translators: %d: number of bold elements. */
+					_n( 'The final article contains %d bold element. A count cannot show whether the emphasis is useful.', 'The final article contains %d bold elements. A count cannot show whether the emphasis is useful.', $facts['bold_count'], 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					$facts['bold_count']
+				),
+				'suggestion' => __( 'Use bold emphasis sparingly where it helps scanning; no fixed count is required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 			),
 		);
 	}
@@ -676,9 +727,13 @@ class AI_Scribe_Generation_Service {
 			$detail = isset( $check['detail'] ) ? trim( (string) $check['detail'] ) : '';
 			$status = isset( $check['status'] ) ? strtolower( trim( (string) $check['status'] ) ) : 'warn';
 			$check['status'] = in_array( $status, array( 'pass', 'warn', 'fail' ), true ) ? $status : 'warn';
-			$check['detail'] = 'AI editorial review of the supplied article (not external fact-checking): ' . $detail;
+			$check['detail'] = sprintf(
+				/* translators: %s: AI editorial-review detail. */
+				__( 'AI editorial review of the supplied article (not external fact-checking): %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+				$detail
+			);
 			if ( empty( $check['suggestion'] ) ) {
-				$check['suggestion'] = 'Review this editorial judgement against the article and your standards.';
+				$check['suggestion'] = __( 'Review this editorial judgement against the article and your standards.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' );
 			}
 			$subjective[] = $check;
 		}
@@ -921,14 +976,22 @@ class AI_Scribe_Generation_Service {
 					'usage'       => $usage,
 					'error'       => array(
 						'code'      => 'schema_validation_failed',
-						'message'   => 'Express response failed validation: ' . implode( '; ', $parsed['errors'] ),
+						'message'   => sprintf(
+							/* translators: %s: semicolon-separated validation errors. */
+							__( 'Express response failed validation: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+							implode( '; ', $parsed['errors'] )
+						),
 						'retryable' => true,
 					),
 				)
 			);
 			return $this->error(
 				'schema_validation_failed',
-				'Express response failed validation: ' . implode( '; ', $parsed['errors'] ),
+				sprintf(
+					/* translators: %s: semicolon-separated validation errors. */
+					__( 'Express response failed validation: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					implode( '; ', $parsed['errors'] )
+				),
 				true,
 				array(
 					'step'            => 0,
@@ -1029,9 +1092,9 @@ class AI_Scribe_Generation_Service {
 				if ( $structure_pass ) {
 					$quality = AI_Scribe_Article_Plan_Service::advisory( $quality, $plan, false, 2 );
 				} else {
-					$this->conversations->record_step( $conversation_id, 0, 'failed', array( 'kind' => 'express', 'raw' => $raw, 'prompt_used' => $prompt, 'usage' => $usage, 'quality' => $quality, 'error' => array( 'code' => 'article_structure_incomplete', 'message' => 'The Express response did not preserve the required section structure after two correction attempts.', 'retryable' => true ) ) );
+					$this->conversations->record_step( $conversation_id, 0, 'failed', array( 'kind' => 'express', 'raw' => $raw, 'prompt_used' => $prompt, 'usage' => $usage, 'quality' => $quality, 'error' => array( 'code' => 'article_structure_incomplete', 'message' => __( 'The Express response did not preserve the required section structure after two correction attempts.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), 'retryable' => true ) ) );
 					$this->record_actuals( $conversation_id, 0, $model, $usage );
-					return $this->error( 'article_structure_incomplete', 'The Express response did not preserve the required section structure after two correction attempts.', true );
+					return $this->error( 'article_structure_incomplete', __( 'The Express response did not preserve the required section structure after two correction attempts.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), true );
 				}
 			}
 		}
@@ -1097,7 +1160,7 @@ class AI_Scribe_Generation_Service {
 					'requested_words' => 0,
 					'added_words'     => 0,
 					'remaining_words' => 0,
-					'message'         => 'The article already meets or exceeds its selected target.',
+					'message'         => __( 'The article already meets or exceeds its selected target.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				),
 			);
 		}
@@ -1188,7 +1251,7 @@ class AI_Scribe_Generation_Service {
 			? AI_Scribe_Article_Plan_Service::assess_outline( $source, $outline )
 			: AI_Scribe_Article_Plan_Service::assess_selected_outline_order( $source, $outline );
 		if ( '' === $source || empty( $outline ) || empty( $coverage['pass'] ) ) {
-			return $this->error( 'article_unavailable', 'The current draft does not preserve the selected outline, so it was not changed.', false );
+			return $this->error( 'article_unavailable', __( 'The current draft does not preserve the selected outline, so it was not changed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ), false );
 		}
 
 		$current   = AI_Scribe_Article_Plan_Service::assess_html( $source, $plan, $body_only );
@@ -1200,7 +1263,7 @@ class AI_Scribe_Generation_Service {
 				'success' => true, 'conversation_id' => (int) $conversation_id,
 				'improved_html' => $source, 'quality_plan' => $current,
 				'usage' => array(), 'cost' => array( 'actual_usd' => 0.0, 'running_total_usd' => (float) $conversation['cost']['running_total_usd'] ),
-				'improvement' => array( 'requested_words' => 0, 'added_words' => 0, 'remaining_words' => 0, 'message' => 'The draft already meets or exceeds its selected target.' ),
+				'improvement' => array( 'requested_words' => 0, 'added_words' => 0, 'remaining_words' => 0, 'message' => __( 'The draft already meets or exceeds its selected target.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ),
 			);
 		}
 
@@ -1340,7 +1403,7 @@ class AI_Scribe_Generation_Service {
 				'error',
 				array(
 					'code'      => 'invalid_params',
-					'message'   => 'Only long-form steps (4, 6, 7) may stream.',
+					'message'   => __( 'Only long-form steps (4, 6 and 7) may stream.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'retryable' => false,
 				)
 			);

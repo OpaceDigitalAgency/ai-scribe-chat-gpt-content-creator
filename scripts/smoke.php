@@ -57,6 +57,7 @@ function esc_url($s) { return (string) $s; }
 function sanitize_text_field($s) { return is_string($s) ? trim($s) : $s; }
 function wp_json_encode($data, $options = 0, $depth = 512) { return json_encode($data, $options, $depth); }
 function __($text, $domain = 'default') { return $text; }
+function _n($single, $plural, $number, $domain = 'default') { return 1 === (int) $number ? $single : $plural; }
 function _e($text, $domain = 'default') { echo $text; }
 function is_admin() { return true; }
 function current_user_can(...$args) { return true; }

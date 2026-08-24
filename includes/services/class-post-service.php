@@ -104,7 +104,7 @@ class AI_Scribe_Post_Service extends AI_Scribe_Base_Service {
 			$this->log_warning( 'Post creation failed: Invalid nonce' );
 			wp_send_json_error(
 				array(
-					'msg'           => 'Invalid request. Please refresh the page and try again.',
+					'msg'           => __( 'Invalid request. Please refresh the page and try again.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'nonce_expired' => true,
 				)
 			);
@@ -136,14 +136,14 @@ class AI_Scribe_Post_Service extends AI_Scribe_Base_Service {
 
 				wp_send_json_success(
 					array(
-						'msg'      => 'Post created successfully',
+						'msg'      => __( 'Post created successfully.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 						'post_id'  => $post_id,
 						'edit_url' => admin_url( 'post.php?post=' . $post_id . '&action=edit' ),
 					)
 				);
 			} else {
 				$this->log_error( 'Failed to create WordPress post' );
-				wp_send_json_error( array( 'msg' => 'Failed to create post' ) );
+				wp_send_json_error( array( 'msg' => __( 'Failed to create the post.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			}
 		} catch ( Exception $e ) {
 			$error_response = $this->handle_error( 'Post creation failed', $e );
@@ -406,7 +406,7 @@ class AI_Scribe_Post_Service extends AI_Scribe_Base_Service {
 			}
 		}
 		if ( $title === '' || trim( wp_strip_all_tags( $content ) ) === '' ) {
-			return new WP_Error( 'invalid_params', 'A title and article content are required to save a post.' );
+			return new WP_Error( 'invalid_params', __( 'A title and article content are required to save a post.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 		$content = $this->normalise_article_semantics( $content );
 
@@ -486,7 +486,7 @@ class AI_Scribe_Post_Service extends AI_Scribe_Base_Service {
 		}
 
 		if ( ! $post_id || is_wp_error( $post_id ) ) {
-			return is_wp_error( $post_id ) ? $post_id : new WP_Error( 'save_failed', 'Failed to create the post.' );
+			return is_wp_error( $post_id ) ? $post_id : new WP_Error( 'save_failed', __( 'Failed to create the post.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 		if ( function_exists( 'update_post_meta' ) ) {
 			update_post_meta( $post_id, '_ai_scribe_generated', '1' );

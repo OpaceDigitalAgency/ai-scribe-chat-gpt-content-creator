@@ -810,15 +810,15 @@ class WizardFlowController {
         status.classList.toggle('is-error', failed);
 
         if (running) {
-            status.textContent = 'Running your amended prompt for this step…';
+			status.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.runningAmendedPrompt) || 'Running your amended prompt for this step…';
         } else if (used) {
-            status.textContent = 'Amended prompt used.';
+			status.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.amendedPromptUsed) || 'Amended prompt used.';
         } else if (failed) {
-            status.textContent = 'The amended prompt could not be run. Try again.';
+			status.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.amendedPromptFailed) || 'The amended prompt could not be run. Try again.';
         } else if (dirty) {
-            status.textContent = 'Your amended prompt is ready to run.';
+			status.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.amendedPromptReady) || 'Your amended prompt is ready to run.';
         } else {
-            status.textContent = 'Edit the prompt to enable this button.';
+			status.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.editPromptToEnable) || 'Edit the prompt to enable this button.';
         }
     }
 
@@ -1630,7 +1630,7 @@ class WizardFlowController {
         }
         const topic = view.getTopic();
         if (!topic) {
-            view.showError(new Error('Enter a topic to generate the article.'), null);
+			view.showError(new Error((window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.enterTopicForArticle) || 'Enter a topic to generate the article.'), null);
             return;
         }
         if (this.pendingSteps.has('express')) {
@@ -1865,7 +1865,7 @@ class WizardFlowController {
             this.improvementProgressStartedAt = Date.now();
             const stage = progress.querySelector('[data-improve-progress-stage]');
             const detail = progress.querySelector('[data-improve-progress-detail]');
-            if (stage) stage.textContent = 'Improving article length';
+			if (stage) stage.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.improvingArticleLength) || 'Improving article length';
             const updateElapsed = () => {
                 const elapsed = Math.max(0, Math.round((Date.now() - this.improvementProgressStartedAt) / 1000));
                 if (detail) detail.textContent = `Distributing concise detail across existing sections · ${elapsed}s elapsed`;
@@ -2211,7 +2211,7 @@ class WizardFlowController {
         details.appendChild(summary);
         const help = document.createElement('p');
         help.className = 'image-plan-help';
-        help.textContent = 'Optional: review or edit these prompts before generating the section set.';
+		help.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.reviewSectionPrompts) || 'Optional: review or edit these prompts before generating the section set.';
         details.appendChild(help);
         prompts.forEach((entry, index) => {
             const label = document.createElement('label');
@@ -2272,7 +2272,7 @@ class WizardFlowController {
             const elapsed = Math.max(0, Math.floor((Date.now() - this.imageProgressStartedAt) / 1000));
             const time = status.querySelector('[data-image-progress-time]');
             if (time) time.textContent = `${elapsed}s`;
-            if (detailEl && elapsed >= 45) detailEl.textContent = 'Still working with your image provider. Larger images can take over a minute.';
+			if (detailEl && elapsed >= 45) detailEl.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.imageProviderStillWorking) || 'Still working with your image provider. Larger images can take over a minute.';
         };
         tick();
         this.imageProgressTimer = window.setInterval(tick, 1000);
@@ -2675,12 +2675,12 @@ class WizardFlowController {
 
         const captionLabel = document.createElement('label');
         captionLabel.className = 'gallery-caption-label';
-        captionLabel.textContent = 'Caption';
+		captionLabel.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.caption) || 'Caption';
         const caption = document.createElement('textarea');
         caption.rows = 2;
         caption.className = 'form-control gallery-caption-editor';
         caption.value = stored.caption || '';
-        caption.placeholder = 'Edit caption, or clear it to remove';
+		caption.placeholder = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.captionPlaceholder) || 'Edit the caption, or clear it to remove it';
         caption.setAttribute('data-testid', 'gallery-caption');
         caption.setAttribute('aria-label', `Caption for ${badge.textContent}`);
         const resizeCaption = () => {
@@ -2712,12 +2712,12 @@ class WizardFlowController {
             const save = document.createElement('button');
             save.type = 'button';
             save.className = 'btn btn-link';
-            save.textContent = 'Save prompt';
+			save.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.savePrompt) || 'Save prompt';
             save.addEventListener('click', () => this.saveGalleryPrompt(stored.url, prompt.value, step));
             const regenerate = document.createElement('button');
             regenerate.type = 'button';
             regenerate.className = 'btn btn-outline';
-            regenerate.textContent = 'Regenerate image';
+			regenerate.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.regenerateImage) || 'Regenerate image';
             regenerate.setAttribute('data-testid', 'regenerate-image');
             regenerate.addEventListener('click', () => this.regenerateGalleryImage(step, stored, prompt.value, regenerate));
             promptActions.appendChild(save);
@@ -2739,7 +2739,7 @@ class WizardFlowController {
         insertBtn.type = 'button';
         insertBtn.className = 'btn btn-outline gallery-place-btn';
         insertBtn.setAttribute('data-testid', 'insert-image-end');
-        insertBtn.textContent = 'Place in article';
+		insertBtn.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.placeInArticle) || 'Place in article';
         insertBtn.addEventListener('click', () => this.insertImageIntelligently(step, stored, false));
         content.appendChild(insertBtn);
         item.appendChild(content);
@@ -3589,16 +3589,16 @@ class WizardFlowController {
             const badge = card.querySelector('[data-save-status-badge]');
             const message = card.querySelector('[data-save-status-message]');
             if (!hasSaved) {
-                badge.textContent = 'Not saved';
-                message.textContent = 'Not saved. This article currently exists only in AI-Scribe.';
+				badge.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.notSaved) || 'Not saved';
+				message.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.notSavedDetail) || 'Not saved. This article currently exists only in AI-Scribe.';
             } else if (!hasCurrent) {
-                badge.textContent = 'Unsaved changes';
-                message.textContent = 'Changes made since the last save exist only in AI-Scribe. Update a destination before finishing if you want to keep them.';
+				badge.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.unsavedChanges) || 'Unsaved changes';
+				message.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.unsavedChangesDetail) || 'Changes made since the last save exist only in AI-Scribe. Update a destination before finishing if you want to keep them.';
             } else {
                 const labels = current.map((item) => item.type === 'post'
                     ? (item.status === 'publish' ? 'published post' : 'WordPress draft')
                     : 'shortcode');
-                badge.textContent = 'Saved';
+				badge.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.saved) || 'Saved';
                 message.textContent = `The current article is saved as ${labels.join(' and ')}.`;
             }
 
@@ -3649,7 +3649,7 @@ class WizardFlowController {
         this.discardConfirmUntil = Date.now() + 8000;
         button.classList.add('is-discard-confirm');
         const label = button.querySelector('[data-complete-label]');
-        if (label) label.textContent = 'Discard & Start New';
+		if (label) label.textContent = (window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.discardAndStartNew) || 'Discard & Start New';
         const message = 'The current version has not been saved. Select “Discard & Start New” to confirm.';
         const evaluate = this.registry.get(11);
         if (evaluate) evaluate.announce(message);
@@ -3666,7 +3666,7 @@ class WizardFlowController {
         }
         if (!this.updateReviewActions()) {
             source.view.showError(
-                new Error('There is nothing to publish yet — generate the article first.'),
+				new Error((window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.nothingToPublish) || 'There is nothing to publish yet — generate the article first.'),
                 null
             );
             return;
@@ -3693,7 +3693,7 @@ class WizardFlowController {
             const data = await this.api.savePost(conversationId, fields);
             const postId = data && parseInt(data.post_id, 10);
             if (!postId) {
-                throw new Error('WordPress did not confirm a saved post. Nothing has been marked as saved.');
+				throw new Error((window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.postSaveNotConfirmed) || 'WordPress did not confirm a saved post. Nothing has been marked as saved.');
             }
             // Server contract: `updated` distinguishes updating the post this
             // conversation already created from creating a new one, and
@@ -3762,7 +3762,7 @@ class WizardFlowController {
         }
         if (!this.updateReviewActions()) {
             source.view.showError(
-                new Error('There is nothing to save yet — generate the article first.'),
+				new Error((window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.nothingToSave) || 'There is nothing to save yet — generate the article first.'),
                 null
             );
             return;
@@ -3774,7 +3774,7 @@ class WizardFlowController {
             });
             const shortcodeId = data && parseInt(data.shortcode_id, 10);
             if (!shortcodeId) {
-                throw new Error('WordPress did not confirm a saved shortcode. Nothing has been marked as saved.');
+				throw new Error((window.ai_scribe && window.ai_scribe.i18n && window.ai_scribe.i18n.shortcodeSaveNotConfirmed) || 'WordPress did not confirm a saved shortcode. Nothing has been marked as saved.');
             }
             const code = `[article_builder_generate_data template_id="${shortcodeId}"]`;
             const saved = this.persistenceState();

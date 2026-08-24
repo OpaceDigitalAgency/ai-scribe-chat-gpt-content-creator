@@ -287,7 +287,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 				}
 				wp_send_json_error(
 					array(
-						'msg'           => 'Security nonce is missing or invalid. Please refresh the page.',
+						'msg'           => __( 'The security nonce is missing or invalid. Please refresh the page.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 						'nonce_expired' => true,
 						'console_debug' => '[AI_SCRIBE_IMAGE_DEBUG] Security check failed - invalid nonce',
 					)
@@ -319,7 +319,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 				}
 				wp_send_json_error(
 					array(
-						'msg'           => 'Image prompt is required.',
+						'msg'           => __( 'An image prompt is required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 						'console_debug' => '[AI_SCRIBE_IMAGE_DEBUG] Empty prompt - aborting',
 					)
 				);
@@ -470,7 +470,11 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 
 			wp_send_json_error(
 				array(
-					'msg'           => 'A fatal error occurred during image generation: ' . $e->getMessage(),
+					'msg'           => sprintf(
+						/* translators: %s: fatal image-generation error message. */
+						__( 'A fatal error occurred during image generation: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$e->getMessage()
+					),
 					'console_debug' => '[AI_SCRIBE_IMAGE_DEBUG] FATAL ERROR: ' . $e->getMessage(),
 					'error_type'    => 'fatal_error',
 				)
@@ -481,7 +485,11 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 
 			wp_send_json_error(
 				array(
-					'msg'           => 'A PHP error occurred during image generation: ' . $e->getMessage(),
+					'msg'           => sprintf(
+						/* translators: %s: PHP image-generation error message. */
+						__( 'A PHP error occurred during image generation: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$e->getMessage()
+					),
 					'console_debug' => '[AI_SCRIBE_IMAGE_DEBUG] PHP ERROR: ' . $e->getMessage(),
 					'error_type'    => 'php_error',
 				)
@@ -587,14 +595,14 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 		if ( ! $this->security_service->verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
 			wp_send_json_error(
 				array(
-					'msg'           => 'Security nonce is missing or invalid. Please refresh the page.',
+					'msg'           => __( 'The security nonce is missing or invalid. Please refresh the page.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'nonce_expired' => true,
 				)
 			);
 			return;
 		}
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( array( 'msg' => 'You do not have permission to do this.' ) );
+			wp_send_json_error( array( 'msg' => __( 'You do not have permission to do this.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			return;
 		}
 
@@ -778,7 +786,11 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 
 		wp_send_json_error(
 			array(
-				'msg'       => 'Failed to generate image: ' . $error->get_error_message(),
+				'msg'       => sprintf(
+					/* translators: %s: image provider error message. */
+					__( 'Failed to generate image: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					$error->get_error_message()
+				),
 				'code'      => $error->get_error_code(),
 				'retryable' => $retryable,
 				'debug'     => $debug_messages,
@@ -836,7 +848,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 		if ( empty( $image_url ) ) {
 			wp_send_json_error(
 				array(
-					'msg'   => 'No image URL or base64 data received from AI service',
+					'msg'   => __( 'No image URL or base64 data was received from the AI service.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 					'debug' => $debug_messages,
 				)
 			);
@@ -851,7 +863,11 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 		if ( is_wp_error( $attachment_result ) ) {
 			wp_send_json_error(
 				array(
-					'msg'   => 'Failed to save image to media library: ' . $attachment_result->get_error_message(),
+					'msg'   => sprintf(
+						/* translators: %s: media-library save error message. */
+						__( 'Failed to save the image to the media library: %s', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						$attachment_result->get_error_message()
+					),
 					'debug' => $debug_messages,
 				)
 			);
@@ -935,7 +951,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 			$data_parts = explode( ',', $image_url, 2 );
 			if ( count( $data_parts ) !== 2 ) {
 				$debug_messages[] = '❌ Invalid data URL format';
-				return new WP_Error( 'invalid_data_url', 'Invalid data URL format' );
+				return new WP_Error( 'invalid_data_url', __( 'Invalid data URL format.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 			}
 
 			$base64_data = $data_parts[1];
@@ -943,14 +959,14 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 
 			if ( $image_data === false ) {
 				$debug_messages[] = '❌ Failed to decode base64 data';
-				return new WP_Error( 'base64_decode_failed', 'Failed to decode base64 data' );
+				return new WP_Error( 'base64_decode_failed', __( 'Failed to decode base64 data.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 			}
 
 			// Create temporary file
 			$temp_file = wp_tempnam( 'ai-image-' );
 			if ( ! $temp_file ) {
 				$debug_messages[] = '❌ Failed to create temporary file';
-				return new WP_Error( 'temp_file_failed', 'Failed to create temporary file' );
+				return new WP_Error( 'temp_file_failed', __( 'Failed to create a temporary file.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 			}
 
 			// Write decoded image data to temp file
@@ -958,7 +974,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 			if ( $bytes_written === false ) {
 				$debug_messages[] = '❌ Failed to write image data to temp file';
 				wp_delete_file( $temp_file );
-				return new WP_Error( 'write_temp_file_failed', 'Failed to write image data to temp file' );
+				return new WP_Error( 'write_temp_file_failed', __( 'Failed to write image data to the temporary file.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 			}
 
 			$debug_messages[] = '✅ Base64 image data written to temp file: ' . $temp_file;
@@ -1221,13 +1237,13 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 		// Verify nonce
 		$nonce = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
 		if ( ! wp_verify_nonce( $nonce, 'ai_scribe_nonce' ) ) {
-			wp_send_json_error( array( 'msg' => 'Security check failed' ) );
+			wp_send_json_error( array( 'msg' => __( 'Security check failed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			return;
 		}
 
 		$title = isset( $_POST['title'] ) ? sanitize_text_field( wp_unslash( $_POST['title'] ) ) : '';
 		if ( empty( $title ) ) {
-			wp_send_json_error( array( 'msg' => 'No title provided' ) );
+			wp_send_json_error( array( 'msg' => __( 'No title was provided.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 			return;
 		}
 
@@ -1285,7 +1301,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 
 			wp_send_json_success( $response_data );
 		} else {
-			wp_send_json_error( array( 'msg' => 'No recent images found matching title' ) );
+			wp_send_json_error( array( 'msg' => __( 'No recent images were found matching the title.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ) );
 		}
 	}
 
@@ -1326,7 +1342,7 @@ class AI_Scribe_Image_Service extends AI_Scribe_Base_Service {
 		$prompt = $prompt_data['prompt'] ?? '';
 
 		if ( empty( $prompt ) ) {
-			return new WP_Error( 'empty_prompt', 'Generated prompt is empty' );
+			return new WP_Error( 'empty_prompt', __( 'The generated prompt is empty.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) );
 		}
 
 		// Get image format setting
