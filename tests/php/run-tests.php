@@ -1042,7 +1042,7 @@ test_assert(file_exists($uninstall_file), 'uninstall.php exists at the plugin ro
 $uninstall_src = file_get_contents($uninstall_file);
 test_assert_contains("defined( 'WP_UNINSTALL_PLUGIN' )", $uninstall_src, 'uninstall.php guards on WP_UNINSTALL_PLUGIN');
 test_assert_contains('ai_scribe_delete_data_on_uninstall', $uninstall_src, 'uninstall.php honours the opt-in option');
-foreach (['ab_gpt_ai_engine_settings', 'ab_gpt_content_settings', 'ai_scribe_languages', 'ab_api_key', 'ab_anthropic_api_key', 'ai_scribe_conversations'] as $must_clean) {
+foreach (['ab_gpt_ai_engine_settings', 'ab_gpt_content_settings', 'ai_scribe_languages', 'ab_api_key', 'ab_anthropic_api_key', 'ai_scribe_conversations', 'ai_scribe_hub_setup_pending', 'ai_scribe_hub_setup_prompted_version'] as $must_clean) {
     test_assert_contains($must_clean, $uninstall_src, "uninstall.php cleans {$must_clean}");
 }
 
@@ -1295,9 +1295,9 @@ test_section('P9 — onboarding notice (§15.2): gating, dismissal, feature flag
 // ---------------------------------------------------------------------------
 
 test_reset_options();
-test_assert(AI_Scribe_Onboarding_Notice::should_show_onboarding() === true, 'onboarding shows when never dismissed');
+test_assert(AI_Scribe_Onboarding_Notice::should_show_onboarding() === false, 'stale 3.0 onboarding notice remains retired');
 update_option(AI_Scribe_Onboarding_Notice::DISMISSED_OPTION, '3.0.3');
-test_assert(AI_Scribe_Onboarding_Notice::should_show_onboarding() === false, 'onboarding never re-shows once dismissed');
+test_assert(AI_Scribe_Onboarding_Notice::should_show_onboarding() === false, 'retired onboarding never re-shows for older dismissal state');
 
 test_assert(AI_Scribe_Onboarding_Notice::should_show_remap() === false, 'remap notice hidden without a recorded remap');
 update_option(AI_Scribe_Onboarding_Notice::REMAP_OPTION, ['from' => 'gpt-4.5-preview', 'to' => 'gpt-4o-mini']);
@@ -1305,16 +1305,15 @@ test_assert(AI_Scribe_Onboarding_Notice::should_show_remap() === true, 'remap no
 update_option(AI_Scribe_Onboarding_Notice::REMAP_OPTION, ['bad' => 'shape']);
 test_assert(AI_Scribe_Onboarding_Notice::should_show_remap() === false, 'malformed remap payload never renders');
 
-// This isolated harness does not load WordPress's dependency resolver, so the
-// install CTA stays off here. Runtime availability comes from the live listing.
-test_assert(AI_Scribe_Onboarding_Notice::hub_install_cta_enabled() === false, 'hub install CTA stays off when the WordPress dependency resolver is unavailable');
-// The filter escape hatch is asserted statically: this harness stubs
-// add_filter(), so exercising it at runtime would prove nothing.
 $p9_notice_src_cta = file_get_contents(dirname(__DIR__, 2) . '/includes/core/class-onboarding-notice.php');
-test_assert_contains("'install-plugin_'", $p9_notice_src_cta, 'install CTA is nonced with the core install-plugin action');
-test_assert_contains("current_user_can( 'install_plugins' )", $p9_notice_src_cta, 'install CTA is capability gated');
-test_assert_contains("apply_filters( 'ai_scribe_hub_install_cta'", $p9_notice_src_cta, 'install CTA remains filterable for non-wp.org distribution');
-test_assert_contains("apply_filters( 'ai_scribe_hub_install_cta', \$available )", $p9_notice_src_cta, 'install CTA filter follows WordPress dependency availability');
+test_assert_contains('public static function installed_hub_file()', $p9_notice_src_cta, 'Hub setup resolves an installed copy before downloading');
+test_assert_contains("wp_verify_nonce( \$nonce, self::HUB_NONCE_ACTION )", $p9_notice_src_cta, 'Hub preparation verifies its dedicated nonce');
+test_assert_contains("current_user_can( 'install_plugins' )", $p9_notice_src_cta, 'Hub installation is capability gated');
+test_assert_contains("current_user_can( 'activate_plugins' )", $p9_notice_src_cta, 'Hub activation is capability gated');
+test_assert_contains("plugins_api( 'plugin_information'", $p9_notice_src_cta, 'Hub package is resolved through the WordPress.org plugin API');
+test_assert_contains('new WP_Ajax_Upgrader_Skin()', $p9_notice_src_cta, 'Hub uses WordPress core AJAX upgrader error handling');
+test_assert_contains('new Plugin_Upgrader( $skin )', $p9_notice_src_cta, 'Hub uses the core plugin upgrader');
+test_assert_contains("'redirect' => admin_url( 'admin.php?page=ai_scribe_settings&hub_setup=complete' )", $p9_notice_src_cta, 'successful setup returns to AI-Scribe settings');
 
 // Static: dismiss handler is nonce + capability gated and the bootstrap wires the class.
 $p9_notice_src = file_get_contents(dirname(__DIR__, 2) . '/includes/core/class-onboarding-notice.php');
@@ -1322,6 +1321,9 @@ test_assert_contains('wp_verify_nonce', $p9_notice_src, 'dismiss handler verifie
 test_assert_contains("current_user_can( 'manage_options' )", $p9_notice_src, 'dismiss handler is capability gated');
 $p9_boot_src = file_get_contents(dirname(__DIR__, 2) . '/article_builder.php');
 test_assert_contains('AI_Scribe_Onboarding_Notice::register()', $p9_boot_src, 'bootstrap registers the onboarding notice');
+test_assert_contains('AI_Scribe_Onboarding_Notice::register_hub_setup()', $p9_boot_src, 'bootstrap registers the Hub setup surface when Hub is absent');
+test_assert(strpos($p9_boot_src, 'Requires Plugins:') === false, 'AI-Scribe remains independently installable without a core dependency header');
+test_assert_contains('HUB_SETUP_VERSION_OPTION', $p9_notice_src, 'missing-Hub setup is prompted once per AI-Scribe version for both installs and upgrades');
 test_reset_options();
 
 // ---------------------------------------------------------------------------

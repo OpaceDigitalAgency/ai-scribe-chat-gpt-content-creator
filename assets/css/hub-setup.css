@@ -1,0 +1,126 @@
+.ai-scribe-hub-setup {
+	max-width: 860px;
+	margin: 48px auto 0;
+}
+
+.ai-scribe-hub-setup__card {
+	padding: 40px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 12px;
+	box-shadow: 0 8px 30px rgba( 0, 0, 0, 0.08 );
+}
+
+.ai-scribe-hub-setup__logo {
+	display: block;
+	width: auto;
+	height: 64px;
+	margin-bottom: 24px;
+}
+
+.ai-scribe-hub-setup__eyebrow {
+	margin: 0 0 6px;
+	color: #0068b3;
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.ai-scribe-hub-setup h1 {
+	margin: 0 0 14px;
+	font-size: clamp( 28px, 4vw, 40px );
+	line-height: 1.15;
+}
+
+.ai-scribe-hub-setup__lead {
+	max-width: 700px;
+	margin: 0 0 24px;
+	color: #50575e;
+	font-size: 17px;
+	line-height: 1.6;
+}
+
+.ai-scribe-hub-setup__plugin {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	padding: 18px 20px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+}
+
+.ai-scribe-hub-setup__plugin p {
+	margin: 4px 0 0;
+	color: #646970;
+}
+
+.ai-scribe-hub-setup__plugin a {
+	white-space: nowrap;
+}
+
+.ai-scribe-hub-setup__benefits {
+	margin: 24px 0;
+	padding-left: 22px;
+	font-size: 15px;
+	line-height: 1.6;
+}
+
+.ai-scribe-hub-setup__benefits li {
+	margin-bottom: 7px;
+}
+
+.ai-scribe-hub-setup__status {
+	min-height: 22px;
+	margin: 14px 0 0;
+	font-weight: 600;
+}
+
+.ai-scribe-hub-setup__status.is-success {
+	color: #008a20;
+}
+
+.ai-scribe-hub-setup__status.is-error,
+.ai-scribe-hub-setup__permissions {
+	color: #b32d2e;
+}
+
+@media ( max-width: 782px ) {
+	.ai-scribe-hub-setup {
+		margin-top: 24px;
+	}
+
+	.ai-scribe-hub-setup__card {
+		padding: 24px;
+	}
+
+	.ai-scribe-hub-setup__plugin {
+		align-items: flex-start;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.ai-scribe-hub-setup__plugin a {
+		white-space: normal;
+	}
+}
+
+@media ( prefers-color-scheme: dark ) {
+	.ai-scribe-hub-setup__card {
+		background: #1d2327;
+		border-color: #50575e;
+		color: #f0f0f1;
+	}
+
+	.ai-scribe-hub-setup__lead,
+	.ai-scribe-hub-setup__plugin p {
+		color: #c3c4c7;
+	}
+
+	.ai-scribe-hub-setup__plugin {
+		background: #2c3338;
+		border-color: #50575e;
+	}
+}

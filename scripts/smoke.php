@@ -119,33 +119,15 @@ $checks['version_constant_agrees'] = defined('AI_SCRIBE_VERSION')
 $checks['version_alias_agrees'] = defined('AI_SCRIBE_VER')
     && defined('AI_SCRIBE_VERSION')
     && AI_SCRIBE_VER === AI_SCRIBE_VERSION;
-$checks['external_ai_core_declared'] = preg_match('/^\s*\* Requires Plugins:\s*opace-ai-prompt-library-api-hub\s*$/m', $plugin_source) === 1;
+$checks['no_core_dependency_header'] = preg_match('/^\s*\* Requires Plugins:/m', $plugin_source) !== 1;
 $checks['no_bundled_ai_core'] = !is_dir(__DIR__ . '/../ai-core');
 $checks['hub_absent_for_smoke'] = !function_exists('ai_core')
     && !AI_Scribe_Onboarding_Notice::hub_active();
 
-// Plugin container booted with all core services
-try {
-    $container = function_exists('ai_scribe_get_container') ? ai_scribe_get_container() : null;
-    $checks['container_available'] = $container instanceof AI_Scribe_Service_Container;
-    if ($container) {
-        $adapter = $container->get('ai_core_adapter');
-        $checks['adapter_resolves'] = $adapter instanceof AI_Scribe_AI_Core_Adapter;
-        $health = $adapter->get_health_status();
-        $checks['adapter_three_providers'] = isset(
-            $health['providers_available']['openai'],
-            $health['providers_available']['anthropic'],
-            $health['providers_available']['gemini']
-        );
-        $checks['adapter_has_no_grok'] = !isset($health['providers_available']['grok']);
-        $missing_hub = $adapter->generate_text('smoke-model', [['role' => 'user', 'content' => 'No request must be sent.']]);
-        $checks['adapter_fails_closed'] = is_wp_error($missing_hub)
-            && $missing_hub->get_error_code() === 'ai_core_hub_missing';
-    }
-} catch (Throwable $e) {
-    $failures[] = 'Container/adapter check failed: ' . $e->getMessage();
-    $checks['container_available'] = false;
-}
+$checks['container_not_booted_without_hub'] = empty($GLOBALS['ai_scribe_plugin_initializer']);
+$checks['setup_surface_registered'] = strpos($plugin_source, 'AI_Scribe_Onboarding_Notice::register_hub_setup()') !== false;
+$checks['runtime_guard_precedes_boot'] = strpos($plugin_source, 'AI_Scribe_Onboarding_Notice::register_hub_setup()')
+    < strrpos($plugin_source, 'ai_scribe();');
 
 // ---------------------------------------------------------------------------
 // Report

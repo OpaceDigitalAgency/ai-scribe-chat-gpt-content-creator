@@ -85,6 +85,8 @@ $ai_scribe_options = array(
 	'ai_scribe_model_remap_notice',
 	'ai_scribe_retired_params_notice',
 	'ai_scribe_onboarding_dismissed',
+	'ai_scribe_hub_setup_pending',
+	'ai_scribe_hub_setup_prompted_version',
 );
 
 foreach ( $ai_scribe_options as $ai_scribe_option ) {

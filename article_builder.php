@@ -9,8 +9,7 @@
  * Author:              Opace Digital Agency
  * Requires at least:   6.5
  * Requires PHP:        7.4
- * Requires Plugins:    opace-ai-prompt-library-api-hub
- * Version:             3.2.31
+ * Version:             3.2.32
  * License:             GPL-3.0
  * License URI:         http://www.gnu.org/licenses/gpl-3.0.txt
  *
@@ -24,9 +23,8 @@
  *
  * Opace AI Hub is required, not optional: from 3.0 the provider API keys, the model
  * lists and the usage statistics all live in the hub, so without it there is
- * nowhere to configure a model. `Requires Plugins` blocks activation on
- * WordPress 6.5+; the runtime guard below covers the hub being deactivated
- * afterwards.
+ * nowhere to configure a model. The runtime guard below keeps generation
+ * unavailable and exposes a dedicated consent-led Hub setup screen.
  */
 
 // Prevent direct access
@@ -35,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'AI_SCRIBE_VERSION', '3.2.31' ); // Used for cache busting on every enqueue
+define( 'AI_SCRIBE_VERSION', '3.2.32' ); // Used for cache busting on every enqueue
 if ( ! defined( 'AI_SCRIBE_VER' ) ) {
 	define( 'AI_SCRIBE_VER', AI_SCRIBE_VERSION ); // Back-compat alias used by copied v4 services
 }
@@ -90,8 +88,8 @@ if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
  * silently did nothing. That is exactly how Gemini shipped unable to generate
  * at all: the fix went into the copy that never loads.
  *
- * Opace AI Hub is a hard dependency (see the Requires Plugins header and the guard
- * below), so there is one copy of the library, in the hub, and no way for a
+ * Opace AI Hub is a hard runtime dependency (see the guard below), so there is
+ * one copy of the library, in the hub, and no way for a
  * fix to land in the wrong one.
  */
 
@@ -233,7 +231,7 @@ add_action(
 );
 
 if ( ! AI_Scribe_Onboarding_Notice::hub_active() ) {
-	AI_Scribe_Onboarding_Notice::register_hub_required();
+	AI_Scribe_Onboarding_Notice::register_hub_setup();
 	return;
 }
 

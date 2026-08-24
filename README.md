@@ -7,7 +7,7 @@
 <p align="center"><strong>SEO content creator and humaniser for WordPress, powered by OpenAI, Anthropic and Google Gemini.</strong></p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.2.31-087abd" alt="AI Scribe version 3.2.31">
+  <img src="https://img.shields.io/badge/version-3.2.32-087abd" alt="AI Scribe version 3.2.32">
   <img src="https://img.shields.io/badge/WordPress-6.5%2B-21759b" alt="Requires WordPress 6.5 or newer">
   <img src="https://img.shields.io/badge/tested%20up%20to-WordPress%207.1-21759b" alt="Tested up to WordPress 7.1">
   <img src="https://img.shields.io/badge/PHP-7.4%2B-777bb4" alt="Requires PHP 7.4 or newer">
@@ -111,9 +111,10 @@ The other structural change is modularity. What used to be one plugin is now two
   text + images            text only            text + images
 ```
 
-AI Scribe declares `Requires Plugins: opace-ai-prompt-library-api-hub`, so WordPress refuses activation without the hub. If
-Opace AI Hub is deactivated later, AI Scribe unhooks itself — no menu, no endpoints — and shows a notice
-with a reactivation button.
+AI Scribe and Opace AI Hub remain independently searchable and installable on WordPress.org. If AI
+Scribe is activated first, it exposes only a branded setup screen with one consented action that
+installs and activates the public Hub package. If Hub is deactivated later, AI Scribe keeps generation
+screens and endpoints unavailable and returns the administrator to setup.
 
 ### Why split it
 
@@ -129,7 +130,7 @@ always won and a bundled copy would be dead code that could silently receive a f
 There is one copy, in the hub.
 
 ```
-article_builder.php          bootstrap, constants, Requires Plugins header
+article_builder.php          bootstrap, constants, runtime Hub guard
 includes/
   core/                      config manager, migration service
   adapters/                  Opace AI Hub adapter, WP 7 core AI client adapter
@@ -324,16 +325,17 @@ retained-data reinstalls fill missing settings only and never overwrite a valid 
 
 ## Installation
 
-1. Install and activate [Opace AI Hub from WordPress.org](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/).
-   WordPress can install or activate it directly because AI Scribe declares the approved dependency slug.
-2. In Opace AI Hub → Settings, add a key for at least one provider and press Test.
-3. Install and activate AI Scribe.
+1. Install and activate AI Scribe from WordPress.org.
+2. Review the Opace AI Hub information on **Complete AI-Scribe setup**, then choose **Install and activate Opace AI Hub**.
+3. In Opace AI Hub → Settings, add a key for at least one provider and press Test.
 4. AI Scribe → Settings → Providers & Model: confirm the status chip, pick a model, then open
    Generate Article.
 
-Upgrading from 2.6.x is a normal update, but Opace AI Hub must be active first. Prompts, settings, custom
-languages, saved shortcodes and keys migrate on the first admin page load; keys are encrypted at rest
-during that migration; edited prompts are **copied** into Opace AI Hub's library, never moved.
+Hub can also be installed first, then its Add-ons screen can install and activate AI Scribe. Upgrading
+from 2.6.x is a normal update; if Hub is absent, the setup screen replaces dependency-error notices.
+Prompts, settings, custom languages, saved shortcodes and keys migrate after Hub activates; keys are
+encrypted at rest during that migration; edited prompts are **copied** into Opace AI Hub's library,
+never moved.
 
 ---
 
