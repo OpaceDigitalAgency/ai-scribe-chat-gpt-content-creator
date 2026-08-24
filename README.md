@@ -30,10 +30,30 @@ AI Scribe is independently developed by Opace Digital Agency and is not affiliat
 
 **Compatibility:** requires WordPress 6.5 or newer and has been tested up to **WordPress 7.1**.
 
-AI Scribe writes long-form, search-optimised articles inside WordPress. An eleven-step wizard takes an
+AI Scribe is a free, open-source SEO AI writer, content generator and humaniser. It writes long-form,
+search-optimised articles inside WordPress. An eleven-step wizard takes an
 idea through titles, keywords, outline, body, conclusion, Q&A and SEO meta; Express mode starts with one
 structured whole-article generation. Optional length improvements are separate requests. Output goes to a draft, a published post, or a saved shortcode you can drop into
 any page builder.
+
+## What AI Scribe does
+
+- Guides an article through titles, keywords, outline, introduction, tagline, body, conclusion, Q&A,
+  SEO metadata, Review and Evaluate, or creates a complete first draft in Express mode.
+- Keeps the whole article in one conversation so later sections retain earlier context.
+- Discovers compatible writing and image models from your OpenAI, Anthropic or Gemini account.
+- Makes prompts and results editable, with saved AI Scribe prompts and shared Hub prompts.
+- Applies language, style, tone, spelling, writing mode and reusable Custom Instructions.
+- Measures article length and preserves a usable draft if a later improvement fails.
+- Labels keyword demand as an unverified AI estimate and links to Google Trends for comparison.
+- Generates and manages compatible OpenAI or Gemini featured and section images in Image Studio.
+- Reports estimated, actual and running provider cost when trustworthy Hub pricing is available.
+- Stores SEO metadata and focus keywords for Yoast SEO, Rank Math, AIOSEO or SEOPress.
+- Saves a draft, published post or shortcode for the block editor, Classic Editor, page builders,
+  widgets and ACF fields.
+
+AI Scribe supports the editorial process; the user remains responsible for checking, editing and
+approving everything before publication.
 
 ---
 
@@ -206,6 +226,25 @@ working, and only a genuine authentication failure marks a key as bad.
   contents links, internal contextual links and external links are reported separately; editorial
   judgements are labelled for human confirmation rather than presented as measured facts.
 
+## Prompts and writing controls
+
+Every Wizard step shows the prompt that will guide the selected model. Editing it does not silently
+change a request: choose **Run amended prompt** to use the revised wording once. A one-run amendment
+takes priority, followed by an applied Hub prompt or a saved AI Scribe prompt; built-in wording is the
+fallback. Custom Instructions are appended last so brand rules take final priority.
+
+Supported placeholders are `[Idea]`, `[Title]`, `[Selected Keywords]`, `[Heading]`, `[Outline]`,
+`[Intro]`, `[The Tagline]`, `[above/below]`, `[Language]`, `[Style]`, `[Tone]`, `[No. Headings]`,
+`[Heading Tag]` and `[Keywords to Avoid]`. Keep the square brackets and use only the values relevant
+to the step.
+
+- **Standard** aims for clear, direct copy governed by the chosen style, tone and instructions.
+- **Humanizer** encourages more varied sentence structure and natural phrasing.
+- **Humanizer with Personality** permits a more distinctive, informal voice where appropriate.
+
+The modes change writing guidance, not authorship. They cannot guarantee originality, rankings or a
+particular result from an AI-detection tool.
+
 ## Video walkthrough
 
 [![Watch the current AI Scribe v3 walkthrough](https://img.youtube.com/vi/NkXMf-rl6TE/maxresdefault.jpg)](https://www.youtube.com/watch?v=NkXMf-rl6TE)
@@ -295,6 +334,133 @@ retained-data reinstalls fill missing settings only and never overwrite a valid 
 Upgrading from 2.6.x is a normal update, but Opace AI Hub must be active first. Prompts, settings, custom
 languages, saved shortcodes and keys migrate on the first admin page load; keys are encrypted at rest
 during that migration; edited prompts are **copied** into Opace AI Hub's library, never moved.
+
+---
+
+## Frequently asked questions
+
+### Is AI Scribe free, and are there any other costs?
+
+AI Scribe and Opace AI Hub are free, open-source WordPress plugins. OpenAI, Anthropic or Google bills
+API usage separately under its own prices and terms. AI Scribe reports costs when the Hub has
+trustworthy pricing; the provider account remains the billing authority.
+
+### Where do I get and enter an API key?
+
+Create a key through [OpenAI](https://platform.openai.com/api-keys),
+[Anthropic](https://console.anthropic.com/settings/keys) or
+[Google AI Studio](https://aistudio.google.com/apikey), then enter and test it under Opace AI Hub →
+Settings. Never put a key in a prompt or public support request. Compatible WordPress 7 AI Connector
+credentials can also be used when the corresponding connector is installed and configured.
+
+### Which models are supported, and how are they kept current?
+
+AI Scribe accepts writing and still-image models exposed by the configured accounts. The Hub fetches
+provider lists, caches them for one hour and falls back to its maintained registry only if live
+discovery is unavailable. Use **Refresh models** to bypass the cache. AI Scribe → Settings is the
+authority for a particular account; the dated catalogue above is a reproducible snapshot, not a fixed
+allowlist.
+
+### How do tokens, costs and word targets work?
+
+Tokens may be words, word fragments, punctuation or spaces. Four English characters or three-quarters
+of a word per token is only a rough estimate. A model's context has to contain instructions,
+conversation history and output. Provider charges normally depend on input/output tokens and image
+options. AI Scribe shows **Cost unavailable** rather than a false zero when reliable pricing is absent.
+Choose Auto, a preset or a custom word target; a failed improvement never removes the retained draft.
+
+### How do I customise prompts and use placeholders?
+
+Edit a step prompt and choose **Run amended prompt** for one run, save an AI Scribe prompt for reuse,
+or apply a shared Hub prompt. Placeholders insert the article values listed under
+[Prompts and writing controls](#prompts-and-writing-controls). Custom Instructions are applied last.
+
+### What are Custom Instructions, and how do I establish a brand voice?
+
+They are reusable rules sent with every writing request. Combine them with language, style, tone,
+spelling and writing mode for brand terminology, audience, formatting, preferred wording, banned
+phrases and prohibited claims. Give concrete examples and review the result because a model can still
+misinterpret an instruction.
+
+### What if I do not like the content?
+
+Edit the result, choose **Regenerate**, or amend the prompt and select **Run amended prompt**. Refine
+the saved prompt or Custom Instructions for later runs. Responses vary even when wording is unchanged,
+so retain and improve the best useful draft.
+
+### What if nothing appears, the result is incomplete or it times out?
+
+Check the provider-status chip and selected model, then retry once. If failures continue, refresh the
+model list, choose a faster model, request less content or ask the host about PHP and web-server time
+limits. Report the step and provider, but never an API key or private article content.
+
+### Why did AI Scribe say that my model was updated?
+
+An upgrade or reinstall found the untouched legacy `gpt-4o-mini` default or a retired model, so AI
+Scribe selected a current valid Hub default and identified both choices. It does not replace a valid
+model explicitly saved by the user.
+
+### Do my 2.6 settings and prompts survive the upgrade?
+
+Yes. Keys, content settings, custom languages and saved shortcodes migrate without overwriting existing
+values. Edited prompts are copied once to the Hub's AI-Scribe group, not moved; interrupted migration
+resumes and an existing same-name Hub prompt is preserved.
+
+### Are keyword volumes measured, and what does Evaluate verify?
+
+Keyword demand bands are labelled unverified AI estimates; Google Trends shows relative interest and
+seasonality, not monthly volume. Evaluate measures facts in final Review HTML such as images, alt
+markup, headings, contents anchors and links. Originality, authority and writing quality need human
+judgement.
+
+### Does it work with SEO plugins, editors and page builders?
+
+Yes. It integrates with Yoast SEO, Rank Math, AIOSEO and SEOPress. Standard post content works with the
+block and Classic Editors; shortcodes work in Divi, Elementor, widgets and ACF fields.
+
+### How should I check originality and duplicate content?
+
+Search distinctive passages and use a suitable originality or plagiarism service if the editorial
+process requires one. Add first-hand expertise, verify sources and rewrite generic passages. AI Scribe
+and its Humanizer modes cannot certify originality or guarantee an AI-detector result.
+
+### Do prompts, content or keys pass through Opace's servers?
+
+No. Provider keys are managed by the Hub and requests go directly from the WordPress site to the
+selected provider. Provider terms and billing apply. AI Scribe never renders provider keys into its
+page.
+
+### Does uninstalling remove my data?
+
+Only when the administrator opts into the delete-on-uninstall setting. Otherwise settings,
+conversations and saved shortcodes remain available for a reinstall.
+
+### Who created AI Scribe, and where can I get help?
+
+AI Scribe was designed and developed by [Opace Digital Agency](https://opace.agency/), a UK digital
+agency. Report bugs and suggestions through the
+[WordPress.org support forum](https://wordpress.org/support/plugin/ai-scribe-the-chatgpt-powered-seo-content-creation-wizard/).
+This free, community-supported project provides best-effort support focused on critical defects,
+compatibility and useful improvements.
+
+## Community, editorial guidance and roadmap
+
+AI Scribe grew from Opace's aim to bring keyword-led, controllable SEO drafting into WordPress. User
+feedback and the wider prompt-writing community have helped shape it. If it helps, please
+[leave a WordPress.org review](https://wordpress.org/support/plugin/ai-scribe-the-chatgpt-powered-seo-content-creation-wizard/reviews/#new-post).
+You can also [contact Opace](https://opace.agency/get-in-touch/), follow
+[Opace on Facebook](https://www.facebook.com/opacewebdesign) or follow
+[Opace on X](https://x.com/OpaceWeb).
+
+Before publishing, verify facts, quotations and sources; remove repetition and keyword stuffing;
+check keyword demand using a trusted source; add first-hand expertise and useful links; check image
+rights, alt text, captions and personal data; and review the final post in WordPress and the active SEO
+plugin.
+
+Ideas under consideration include provider-supported token streaming, optional verified keyword data,
+source research with explicit provenance and approval, confirmed batch planning, WooCommerce content
+workflows and deeper provider-neutral SEO previews. These are directions, not commitments or release
+dates; suggestions belong in the support forum.
 
 ---
 

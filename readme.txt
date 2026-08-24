@@ -1,6 +1,6 @@
 === Opace AI Scribe: SEO Content Creator & Humanizer for OpenAI, Anthropic & Gemini ===
 Contributors: opacewebdesign
-Tags: AI Writer, Content Generator, AI Content Creator, AI, SEO
+Tags: AI Writer, Content Generator, Content Creator, AI, SEO
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -14,11 +14,11 @@ AI SEO content writer and humaniser for OpenAI, Anthropic and Gemini. Eleven-ste
 
 == Description ==
 
-**AI Scribe** is an SEO AI writer, content generator and humaniser for OpenAI, Anthropic and Google Gemini, with optional support for the WordPress 7 core AI client.
+**AI Scribe** is a free, open-source SEO AI writer, content generator and humaniser for WordPress. It helps you turn an idea into an editable, search-focused article with OpenAI, Anthropic Claude or Google Gemini, with optional support for the WordPress 7 core AI client.
 
 AI Scribe is independently developed by Opace Digital Agency and is not affiliated with, endorsed by or sponsored by OpenAI, Anthropic or Google.
 
-Version 3 keeps the whole article in one conversation, so later sections are written with the title, outline and existing copy in context. Use the guided 11-step Wizard or Express mode for a complete first draft.
+Version 3 keeps the whole article in one conversation, so later sections are written with the title, outline and existing copy in context. Use the guided 11-step Wizard for control at every stage, or Express mode for a complete first draft. AI Scribe supports the process; you remain responsible for checking, editing and approving everything before publication.
 
 = Required Opace AI Hub =
 
@@ -32,13 +32,34 @@ Add OpenAI, Anthropic or Google Gemini keys in the Hub. Models are fetched from 
 
 OpenAI and Gemini can supply text and images. Claude supplies text, so pair Anthropic with OpenAI or Gemini if you want Claude writing plus generated images. Audio, realtime, embedding, video, code, research and other specialist Hub models are deliberately excluded.
 
-= Wizard, Express and prompts =
+= Core features =
 
-The Wizard covers titles, keywords, outline, introduction, tagline, body, conclusion, Q&A, SEO meta, Review and Evaluate. Results and prompts stay editable. Choose Auto, a preset or a custom word target; visible counts and safe improvement actions retain the usable draft if a request fails.
+* **Guided or fast drafting:** use the 11-step Wizard for titles, keywords, outline, introduction, tagline, body, conclusion, Q&A, SEO meta, Review and Evaluate, or use Express for a structured whole-article draft.
+* **One threaded article:** later steps retain the title, outline and existing copy, reducing repetition and disconnected sections.
+* **Live provider choice:** select compatible writing and image models exposed by your own OpenAI, Anthropic or Gemini account.
+* **Editable prompts and results:** amend a prompt for one run, save step prompts in AI Scribe or apply shared prompts from Opace AI Hub.
+* **Brand and language controls:** set language, style, tone, British or American spelling, banned phrases and reusable Custom Instructions.
+* **Three writing modes:** choose Standard, Humanizer or Humanizer with Personality for different levels of voice and informality.
+* **Measured article length:** choose Auto, a preset or a custom word target; visible counts and safe improvement actions retain the usable draft if a request fails.
+* **Honest keyword guidance:** qualitative demand bands are labelled unverified AI estimates and link to Google Trends rather than claiming invented monthly volumes.
+* **Image Studio:** create, caption, place, replace and remove compatible OpenAI or Gemini featured and section images.
+* **Visible costs:** see estimated, actual and running provider spend when trustworthy pricing is available.
+* **SEO and editorial checks:** generate metadata and focus keywords, then separate measured structural checks from judgements requiring human review.
+* **Flexible output:** save a draft or published post, or create a reusable shortcode for page builders, widgets and custom fields.
+* **WordPress integrations:** supports the block and Classic Editors plus Yoast SEO, Rank Math, AIOSEO and SEOPress.
+* **Responsive, permission-aware admin:** authors can write; administrators manage settings and saved shortcodes.
 
-Express returns a structured whole-article draft in one starting request. The threaded workflow reduces resent context and repetition. Keyword demand bands are labelled unverified AI estimates and include Google Trends links rather than invented monthly volumes.
+= Prompts, placeholders and writing modes =
 
-Use built-in prompts, your saved AI Scribe prompt, or a shared Hub prompt. A one-run amended prompt has highest priority. Custom Instructions apply brand voice, spelling and banned phrases last. Writing modes are Standard, Humanizer and Humanizer with Personality.
+Every Wizard step shows the prompt that will guide the selected model. Editing the visible prompt does not silently change a request: choose **Run amended prompt** to use it once. A one-run amendment takes priority, followed by an applied Hub prompt or your saved AI Scribe prompt; built-in wording remains the fallback. Custom Instructions are appended last so your brand rules take final priority.
+
+Prompt placeholders insert the current article choices when the request runs. Available placeholders include `[Idea]`, `[Title]`, `[Selected Keywords]`, `[Heading]`, `[Outline]`, `[Intro]`, `[The Tagline]`, `[above/below]`, `[Language]`, `[Style]`, `[Tone]`, `[No. Headings]`, `[Heading Tag]` and `[Keywords to Avoid]`. Use only placeholders relevant to that step and keep the square brackets intact.
+
+* **Standard:** clear, direct writing guided by your selected style, tone, spelling and instructions.
+* **Humanizer:** varies sentence structure and uses more natural phrasing while retaining the article brief and SEO controls.
+* **Humanizer with Personality:** adds a more distinctive, informal voice where the subject and audience suit it.
+
+These modes change writing guidance, not authorship. They cannot guarantee originality, rankings or a particular result from an AI-detection tool.
 
 = Images, costs, SEO and output =
 
@@ -71,9 +92,17 @@ Upgrading from 2.6.x is a normal one-click update, but Opace AI Hub must be inst
 
 == Frequently Asked Questions ==
 
+= Is AI Scribe free, and are there any other costs? =
+
+AI Scribe and the required Opace AI Hub are free, open-source WordPress plugins. The provider you choose charges separately for API usage under its own account, prices and terms. AI Scribe shows an estimate and running cost when the Hub has trustworthy pricing, but your provider account is the billing authority.
+
 = Do I really need Opace AI Hub? =
 
 Yes. The Hub stores keys, discovers models, records usage and supplies shared prompts. With Anthropic alone, writing works but image controls are hidden. Add OpenAI or Gemini for images; any mixture of the three providers works.
+
+= Where can I get and enter an API key? =
+
+Create a key in the provider account you want to use: [OpenAI API keys](https://platform.openai.com/api-keys), [Anthropic Console keys](https://console.anthropic.com/settings/keys) or [Google AI Studio keys](https://aistudio.google.com/apikey). Enter it under Opace AI Hub → Settings, then test it there. Never post a key in a support request or paste it into an article prompt. Compatible WordPress 7 AI Connector credentials may also be used when that provider connector is installed and configured.
 
 = Which models are supported? =
 
@@ -96,6 +125,46 @@ Showcased current families include:
 
 Use Refresh models in Settings for the exact identifiers available to your account. The [complete Hub catalogue](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/#description) also groups specialist identifiers that AI Scribe deliberately excludes.
 
+= How are models kept current? =
+
+The Hub requests the model list from each configured provider and caches it for one hour. AI Scribe filters that list to compatible writing and still-image capabilities. Use **Refresh models** to bypass the cache. A maintained Hub registry is only a fallback when live discovery is unavailable; your Settings screen is authoritative for your account.
+
+= How do tokens and model limits work? =
+
+Models process text as tokens, which may be whole words, parts of words, punctuation or spaces. In English, one token is often around four characters or three-quarters of a word, but this is only a rough estimate. A model's context limit must cover instructions, conversation history and output together. Limits vary by model and account, so shorten the requested article or choose a suitable model if a long request exceeds them.
+
+= How do costs and word targets work? =
+
+Provider charges normally depend on input/output tokens and, for images, the selected model and options. AI Scribe shows estimated, actual and running costs when trustworthy Hub pricing exists and says **Cost unavailable** otherwise. Choose Auto, a preset or a custom word target. Visible counts, preferred ranges and optional improvement requests never discard a usable draft after failure.
+
+= How can I customise and save prompts? =
+
+Edit the visible prompt at a Wizard step and choose **Run amended prompt** for a one-off request. Save a reusable AI Scribe step prompt in Settings, or apply a shared prompt from Opace AI Hub. A one-run amendment has highest priority; Custom Instructions are applied last. Your current result remains available if the amended request fails.
+
+= What are prompt placeholders? =
+
+Placeholders insert current article choices when a prompt runs. AI Scribe supports `[Idea]`, `[Title]`, `[Selected Keywords]`, `[Heading]`, `[Outline]`, `[Intro]`, `[The Tagline]`, `[above/below]`, `[Language]`, `[Style]`, `[Tone]`, `[No. Headings]`, `[Heading Tag]` and `[Keywords to Avoid]`. Keep the brackets and use placeholders that make sense for the step.
+
+= What are Custom Instructions? =
+
+Custom Instructions are reusable rules added to every writing request after the step prompt. Use them for brand terminology, preferred spelling, audience, formatting, phrases to avoid and non-negotiable editorial rules. They apply across OpenAI, Anthropic and Gemini rather than being limited to a particular ChatGPT model.
+
+= How do I keep the content aligned with my brand voice and tone? =
+
+Set the language, writing style, tone, spelling and writing mode under AI Scribe → Settings → Generation, then add precise brand rules to Custom Instructions. Give concrete examples of preferred wording and prohibited claims. Review the output because a model can still miss or misinterpret instructions.
+
+= What is the difference between the three writing modes? =
+
+**Standard** aims for clear, direct copy governed by your chosen style and tone. **Humanizer** encourages more varied sentence structure and natural phrasing. **Humanizer with Personality** permits a more distinctive, informal voice where appropriate. None can guarantee originality, search rankings or an AI-detector result.
+
+= What if I do not like the generated content? =
+
+Edit the result directly, select **Regenerate**, or change the visible prompt and choose **Run amended prompt**. You can also refine the saved prompt, style, tone or Custom Instructions for future runs. AI responses vary, so a second request may differ even without a prompt change; always keep and improve the best useful draft.
+
+= What if nothing appears, the result is incomplete or a request times out? =
+
+Check the provider-status chip and confirm that a valid live model is selected. Retry once; for repeated failures, refresh the model list, choose a faster model, request less content or ask your host about PHP and web-server time limits. AI Scribe retains an existing usable draft when a later improvement fails. Report persistent errors with the step and provider, but never include an API key or private article content.
+
 = Why did I see an "AI-Scribe model updated" notice after installing? =
 
 An upgrade or reinstall retained either the untouched legacy `gpt-4o-mini` default or a retired model. AI Scribe selects a current valid Hub default and names both models. It never replaces a valid model you explicitly saved.
@@ -107,10 +176,6 @@ They are copied once into the Hub's "AI-Scribe" group and linked to their steps.
 = Will my other 2.6 settings survive? =
 
 Yes. API keys, content settings, custom languages and saved shortcodes migrate automatically. Existing values are not overwritten. Carried-over keys are encrypted at rest in the Hub.
-
-= How do costs and word counts work? =
-
-You pay the provider's API rates. AI Scribe shows costs when trustworthy pricing exists and says **Cost unavailable** otherwise. Choose Auto, a preset or a custom word target. Visible counts, ranges and optional improvement requests never discard the usable draft after failure.
 
 = Are keyword search volumes measured? =
 
@@ -124,21 +189,21 @@ It measures structural facts from the final Review HTML, including images, alt m
 
 No. Keys are managed by Opace AI Hub; requests go directly from your WordPress site to your chosen provider. AI Scribe only shows provider status and never renders keys into its page.
 
-= Where are Humanizer and spelling settings? =
-
-Use Settings → Generation. Choose Standard, Humanizer or Humanizer with Personality, and British or American English. Custom Instructions are applied last, so your brand rules win.
-
 = Does it work with SEO plugins and page builders? =
 
 Yes. It integrates with Yoast SEO, Rank Math, AIOSEO and SEOPress. Standard post content works with WordPress editors, while saved shortcodes work in Divi, Elementor, widgets and ACF fields.
 
-= What if generation is blank or times out? =
+= How should I check originality and duplicate content? =
 
-Keep the retained draft, check the provider-status chip, then retry. For repeated timeouts, use a faster model, reduce the requested length or ask your host about PHP/web-server time limits. Report persistent errors in the support forum with the step and provider, but never post an API key or private article content.
+Search distinctive passages and use an appropriate originality or plagiarism-checking service if your editorial process requires one. Add first-hand expertise, verify sources and rewrite generic sections. AI Scribe and its Humanizer modes cannot certify originality or promise how an AI detector will classify text.
 
 = Does uninstalling remove my data? =
 
 Only if you opt in through the delete-on-uninstall setting. Otherwise settings, conversations and saved shortcodes are retained.
+
+= Who created AI Scribe, and where can I get help? =
+
+AI Scribe was designed and developed by [Opace Digital Agency](https://opace.agency/), a UK digital agency. Use the [WordPress.org support forum](https://wordpress.org/support/plugin/ai-scribe-the-chatgpt-powered-seo-content-creation-wizard/) for bugs and suggestions. It is a free, community-supported project, so support is best-effort and prioritises critical defects, compatibility and useful improvements.
 
 == AI-Scribe GPT ==
 
@@ -152,7 +217,7 @@ https://www.youtube.com/watch?v=NkXMf-rl6TE
 
 == Community, support and contact ==
 
-AI Scribe is free and community-supported. Report bugs or suggest improvements through the [WordPress.org support forum](https://wordpress.org/support/plugin/ai-scribe-the-chatgpt-powered-seo-content-creation-wizard/). If the plugin helps you, please [leave a WordPress.org review](https://wordpress.org/support/plugin/ai-scribe-the-chatgpt-powered-seo-content-creation-wizard/reviews/#new-post).
+AI Scribe is free, open source and community-supported. It grew from Opace's aim to bring keyword-led, controllable SEO drafting into WordPress; feedback from users and the wider prompt-writing community has helped shape it. Support is best-effort and prioritises critical defects, compatibility and useful improvements. Report bugs or suggest improvements through the [WordPress.org support forum](https://wordpress.org/support/plugin/ai-scribe-the-chatgpt-powered-seo-content-creation-wizard/). If the plugin helps you, please [leave a WordPress.org review](https://wordpress.org/support/plugin/ai-scribe-the-chatgpt-powered-seo-content-creation-wizard/reviews/#new-post).
 
 AI Scribe is designed and developed by [Opace Digital Agency](https://opace.agency/), a UK digital agency providing [WordPress development](https://opace.agency/services/web-design/wordpress-development/). You can [contact Opace](https://opace.agency/get-in-touch/), follow [Opace on Facebook](https://www.facebook.com/opacewebdesign) or follow [Opace on X](https://x.com/OpaceWeb).
 
@@ -164,8 +229,9 @@ AI-generated text needs human review. Before publishing:
 2. Write for the reader first. Remove repetition, keyword stuffing and text that does not answer the search intent.
 3. Verify keyword demand with a trusted data source. AI Scribe's demand bands are clearly labelled unverified estimates; Google Trends links show relative interest, not monthly volume.
 4. Add first-hand knowledge, useful examples, internal links and properly reviewed external sources where they genuinely help.
-5. Check image rights, alt text, captions, personal data and any disclosure required by your organisation or jurisdiction.
-6. Review the final post in WordPress and in your SEO plugin before publishing. Humanizer changes writing style; it cannot guarantee rankings, originality or any AI-detector result.
+5. Search distinctive passages and use an appropriate originality or plagiarism-checking service if your editorial process requires one.
+6. Check image rights, alt text, captions, personal data and any disclosure required by your organisation or jurisdiction.
+7. Review the final post in WordPress and in your SEO plugin before publishing. Humanizer changes writing style; it cannot guarantee rankings, originality or any AI-detector result.
 
 == Potential future updates ==
 
