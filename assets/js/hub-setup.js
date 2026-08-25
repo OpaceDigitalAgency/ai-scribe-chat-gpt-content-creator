@@ -8,14 +8,19 @@
 	}
 
 	button.addEventListener( 'click', function () {
+		var requestedAction = button.getAttribute( 'data-action' );
+		if ( 'install' !== requestedAction && 'activate' !== requestedAction ) {
+			return;
+		}
 		button.disabled = true;
 		button.setAttribute( 'aria-busy', 'true' );
 		status.className = 'ai-scribe-hub-setup__status';
-		status.textContent = aiScribeHubSetup.strings.working;
+		status.textContent = 'install' === requestedAction ? aiScribeHubSetup.strings.installing : aiScribeHubSetup.strings.activating;
 
 		var body = new URLSearchParams();
 		body.set( 'action', aiScribeHubSetup.action );
 		body.set( 'nonce', aiScribeHubSetup.nonce );
+		body.set( 'setup_action', requestedAction );
 
 		window.fetch( aiScribeHubSetup.ajaxUrl, {
 			method: 'POST',
@@ -32,6 +37,14 @@
 				}
 				status.classList.add( 'is-success' );
 				status.textContent = response.data.message;
+				if ( response.data.next_action ) {
+					button.setAttribute( 'data-action', response.data.next_action );
+					button.textContent = response.data.button_label;
+					button.disabled = false;
+					button.removeAttribute( 'aria-busy' );
+					button.focus();
+					return;
+				}
 				window.location.assign( response.data.redirect );
 			} )
 			.catch( function ( error ) {

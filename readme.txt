@@ -4,7 +4,7 @@ Tags: AI Writer, Content Generator, Content Creator, AI, SEO
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 3.2.32
+Stable tag: 3.2.34
 License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://opace.agency/get-in-touch
@@ -21,7 +21,7 @@ Version 3 keeps the whole article in one conversation, so later sections are wri
 
 = Required Opace AI Hub =
 
-The free [Opace AI Hub](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/) is required at runtime. It stores provider keys, discovers models, supplies pricing and shares prompts. AI Scribe owns the writing interface and sends requests directly from your site through the Hub; nothing is routed through Opace's servers. Both plugins remain independently searchable and installable on WordPress.org. If AI Scribe is installed first, its branded setup screen explains the Hub and installs and activates it after one explicit click.
+The free [Opace AI Hub](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/) is required at runtime. It stores provider keys, discovers models, supplies pricing and shares prompts. AI Scribe owns the writing interface and sends requests directly from your site through the Hub; nothing is routed through Opace's servers. Both plugins remain independently searchable and installable on WordPress.org. If AI Scribe is installed first, its Plugins row links directly to the branded setup screen, where installation and activation are two explicit actions.
 
 = Live providers and models =
 
@@ -80,16 +80,16 @@ This plugin connects only to the AI provider APIs you configure with your own AP
 
 Requests only happen when you run the wizard, Express mode, image generation, or open a screen that lists models or checks key status; no data is transmitted in the background.
 
-During the one-time companion setup, choosing **Install and activate Opace AI Hub** asks WordPress to retrieve the public Hub package from [WordPress.org](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/). WordPress.org receives the normal plugin-download request; AI Scribe does not send it API keys, prompts, article content or Hub settings.
+During the one-time companion setup, choosing **Install Opace AI Hub** asks WordPress to retrieve the public Hub package from [WordPress.org](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/). WordPress.org receives the normal plugin-download request; AI Scribe does not send it API keys, prompts, article content or Hub settings. Installation stops for the administrator to review and choose **Activate Opace AI Hub and continue**.
 
 == Installation ==
 
 1. Install and activate AI Scribe from the Plugins screen.
-2. On **Complete AI-Scribe setup**, review the Opace AI Hub details and choose **Install and activate Opace AI Hub**. If Hub is already installed, the same screen activates it instead.
+2. On **Complete AI-Scribe setup**, review the Opace AI Hub details and choose **Install Opace AI Hub**, then **Activate Opace AI Hub and continue**. If Hub is already installed, the setup opens directly at the activation step.
 3. In Opace AI Hub → Settings, add an API key for at least one provider: OpenAI, Anthropic or Google Gemini.
 4. Open AI Scribe → Settings → Providers & Model. Check that your provider shows as configured, pick a model (Refresh models re-fetches the live list), then open Generate Article and start writing.
 
-You can also install Hub first and choose **Install and activate AI-Scribe** from its Add-ons screen. Upgrading from 2.6.x is a normal one-click update. If Hub is not present, AI Scribe opens the same setup screen instead of showing dependency errors; its generation screens and endpoints remain unavailable until setup is complete, and existing data stays untouched. Saved prompts, content settings, custom languages, saved shortcodes and API keys migrate after Hub activates, keys carried over from 2.6.x are encrypted at rest, and edited prompts are copied into Opace AI Hub's library.
+You can also install Hub first and choose **Install AI-Scribe**, then **Activate AI-Scribe and continue**, from its Add-ons screen. Upgrading from 2.6.x is a normal one-click update. If Hub is not present, AI Scribe opens the same setup screen instead of showing dependency errors; its generation screens and endpoints remain unavailable until setup is complete, and existing data stays untouched. Saved prompts, content settings, custom languages, saved shortcodes and API keys migrate after Hub activates, keys carried over from 2.6.x are encrypted at rest, and edited prompts are copied into Opace AI Hub's library.
 
 == Frequently Asked Questions ==
 
@@ -260,6 +260,8 @@ Please add roadmap suggestions through the support forum rather than treating th
 
 == Changelog ==
 
+* **3.2.34:** Added a Finish setup action and native inline Hub setup warning beneath AI-Scribe's Plugins row when the Hub is missing or inactive.
+* **3.2.33:** Split companion installation and activation into two explicit in-card actions while retaining the clean setup screen and notice-free Plugins experience.
 * **3.2.32:** Added a branded one-action Opace AI Hub installer/activator, kept AI Scribe independently installable and removed overlapping dependency and retired 3.0 welcome notices.
 * **3.2.31:** Made the complete reachable admin, Wizard, Express and generation interface translation-ready, including JavaScript feedback, validation and editorial evaluation text.
 * **3.2.30:** Aligned runtime providers and disclosures; restored complete public documentation; added dated model totals and current-family highlights.
@@ -321,6 +323,13 @@ Please add roadmap suggestions through the support forum rather than treating th
 * **1.0.0:** Initial release.
 
 == Upgrade Notice ==
+
+= 3.2.34 =
+
+When Opace AI Hub needs setup, AI-Scribe now links to the setup screen directly from its Plugins row.
+
+= 3.2.33 =
+Installs Opace AI Hub in the branded setup card, then waits for an explicit Activate and continue action without showing dependency notices.
 
 = 3.2.32 =
 Completes Opace AI Hub setup in one consented install-and-activate action without overlapping dependency notices.

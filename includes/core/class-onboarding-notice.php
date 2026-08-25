@@ -11,7 +11,8 @@
  * Also renders the one-time model-remap notice the migration records in
  * `ai_scribe_model_remap_notice` (§15.1: remap must be visible, never silent).
  * When Opace AI Hub is missing, this class owns a dedicated setup screen that
- * installs and activates the public Hub package after one explicit consent.
+	 * installs the public Hub package after explicit consent, then waits for a
+	 * second explicit administrator action before activation.
  *
  * @package AI_Scribe
  * @subpackage Core
@@ -147,6 +148,70 @@ class AI_Scribe_Onboarding_Notice {
 		add_action( 'admin_init', array( __CLASS__, 'maybe_redirect_to_hub_setup' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_hub_setup_assets' ) );
 		add_action( 'wp_ajax_' . self::HUB_AJAX_ACTION, array( __CLASS__, 'handle_prepare_hub' ) );
+		add_filter( 'plugin_action_links_' . plugin_basename( AI_SCRIBE_FILE ), array( __CLASS__, 'add_hub_setup_action_link' ) );
+		add_action( 'after_plugin_row_' . plugin_basename( AI_SCRIBE_FILE ), array( __CLASS__, 'render_hub_setup_plugin_row' ), 10, 3 );
+	}
+
+	/**
+	 * Add a direct setup action beneath AI-Scribe on the Plugins screen.
+	 *
+	 * @param array $links Existing plugin action links.
+	 * @return array
+	 */
+	public static function add_hub_setup_action_link( $links ) {
+		if ( self::hub_active() ) {
+			return $links;
+		}
+
+		$setup_link = sprintf(
+			'<a class="ai-scribe-finish-setup" href="%1$s" aria-label="%2$s">%3$s</a>',
+			esc_url( admin_url( 'admin.php?page=' . self::HUB_SETUP_PAGE ) ),
+			esc_attr__( 'Finish AI-Scribe setup', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			esc_html__( 'Finish setup', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' )
+		);
+		array_unshift( $links, $setup_link );
+
+		return $links;
+	}
+
+	/**
+	 * Render a native WordPress warning directly beneath AI-Scribe's plugin row.
+	 *
+	 * @param string $plugin_file Plugin file relative to the plugins directory.
+	 * @param array  $plugin_data Plugin header data.
+	 * @param string $status      Current plugin-list status view.
+	 * @return void
+	 */
+	public static function render_hub_setup_plugin_row( $plugin_file, $plugin_data, $status ) {
+		unset( $plugin_data, $status );
+
+		if ( plugin_basename( AI_SCRIBE_FILE ) !== $plugin_file || self::hub_active() ) {
+			return;
+		}
+
+		global $wp_list_table;
+		$column_count = is_object( $wp_list_table ) && method_exists( $wp_list_table, 'get_column_count' ) ? $wp_list_table->get_column_count() : 4;
+		$setup_url   = admin_url( 'admin.php?page=' . self::HUB_SETUP_PAGE );
+		$message     = sprintf(
+			'<strong>%1$s</strong> %2$s <a class="button button-small" href="%3$s">%4$s</a>',
+			esc_html__( 'Opace AI Hub setup required.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			esc_html__( 'AI-Scribe needs its free companion plugin.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			esc_url( $setup_url ),
+			esc_html__( 'Finish setup', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' )
+		);
+		$notice      = wp_get_admin_notice(
+			$message,
+			array(
+				'type'               => 'warning',
+				'additional_classes' => array( 'inline', 'notice-alt', 'ai-scribe-hub-row-notice' ),
+			)
+		);
+
+		printf(
+			'<tr class="plugin-update-tr active" id="ai-scribe-hub-setup-row"><td colspan="%1$d" class="plugin-update colspanchange">%2$s</td></tr>',
+			(int) $column_count,
+			wp_kses_post( $notice )
+		);
 	}
 
 	/**
@@ -250,8 +315,9 @@ class AI_Scribe_Onboarding_Notice {
 				'action'  => self::HUB_AJAX_ACTION,
 				'nonce'   => wp_create_nonce( self::HUB_NONCE_ACTION ),
 				'strings' => array(
-					'working' => __( 'Installing and activating Opace AI Hub…', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
-					'failed'  => __( 'Opace AI Hub could not be prepared. Please try again.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					'installing' => __( 'Installing Opace AI Hub…', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					'activating' => __( 'Activating Opace AI Hub…', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					'failed'     => __( 'Opace AI Hub could not be prepared. Please try again.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 				),
 			)
 		);
@@ -264,7 +330,8 @@ class AI_Scribe_Onboarding_Notice {
 	 */
 	public static function render_hub_setup_page() {
 		$hub_file = self::installed_hub_file();
-		$can_prepare = current_user_can( 'activate_plugins' ) && ( '' !== $hub_file || current_user_can( 'install_plugins' ) );
+		$setup_action = '' !== $hub_file ? 'activate' : 'install';
+		$can_prepare = 'activate' === $setup_action ? current_user_can( 'activate_plugins' ) : current_user_can( 'install_plugins' );
 		?>
 		<div class="wrap ai-scribe-hub-setup" data-testid="ai-scribe-hub-setup">
 			<div class="ai-scribe-hub-setup__card">
@@ -288,8 +355,8 @@ class AI_Scribe_Onboarding_Notice {
 				</ul>
 
 				<?php if ( $can_prepare ) : ?>
-					<button type="button" class="button button-primary button-hero" id="ai-scribe-prepare-hub" data-testid="ai-scribe-prepare-hub">
-						<?php echo '' !== $hub_file ? esc_html__( 'Activate Opace AI Hub', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) : esc_html__( 'Install and activate Opace AI Hub', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
+					<button type="button" class="button button-primary button-hero" id="ai-scribe-prepare-hub" data-action="<?php echo esc_attr( $setup_action ); ?>" data-testid="ai-scribe-prepare-hub">
+						<?php echo 'activate' === $setup_action ? esc_html__( 'Activate Opace AI Hub and continue', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) : esc_html__( 'Install Opace AI Hub', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
 					</button>
 				<?php else : ?>
 					<p class="ai-scribe-hub-setup__permissions"><?php esc_html_e( 'A site administrator with permission to install and activate plugins must complete this setup.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></p>
@@ -301,20 +368,34 @@ class AI_Scribe_Onboarding_Notice {
 	}
 
 	/**
-	 * Install Hub from WordPress.org when absent, then activate it.
+	 * Install Hub from WordPress.org or activate an installed copy.
 	 *
 	 * @return void
 	 */
 	public static function handle_prepare_hub() {
 		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
-		if ( ! wp_verify_nonce( $nonce, self::HUB_NONCE_ACTION ) || ! current_user_can( 'activate_plugins' ) ) {
+		if ( ! wp_verify_nonce( $nonce, self::HUB_NONCE_ACTION ) ) {
 			wp_send_json_error( array( 'message' => __( 'You do not have permission to prepare Opace AI Hub.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ), 403 );
 		}
 
+		$setup_action = isset( $_POST['setup_action'] ) ? sanitize_key( wp_unslash( $_POST['setup_action'] ) ) : '';
+		if ( ! in_array( $setup_action, array( 'install', 'activate' ), true ) ) {
+			wp_send_json_error( array( 'message' => __( 'Choose whether to install or activate Opace AI Hub.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ), 400 );
+		}
+
 		$hub_file = self::installed_hub_file();
-		if ( '' === $hub_file ) {
+		if ( 'install' === $setup_action ) {
 			if ( ! current_user_can( 'install_plugins' ) ) {
 				wp_send_json_error( array( 'message' => __( 'You do not have permission to install Opace AI Hub.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ), 403 );
+			}
+			if ( '' !== $hub_file ) {
+				wp_send_json_success(
+					array(
+						'message'      => __( 'Opace AI Hub is installed. Activate it to finish setup.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+						'next_action'  => 'activate',
+						'button_label' => __( 'Activate Opace AI Hub and continue', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					)
+				);
 			}
 
 			require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -349,10 +430,24 @@ class AI_Scribe_Onboarding_Notice {
 
 			wp_clean_plugins_cache( true );
 			$hub_file = self::installed_hub_file();
+			if ( '' === $hub_file ) {
+				wp_send_json_error( array( 'message' => __( 'Opace AI Hub installed, but its plugin file could not be found.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ), 500 );
+			}
+
+			wp_send_json_success(
+				array(
+					'message'      => __( 'Opace AI Hub installed. Activate it to finish setup.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					'next_action'  => 'activate',
+					'button_label' => __( 'Activate Opace AI Hub and continue', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+				)
+			);
 		}
 
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to activate Opace AI Hub.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ), 403 );
+		}
 		if ( '' === $hub_file ) {
-			wp_send_json_error( array( 'message' => __( 'Opace AI Hub installed, but its plugin file could not be found.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ), 500 );
+			wp_send_json_error( array( 'message' => __( 'Install Opace AI Hub before activating it.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ), 409 );
 		}
 
 		$result = activate_plugin( $hub_file, '', is_multisite() && is_network_admin() );

@@ -1313,6 +1313,12 @@ test_assert_contains("current_user_can( 'activate_plugins' )", $p9_notice_src_ct
 test_assert_contains("plugins_api( 'plugin_information'", $p9_notice_src_cta, 'Hub package is resolved through the WordPress.org plugin API');
 test_assert_contains('new WP_Ajax_Upgrader_Skin()', $p9_notice_src_cta, 'Hub uses WordPress core AJAX upgrader error handling');
 test_assert_contains('new Plugin_Upgrader( $skin )', $p9_notice_src_cta, 'Hub uses the core plugin upgrader');
+test_assert_contains("\$setup_action = isset( \$_POST['setup_action'] )", $p9_notice_src_cta, 'Hub install and activation are separate explicit requests');
+test_assert_contains("'next_action'  => 'activate'", $p9_notice_src_cta, 'Hub installation returns an explicit activation step');
+$p9_install_branch_start = strpos($p9_notice_src_cta, "if ( 'install' === \$setup_action )");
+$p9_activate_branch_start = strpos($p9_notice_src_cta, "if ( ! current_user_can( 'activate_plugins' ) )", $p9_install_branch_start);
+$p9_install_branch = substr($p9_notice_src_cta, $p9_install_branch_start, $p9_activate_branch_start - $p9_install_branch_start);
+test_assert(strpos($p9_install_branch, 'activate_plugin(') === false, 'Hub installation never activates the companion implicitly');
 test_assert_contains("'redirect' => admin_url( 'admin.php?page=ai_scribe_settings&hub_setup=complete' )", $p9_notice_src_cta, 'successful setup returns to AI-Scribe settings');
 
 // Static: dismiss handler is nonce + capability gated and the bootstrap wires the class.
@@ -1324,6 +1330,11 @@ test_assert_contains('AI_Scribe_Onboarding_Notice::register()', $p9_boot_src, 'b
 test_assert_contains('AI_Scribe_Onboarding_Notice::register_hub_setup()', $p9_boot_src, 'bootstrap registers the Hub setup surface when Hub is absent');
 test_assert(strpos($p9_boot_src, 'Requires Plugins:') === false, 'AI-Scribe remains independently installable without a core dependency header');
 test_assert_contains('HUB_SETUP_VERSION_OPTION', $p9_notice_src, 'missing-Hub setup is prompted once per AI-Scribe version for both installs and upgrades');
+test_assert_contains("'plugin_action_links_' . plugin_basename( AI_SCRIBE_FILE )", $p9_notice_src, 'missing-Hub Plugins row registers a Finish setup action');
+test_assert_contains("'after_plugin_row_' . plugin_basename( AI_SCRIBE_FILE )", $p9_notice_src, 'missing-Hub Plugins row registers an inline setup warning');
+test_assert_contains("esc_html__( 'Finish setup'", $p9_notice_src, 'missing-Hub Plugins row labels its setup action clearly');
+test_assert_contains("esc_html__( 'Opace AI Hub setup required.'", $p9_notice_src, 'missing-Hub Plugins row labels the dependency status clearly');
+test_assert_contains("'type'               => 'warning'", $p9_notice_src, 'missing-Hub Plugins row uses the native WordPress warning style');
 test_reset_options();
 
 // ---------------------------------------------------------------------------
