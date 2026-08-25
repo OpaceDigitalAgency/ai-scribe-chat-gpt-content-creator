@@ -4,7 +4,7 @@ Tags: AI Writer, Content Generator, Content Creator, AI, SEO
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 3.2.34
+Stable tag: 3.2.35
 License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://opace.agency/get-in-touch
@@ -22,6 +22,12 @@ Version 3 keeps the whole article in one conversation, so later sections are wri
 = Required Opace AI Hub =
 
 The free [Opace AI Hub](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/) is required at runtime. It stores provider keys, discovers models, supplies pricing and shares prompts. AI Scribe owns the writing interface and sends requests directly from your site through the Hub; nothing is routed through Opace's servers. Both plugins remain independently searchable and installable on WordPress.org. If AI Scribe is installed first, its Plugins row links directly to the branded setup screen, where installation and activation are two explicit actions.
+
+**[Opace AI Hub on WordPress.org](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/)**
+
+**[AI-Scribe on GitHub](https://github.com/OpaceDigitalAgency/ai-scribe-chat-gpt-content-creator)**
+
+**[AI-Scribe Custom GPT](https://chatgpt.com/g/g-ZTkBnCIbA-gpt-seo-article-creator-writer-ai-scribe)**
 
 = Live providers and models =
 
@@ -260,6 +266,7 @@ Please add roadmap suggestions through the support forum rather than treating th
 
 == Changelog ==
 
+* **3.2.35:** Added prominent links to Opace AI Hub on WordPress.org, the AI-Scribe GitHub repository and the AI-Scribe Custom GPT.
 * **3.2.34:** Added a Finish setup action and native inline Hub setup warning beneath AI-Scribe's Plugins row when the Hub is missing or inactive.
 * **3.2.33:** Split companion installation and activation into two explicit in-card actions while retaining the clean setup screen and notice-free Plugins experience.
 * **3.2.32:** Added a branded one-action Opace AI Hub installer/activator, kept AI Scribe independently installable and removed overlapping dependency and retired 3.0 welcome notices.
@@ -323,6 +330,10 @@ Please add roadmap suggestions through the support forum rather than treating th
 * **1.0.0:** Initial release.
 
 == Upgrade Notice ==
+
+= 3.2.35 =
+
+Makes the companion Hub, public source and separate Custom GPT easier to find from the WordPress.org listing.
 
 = 3.2.34 =
 
