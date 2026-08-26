@@ -1331,10 +1331,31 @@ test_assert_contains('AI_Scribe_Onboarding_Notice::register_hub_setup()', $p9_bo
 test_assert(strpos($p9_boot_src, 'Requires Plugins:') === false, 'AI-Scribe remains independently installable without a core dependency header');
 test_assert_contains('HUB_SETUP_VERSION_OPTION', $p9_notice_src, 'missing-Hub setup is prompted once per AI-Scribe version for both installs and upgrades');
 test_assert_contains("'plugin_action_links_' . plugin_basename( AI_SCRIBE_FILE )", $p9_notice_src, 'missing-Hub Plugins row registers a Finish setup action');
+test_assert_contains("'network_admin_plugin_action_links_' . plugin_basename( AI_SCRIBE_FILE )", $p9_notice_src, 'Network Plugins row registers the same Finish setup action');
 test_assert_contains("'after_plugin_row_' . plugin_basename( AI_SCRIBE_FILE )", $p9_notice_src, 'missing-Hub Plugins row registers an inline setup warning');
+test_assert_contains("const HUB_MIN_VERSION = '1.0.13'", $p9_notice_src, 'AI-Scribe declares the oldest Hub release covered by its compatibility matrix');
+test_assert_contains("version_compare( \$version, self::HUB_MIN_VERSION, '>=' )", $p9_notice_src, 'an active historical Hub cannot bypass the supported-version check');
+$p9_version_reader_start = strpos($p9_notice_src, 'public static function installed_hub_version()');
+$p9_version_reader_end = strpos($p9_notice_src, 'public static function hub_version_supported()', $p9_version_reader_start);
+$p9_version_reader = substr($p9_notice_src, $p9_version_reader_start, $p9_version_reader_end - $p9_version_reader_start);
+test_assert(strpos($p9_version_reader, 'get_file_data(') < strpos($p9_version_reader, "defined( 'AI_CORE_VERSION' )"), 'post-update compatibility reads the installed Hub header before the stale in-request runtime constant');
+test_assert_contains("array( 'install', 'update', 'activate' )", $p9_notice_src, 'guided setup handles missing, historical and inactive Hub states');
+test_assert_contains("\$reactivated = activate_plugin( \$hub_file, '', \$was_network_active )", $p9_notice_src, 'historical Hub update restores its exact prior activation scope');
+test_assert_contains("activate_plugin( \$hub_file, '', \$network_wide )", $p9_notice_src, 'multisite setup preserves the requested network activation scope');
+test_assert_contains('HUB_PRISTINE_ACTIVATION_OPTION', $p9_notice_src, 'guided Hub activation distinguishes a new default seed from retained Hub data');
+test_assert_contains("current_user_can( 'manage_network_plugins' )", $p9_notice_src, 'network-wide Hub preparation is capability gated');
 test_assert_contains("esc_html__( 'Finish setup'", $p9_notice_src, 'missing-Hub Plugins row labels its setup action clearly');
 test_assert_contains("esc_html__( 'Opace AI Hub setup required.'", $p9_notice_src, 'missing-Hub Plugins row labels the dependency status clearly');
 test_assert_contains("'type'               => 'warning'", $p9_notice_src, 'missing-Hub Plugins row uses the native WordPress warning style');
+test_assert_contains("'ai_scribe_help'", $p9_notice_src, 'stale 2.6 Help URL is recognised while Hub is missing');
+test_assert_contains("'ai_scribe_settings'", $p9_notice_src, 'stale 2.6 Settings URL is recognised while Hub is missing');
+test_assert_contains("add_action( 'init', array( __CLASS__, 'maybe_redirect_to_hub_setup' ) )", $p9_notice_src, 'stale AI-Scribe routes are intercepted before WordPress rejects an unregistered admin page');
+test_assert_contains("! in_array( \$page, \$scribe_pages, true )", $p9_notice_src, 'missing-Hub redirect is scoped to AI-Scribe routes');
+test_assert(strpos($p9_notice_src, "'yes' !== get_option( self::HUB_SETUP_OPTION )") === false, 'stale AI-Scribe routes do not depend on a one-shot setup flag');
+test_assert_contains("false !== get_option( 'ai_core_settings', false )", $p9_notice_src, 'setup detects retained Hub data without creating or changing it');
+test_assert_contains('Previous Opace AI Hub data found.', $p9_notice_src, 'setup clearly identifies retained Hub data before activation');
+test_assert_contains('AI-Scribe will not overwrite that existing Hub data.', $p9_notice_src, 'setup explains the non-destructive precedence rule');
+test_assert_contains('data-testid="ai-scribe-retained-hub-data"', $p9_notice_src, 'retained Hub data warning has a stable browser-test target');
 test_reset_options();
 
 // ---------------------------------------------------------------------------
@@ -1351,6 +1372,8 @@ AI_Scribe_Migration_Service::maybe_migrate($prompts);
 test_assert(AI_Scribe_Migration_Service::maybe_migrate_keys_to_hub() === false, 'key hand-off is a silent no-op without the hub');
 test_assert(get_option(AI_Scribe_Migration_Service::HUB_KEYS_OPTION) === false, 'hand-off flag stays unset without the hub');
 test_assert(get_option('ai_core_settings') === false, 'no hub option is created without the hub');
+test_assert(AI_Scribe_Migration_Service::maybe_migrate_model_to_hub() === false, 'model hand-off is a silent no-op without the hub');
+test_assert(get_option(AI_Scribe_Migration_Service::HUB_MODEL_OPTION) === false, 'model hand-off flag stays unset without the hub');
 
 // Minimal hub stub — the hand-off itself only needs function_exists('ai_core').
 // Both definitions are deliberately conditional: unconditional top-level
@@ -1381,6 +1404,52 @@ test_assert(ai_core()->is_configured() === true, 'hub reports configured after t
 $hk_scribe = get_option('ab_gpt_ai_engine_settings');
 test_assert(strpos((string) ($hk_scribe['api_key'] ?? ''), 'aisenc1:') === 0, 'AI-Scribe copy is untouched (non-destructive hand-off)');
 
+// 2b. Hub owns model selection too: a clean 2.6.x choice fills an empty Hub
+// provider slot, while the retained AI-Scribe option remains untouched.
+update_option('ab_gpt_ai_engine_settings', array_merge($hk_scribe, ['model' => 'gpt-4o']));
+test_assert(AI_Scribe_Migration_Service::maybe_migrate_model_to_hub() === true, 'selected legacy model hand-off completes with the hub active');
+$hk_model_hub = get_option('ai_core_settings');
+test_assert(($hk_model_hub['provider_models']['openai'] ?? '') === 'gpt-4o', 'selected GPT-4o model carried into the Hub OpenAI provider slot');
+test_assert(($hk_model_hub['default_provider'] ?? '') === 'openai', 'carried model provider becomes the default when no configured Hub provider is displaced');
+test_assert((get_option('ab_gpt_ai_engine_settings')['model'] ?? '') === 'gpt-4o', 'AI-Scribe model copy remains as the non-destructive fallback');
+test_assert(get_option(AI_Scribe_Migration_Service::HUB_MODEL_OPTION) === AI_Scribe_Migration_Service::HUB_MODEL_VERSION, 'model hand-off records its independent completion flag');
+
+// 2c. A live 3.2.35 site has already completed the key/prompt one-shot flags.
+// The separately versioned 3.2.36 model hand-off must still run exactly once.
+test_reset_options();
+update_option(AI_Scribe_Migration_Service::MIGRATED_OPTION, AI_Scribe_Migration_Service::MIGRATION_VERSION);
+update_option(AI_Scribe_Migration_Service::HUB_KEYS_OPTION, AI_Scribe_Migration_Service::HUB_KEYS_VERSION);
+update_option(AI_Scribe_Migration_Service::HUB_MIGRATED_OPTION, AI_Scribe_Migration_Service::HUB_MIGRATION_VERSION);
+update_option('ab_gpt_ai_engine_settings', ['model' => 'gpt-4o']);
+update_option('ai_core_settings', ['openai_api_key' => 'retained-existing-key']);
+test_assert(AI_Scribe_Migration_Service::maybe_migrate_model_to_hub() === true, '3.2.35 one-shot flags do not block the new 3.2.36 model hand-off');
+$hk_live_upgrade = get_option('ai_core_settings');
+test_assert(($hk_live_upgrade['provider_models']['openai'] ?? '') === 'gpt-4o', '3.2.35 to 3.2.36 carries the saved model into an empty Hub slot');
+test_assert(get_option(AI_Scribe_Migration_Service::HUB_MODEL_OPTION) === AI_Scribe_Migration_Service::HUB_MODEL_VERSION, '3.2.35 to 3.2.36 model hand-off records its own flag');
+
+// 2d. A Hub activated from AI-Scribe setup seeds its own registry default.
+// That seed is not an established user choice and must not displace a
+// retained upgrade model. A genuinely fresh AI-Scribe default still yields
+// to the Hub's provider-neutral seed.
+test_reset_options();
+update_option(AI_Scribe_Migration_Service::FROM_V2_OPTION, 'yes');
+update_option(AI_Scribe_Migration_Service::HUB_PRISTINE_ACTIVATION_OPTION, 'yes');
+update_option('ab_gpt_ai_engine_settings', ['model' => 'gpt-4o']);
+update_option('ai_core_settings', ['provider_models' => ['openai' => 'gpt-5.6-terra']]);
+test_assert(AI_Scribe_Migration_Service::maybe_migrate_model_to_hub() === true, 'pristine Hub activation accepts the retained upgrade model');
+$hk_pristine_upgrade = get_option('ai_core_settings');
+test_assert(($hk_pristine_upgrade['provider_models']['openai'] ?? '') === 'gpt-4o', 'Hub activation default never displaces retained GPT-4o');
+test_assert(get_option(AI_Scribe_Migration_Service::HUB_PRISTINE_ACTIVATION_OPTION) === false, 'pristine activation marker is consumed after model hand-off');
+
+test_reset_options();
+update_option(AI_Scribe_Migration_Service::FROM_V2_OPTION, 'no');
+update_option(AI_Scribe_Migration_Service::HUB_PRISTINE_ACTIVATION_OPTION, 'yes');
+update_option('ab_gpt_ai_engine_settings', ['model' => 'gpt-4o-mini']);
+update_option('ai_core_settings', ['provider_models' => ['openai' => 'gpt-5.6-terra']]);
+test_assert(AI_Scribe_Migration_Service::maybe_migrate_model_to_hub() === true, 'fresh install model hand-off completes without forcing its stock fallback');
+$hk_pristine_fresh = get_option('ai_core_settings');
+test_assert(($hk_pristine_fresh['provider_models']['openai'] ?? '') === 'gpt-5.6-terra', 'fresh AI-Scribe stock fallback does not replace the Hub activation default');
+
 // 3. A key already in the hub is never overwritten.
 test_reset_options();
 update_option('ab_gpt_ai_engine_settings', ['api_key' => $hk_openai_plain]);
@@ -1390,6 +1459,18 @@ update_option('ai_core_settings', ['openai_api_key' => 'hub-users-own-key']);
 AI_Scribe_Migration_Service::maybe_migrate_keys_to_hub();
 $hk_hub2 = get_option('ai_core_settings');
 test_assert(($hk_hub2['openai_api_key'] ?? '') === 'hub-users-own-key', 'existing hub key wins — hand-off never overwrites');
+
+delete_option(AI_Scribe_Migration_Service::HUB_MODEL_OPTION);
+update_option('ab_gpt_ai_engine_settings', ['model' => 'claude-sonnet-4-5']);
+update_option('ai_core_settings', [
+    'anthropic_api_key' => 'hub-users-own-anthropic-key',
+    'default_provider' => 'anthropic',
+    'provider_models' => ['anthropic' => 'claude-opus-5'],
+]);
+test_assert(AI_Scribe_Migration_Service::maybe_migrate_model_to_hub() === true, 'model hand-off completes when the Hub already has a model');
+$hk_hub_model2 = get_option('ai_core_settings');
+test_assert(($hk_hub_model2['provider_models']['anthropic'] ?? '') === 'claude-opus-5', 'existing Hub model wins — model hand-off never overwrites');
+test_assert(($hk_hub_model2['default_provider'] ?? '') === 'anthropic', 'existing configured Hub default provider is preserved');
 
 // 4. Idempotent: the completion flag short-circuits a second run.
 update_option('ai_core_settings', []);

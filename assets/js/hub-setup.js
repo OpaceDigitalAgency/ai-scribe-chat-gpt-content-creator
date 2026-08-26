@@ -9,18 +9,21 @@
 
 	button.addEventListener( 'click', function () {
 		var requestedAction = button.getAttribute( 'data-action' );
-		if ( 'install' !== requestedAction && 'activate' !== requestedAction ) {
+		if ( 'install' !== requestedAction && 'update' !== requestedAction && 'activate' !== requestedAction ) {
 			return;
 		}
 		button.disabled = true;
 		button.setAttribute( 'aria-busy', 'true' );
 		status.className = 'ai-scribe-hub-setup__status';
-		status.textContent = 'install' === requestedAction ? aiScribeHubSetup.strings.installing : aiScribeHubSetup.strings.activating;
+		status.textContent = 'install' === requestedAction
+			? aiScribeHubSetup.strings.installing
+			: ( 'update' === requestedAction ? aiScribeHubSetup.strings.updating : aiScribeHubSetup.strings.activating );
 
 		var body = new URLSearchParams();
 		body.set( 'action', aiScribeHubSetup.action );
 		body.set( 'nonce', aiScribeHubSetup.nonce );
 		body.set( 'setup_action', requestedAction );
+		body.set( 'network_wide', aiScribeHubSetup.networkWide ? '1' : '0' );
 
 		window.fetch( aiScribeHubSetup.ajaxUrl, {
 			method: 'POST',

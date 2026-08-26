@@ -110,6 +110,28 @@ class SettingsController {
                     data && data.sources,
                     from ? `Saved model "${from}" is unavailable — switched to ${selected}.` : ''
                 );
+            } else if (this.view.savedUnavailable) {
+                const saved = this.view.savedUnavailable;
+                const i18n = (window.ai_scribe && window.ai_scribe.i18n) || {};
+                const key = saved.state === 'invalid'
+                    ? 'savedModelKeyInvalid'
+                    : (saved.state === 'missing' ? 'savedModelKeyMissing' : 'savedModelKeyUnchecked');
+                const fallback = saved.state === 'invalid'
+                    ? 'Saved model “%1$s” and its %2$s key were retained, but the key did not pass validation. Check it in Opace AI Hub before generating.'
+                    : (saved.state === 'missing'
+                        ? 'Saved model “%1$s” was retained, but its %2$s key is missing. Add the key in Opace AI Hub before generating.'
+                        : 'Saved model “%1$s” and its %2$s key were retained, but the provider could not complete validation. Check it in Opace AI Hub before generating.');
+                const message = (i18n[key] || fallback)
+                    .replace('%1$s', saved.model)
+                    .replace('%2$s', saved.providerLabel);
+                this.view.announce(message);
+                this.view.setModelListStatus(
+                    'loaded',
+                    this.models.length,
+                    null,
+                    data && data.sources,
+                    message
+                );
             }
             this.onModelChange();
         } catch (error) {

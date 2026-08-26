@@ -486,6 +486,15 @@ class AI_Scribe_Admin_Service {
 			'evaluationSummaryNote'     => __( 'Structural checks are measured from the final Review HTML. Editorial rows are clearly labelled AI review and should be confirmed by an editor.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 			'evaluationTableCaption'    => __( 'Article evaluation checks with evidence and suggested next actions', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 			'refreshingModels'          => __( 'Refreshing the model list from your providers…', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			/* translators: 1: Saved AI model name. 2: AI provider name. */
+			'savedModelKeyInvalid'      => __( 'Saved model “%1$s” and its %2$s key were retained, but the key did not pass validation. Check it in Opace AI Hub before generating.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			/* translators: 1: Saved AI model name. 2: AI provider name. */
+			'savedModelKeyUnchecked'    => __( 'Saved model “%1$s” and its %2$s key were retained, but the provider could not complete validation. Check it in Opace AI Hub before generating.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			/* translators: 1: Saved AI model name. 2: AI provider name. */
+			'savedModelKeyMissing'      => __( 'Saved model “%1$s” was retained, but its %2$s key is missing. Add the key in Opace AI Hub before generating.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'savedKeyInvalidSuffix'     => __( 'saved; retained key did not pass validation', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'savedKeyUncheckedSuffix'   => __( 'saved; retained key could not be checked', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			'savedKeyMissingSuffix'     => __( 'saved; provider key is missing', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 			'modelParameters'           => __( 'Model parameters', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 			'configured'                => __( 'Configured', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
 			'optimisingMetadata'        => __( 'Asking the selected model to shorten the overlength metadata…', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),

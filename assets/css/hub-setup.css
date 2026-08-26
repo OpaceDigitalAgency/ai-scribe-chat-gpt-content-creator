@@ -61,6 +61,21 @@
 	white-space: nowrap;
 }
 
+.ai-scribe-hub-setup__retained-data {
+	margin: 20px 0 0;
+	padding: 16px 18px;
+	background: #f0f6fc;
+	border: 1px solid #72aee6;
+	border-left-width: 4px;
+	border-radius: 4px;
+}
+
+.ai-scribe-hub-setup__retained-data p {
+	margin: 6px 0 0;
+	color: #3c434a;
+	line-height: 1.5;
+}
+
 .ai-scribe-hub-setup__benefits {
 	margin: 24px 0;
 	padding-left: 22px;
@@ -122,5 +137,14 @@
 	.ai-scribe-hub-setup__plugin {
 		background: #2c3338;
 		border-color: #50575e;
+	}
+
+	.ai-scribe-hub-setup__retained-data {
+		background: #1e2a33;
+		border-color: #72aee6;
+	}
+
+	.ai-scribe-hub-setup__retained-data p {
+		color: #c3c4c7;
 	}
 }

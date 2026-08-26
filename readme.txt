@@ -4,7 +4,7 @@ Tags: AI Writer, Content Generator, Content Creator, AI, SEO
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 3.2.35
+Stable tag: 3.2.36
 License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://opace.agency/get-in-touch
@@ -21,7 +21,7 @@ Version 3 keeps the whole article in one conversation, so later sections are wri
 
 = Required Opace AI Hub =
 
-The free [Opace AI Hub](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/) is required at runtime. It stores provider keys, discovers models, supplies pricing and shares prompts. AI Scribe owns the writing interface and sends requests directly from your site through the Hub; nothing is routed through Opace's servers. Both plugins remain independently searchable and installable on WordPress.org. If AI Scribe is installed first, its Plugins row links directly to the branded setup screen, where installation and activation are two explicit actions.
+The free [Opace AI Hub](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/) version 1.0.13 or newer is required at runtime. It stores provider keys, discovers models, supplies pricing and shares prompts. AI Scribe owns the writing interface and sends requests directly from your site through the Hub; nothing is routed through Opace's servers. Both plugins remain independently searchable and installable on WordPress.org. If AI Scribe is installed first, its Plugins row links directly to the branded setup screen, where installation and activation are two explicit actions. An older installed Hub is updated through the same setup card before AI Scribe opens.
 
 **[Opace AI Hub on WordPress.org](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/)**
 
@@ -91,7 +91,7 @@ During the one-time companion setup, choosing **Install Opace AI Hub** asks Word
 == Installation ==
 
 1. Install and activate AI Scribe from the Plugins screen.
-2. On **Complete AI-Scribe setup**, review the Opace AI Hub details and choose **Install Opace AI Hub**, then **Activate Opace AI Hub and continue**. If Hub is already installed, the setup opens directly at the activation step.
+2. On **Complete AI-Scribe setup**, review the Opace AI Hub details and choose **Install Opace AI Hub**, then **Activate Opace AI Hub and continue**. If a compatible Hub is already installed, setup opens directly at activation; if an older Hub is installed, setup offers a protected update first.
 3. In Opace AI Hub → Settings, add an API key for at least one provider: OpenAI, Anthropic or Google Gemini.
 4. Open AI Scribe → Settings → Providers & Model. Check that your provider shows as configured, pick a model (Refresh models re-fetches the live list), then open Generate Article and start writing.
 
@@ -266,6 +266,7 @@ Please add roadmap suggestions through the support forum rather than treating th
 
 == Changelog ==
 
+* **3.2.36:** Corrected retained 2.6 admin links, key/model/prompt migration and saved-model status; added minimum-Hub updating and multisite network setup; warned before retained Hub data takes precedence; and made release ZIPs reproducible.
 * **3.2.35:** Added prominent links to Opace AI Hub on WordPress.org, the AI-Scribe GitHub repository and the AI-Scribe Custom GPT.
 * **3.2.34:** Added a Finish setup action and native inline Hub setup warning beneath AI-Scribe's Plugins row when the Hub is missing or inactive.
 * **3.2.33:** Split companion installation and activation into two explicit in-card actions while retaining the clean setup screen and notice-free Plugins experience.
@@ -330,6 +331,10 @@ Please add roadmap suggestions through the support forum rather than treating th
 * **1.0.0:** Initial release.
 
 == Upgrade Notice ==
+
+= 3.2.36 =
+
+Corrects legacy upgrade retention and routing, updates an older Hub in-card, handles multisite network activation and clearly identifies retained keys, models, prompts and previous Hub data.
 
 = 3.2.35 =
 

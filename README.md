@@ -7,7 +7,7 @@
 <p align="center"><strong>SEO content creator and humaniser for WordPress, powered by OpenAI, Anthropic and Google Gemini.</strong></p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.2.35-087abd" alt="AI Scribe version 3.2.35">
+  <img src="https://img.shields.io/badge/version-3.2.36-087abd" alt="AI Scribe version 3.2.36">
   <img src="https://img.shields.io/badge/WordPress-6.5%2B-21759b" alt="Requires WordPress 6.5 or newer">
   <img src="https://img.shields.io/badge/tested%20up%20to-WordPress%207.1-21759b" alt="Tested up to WordPress 7.1">
   <img src="https://img.shields.io/badge/PHP-7.4%2B-777bb4" alt="Requires PHP 7.4 or newer">
@@ -22,7 +22,7 @@
   · <a href="https://github.com/OpaceDigitalAgency">More from Opace</a>
 </p>
 
-AI Scribe requires the separate [**Opace AI Hub**](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin) plugin. Opace AI Hub centralises encrypted provider keys,
+AI Scribe requires version 1.0.13 or newer of the separate [**Opace AI Hub**](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin) plugin. Opace AI Hub centralises encrypted provider keys,
 live model discovery, shared prompts, usage and cost reporting. Install it from
 [WordPress.org](https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/) or review its
 [public source on GitHub](https://github.com/OpaceDigitalAgency/opace-ai-prompt-library-api-hub-wordpress-plugin).
@@ -327,7 +327,7 @@ retained-data reinstalls fill missing settings only and never overwrite a valid 
 ## Installation
 
 1. Install and activate AI Scribe from WordPress.org.
-2. Review the Opace AI Hub information on **Complete AI-Scribe setup**, then choose **Install and activate Opace AI Hub**.
+2. Review the Opace AI Hub information on **Complete AI-Scribe setup**, choose **Install Opace AI Hub**, then explicitly choose **Activate Opace AI Hub and continue**. An older Hub is updated in the same card first.
 3. In Opace AI Hub → Settings, add a key for at least one provider and press Test.
 4. AI Scribe → Settings → Providers & Model: confirm the status chip, pick a model, then open
    Generate Article.

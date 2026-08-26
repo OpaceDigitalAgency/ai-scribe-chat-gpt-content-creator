@@ -55,6 +55,13 @@ rm -rf "$PKG/assets/ENQUEUE_MANIFEST.md"
 find "$PKG" -name '.DS_Store' -delete
 find "$PKG" -name '*.map' -delete
 
+# Normalise archive metadata so the same source produces the same package on
+# every build. ZIP stores timestamps and Unix permissions; leaving either to
+# the local checkout made a rebuild of unchanged source produce a new hash.
+find "$PKG" -type d -exec chmod 0755 {} +
+find "$PKG" -type f -exec chmod 0644 {} +
+find "$PKG" -exec touch -t 198001010000 {} +
+
 # Belt-and-braces: fail the build if any excluded artefact slipped in.
 for banned in tests node_modules playwright.config.ts scripts design-reference docs mu-plugins .wp-env.json .git package.json package-lock.json; do
 	if [[ -e "$PKG/$banned" ]]; then
@@ -65,7 +72,10 @@ done
 
 ZIP="$DIST/ai-scribe-$VERSION.zip"
 rm -f "$ZIP"
-( cd "$STAGE" && zip -rq "$ZIP" "$SLUG" -x '*.DS_Store' )
+(
+	cd "$STAGE"
+	find "$SLUG" -print | LC_ALL=C sort | zip -X -q "$ZIP" -@
+)
 
 FILE_COUNT="$(unzip -l "$ZIP" | tail -1 | awk '{print $2}')"
 SIZE="$(du -h "$ZIP" | awk '{print $1}')"

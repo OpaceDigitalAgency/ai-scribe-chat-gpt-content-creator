@@ -28,6 +28,11 @@ class SettingsView {
         return labels[key] || (key.charAt(0).toUpperCase() + key.slice(1));
     }
 
+    static i18n(key, fallback) {
+        const strings = window.ai_scribe && window.ai_scribe.i18n;
+        return strings && strings[key] ? strings[key] : fallback;
+    }
+
     constructor(container, appState = null) {
         this.root = document.getElementById('ai-scribe-settings-root');
         this.appState = appState;
@@ -247,6 +252,9 @@ class SettingsView {
      * §13 addendum: the text-model picker is GROUPED by provider; only
      * models from validated providers are selectable; unconfigured/invalid
      * providers render greyed out with a "configure in Opace AI Hub" affordance.
+     * If no provider currently validates, the saved model remains visibly
+     * selected (but disabled) so an upgrade never looks as though it erased
+     * the user's choice.
      * Returns the value actually selected (after any dead-selection
      * fallback) so the controller can announce it.
      */
@@ -258,15 +266,20 @@ class SettingsView {
             providers
         );
         // Snapshot the TEXT picker's fallback origin — the image picker fill
-        // below must not clobber it.
+        // below must not clobber it. The same applies to a retained but
+        // unusable text model: fillSelect() resets both pieces of state for
+        // every select it builds.
         this.fallbackFrom = this.lastFallbackFrom;
+        this.textSavedUnavailable = this.savedUnavailable;
         return selected;
     }
 
     populateImageModelSelect(models, providers = {}) {
         const select = this.root.querySelector('#ai-scribe-image-model');
         const current = select && select.value;
-        return this.fillSelect(select, models, current || '', providers);
+        const selected = this.fillSelect(select, models, current || '', providers);
+        this.savedUnavailable = this.textSavedUnavailable || null;
+        return selected;
     }
 
     providerSelectable(providers, providerId) {
@@ -303,6 +316,7 @@ class SettingsView {
         });
 
         let selectedValue = '';
+        let unavailableCurrent = null;
         order.forEach((providerId) => {
             const selectable = this.providerSelectable(providers, providerId);
             const groupEnabled = selectable !== false
@@ -323,9 +337,13 @@ class SettingsView {
                     : '';
                 option.textContent = `${model.label || model.id}${price}`;
                 option.disabled = !groupEnabled;
-                if (model.id === currentValue && !option.disabled) {
-                    option.selected = true;
-                    selectedValue = model.id;
+                if (model.id === currentValue) {
+                    if (option.disabled) {
+                        unavailableCurrent = option;
+                    } else {
+                        option.selected = true;
+                        selectedValue = model.id;
+                    }
                 }
                 group.appendChild(option);
             });
@@ -343,6 +361,7 @@ class SettingsView {
         //   expensive model for one the user is already paying for is not a
         //   decision to make on their behalf.
         this.lastFallbackFrom = null;
+        this.savedUnavailable = null;
         if (!selectedValue) {
             const hadSelection = !!currentValue;
             const fallback = hadSelection
@@ -352,6 +371,27 @@ class SettingsView {
                 select.value = fallback.id;
                 selectedValue = fallback.id;
                 this.lastFallbackFrom = currentValue || '';
+            } else if (unavailableCurrent) {
+                const providerId = models.find((model) => model.id === currentValue)?.provider || '';
+                const providerInfo = providers && providers[providerId] ? providers[providerId] : {};
+                const state = !providerInfo.configured
+                    ? 'missing'
+                    : (providerInfo.validated === false ? 'invalid' : 'unchecked');
+                const suffixKey = state === 'invalid'
+                    ? 'savedKeyInvalidSuffix'
+                    : (state === 'missing' ? 'savedKeyMissingSuffix' : 'savedKeyUncheckedSuffix');
+                const suffixFallback = state === 'invalid'
+                    ? 'saved; retained key did not pass validation'
+                    : (state === 'missing' ? 'saved; provider key is missing' : 'saved; retained key could not be checked');
+                unavailableCurrent.selected = true;
+                unavailableCurrent.textContent += ` — ${SettingsView.i18n(suffixKey, suffixFallback)}`;
+                selectedValue = currentValue;
+                this.savedUnavailable = {
+                    model: currentValue,
+                    provider: providerId,
+                    providerLabel: SettingsView.providerLabel(providerId),
+                    state,
+                };
             }
         }
         return selectedValue;

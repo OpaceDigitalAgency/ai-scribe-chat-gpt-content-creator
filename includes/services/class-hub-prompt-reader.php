@@ -78,10 +78,11 @@ class AI_Scribe_Hub_Prompt_Reader {
 			// in Opace AI Hub's key store even on sites already flagged as
 			// migrated. One-shot, own flag, never overwrites a hub key.
 			add_action( 'admin_init', array( 'AI_Scribe_Migration_Service', 'maybe_migrate_keys_to_hub' ), 19 );
-			add_action( 'admin_init', array( 'AI_Scribe_Migration_Service', 'maybe_migrate_prompts_to_hub' ), 20 );
+			add_action( 'admin_init', array( 'AI_Scribe_Migration_Service', 'maybe_migrate_model_to_hub' ), 20 );
+			add_action( 'admin_init', array( 'AI_Scribe_Migration_Service', 'maybe_migrate_prompts_to_hub' ), 21 );
 			// After the copy: move untouched hub copies of superseded stock
 			// prompts to the current default wording (one-shot, own flag).
-			add_action( 'admin_init', array( 'AI_Scribe_Migration_Service', 'maybe_refresh_hub_prompt_defaults' ), 21 );
+			add_action( 'admin_init', array( 'AI_Scribe_Migration_Service', 'maybe_refresh_hub_prompt_defaults' ), 22 );
 		}
 	}
 

@@ -60,6 +60,15 @@ class AI_Scribe_Migration_Service {
 	const HUB_KEYS_VERSION = '1';
 
 	/**
+	 * Completion flag for the selected text-model -> Hub hand-off. Kept
+	 * separate from the key flag so sites upgraded by an earlier v3 release
+	 * can still receive the missing model migration.
+	 */
+	const HUB_MODEL_OPTION  = 'ai_scribe_hub_model_migrated';
+	const HUB_MODEL_VERSION = '1';
+	const HUB_PRISTINE_ACTIVATION_OPTION = 'ai_scribe_hub_pristine_activation';
+
+	/**
 	 * The Opace AI Hub group migrated prompts are filed under, so a user opening
 	 * Opace AI Hub's Prompt Library can see at a glance where they came from.
 	 */
@@ -152,6 +161,78 @@ class AI_Scribe_Migration_Service {
 		// key left solely in AI-Scribe's options would never be used. Runs
 		// after migrate_engine_keys() so 2.6.2 plaintext has been normalised.
 		self::maybe_migrate_keys_to_hub( $config_manager );
+		self::maybe_migrate_model_to_hub();
+
+		return true;
+	}
+
+	/**
+	 * Carry the selected 2.6.x text model into Opace AI Hub.
+	 *
+	 * Hub owns provider model selection in v3. The legacy model remains in
+	 * AI-Scribe as a fallback, and an existing Hub model always wins. The
+	 * default provider changes only when its current provider has no key, so
+	 * an established Hub configuration is never displaced.
+	 *
+	 * @return bool True when the hand-off is complete (now or previously).
+	 */
+	public static function maybe_migrate_model_to_hub() {
+		if ( get_option( self::HUB_MODEL_OPTION ) === self::HUB_MODEL_VERSION ) {
+			return true;
+		}
+
+		if ( ! function_exists( 'ai_core' ) || ! class_exists( 'AI_Scribe_Model_Resolver' ) ) {
+			return false;
+		}
+
+		$engine = get_option( 'ab_gpt_ai_engine_settings', array() );
+		$model  = is_array( $engine ) && isset( $engine['model'] ) ? trim( (string) $engine['model'] ) : '';
+		if ( '' === $model ) {
+			update_option( self::HUB_MODEL_OPTION, self::HUB_MODEL_VERSION, false );
+			delete_option( self::HUB_PRISTINE_ACTIVATION_OPTION );
+			return true;
+		}
+
+		$provider = AI_Scribe_Model_Resolver::provider_of( $model );
+		if ( ! in_array( $provider, AI_Scribe_Model_Resolver::PROVIDERS, true ) ) {
+			// WordPress AI Client and unknown legacy identifiers are not Hub
+			// provider defaults. Record that there is nothing safe to copy.
+			update_option( self::HUB_MODEL_OPTION, self::HUB_MODEL_VERSION, false );
+			delete_option( self::HUB_PRISTINE_ACTIVATION_OPTION );
+			return true;
+		}
+
+		$hub = get_option( 'ai_core_settings', array() );
+		if ( ! is_array( $hub ) ) {
+			$hub = array();
+		}
+		if ( ! isset( $hub['provider_models'] ) || ! is_array( $hub['provider_models'] ) ) {
+			$hub['provider_models'] = array();
+		}
+
+		$pristine_activation = 'yes' === get_option( self::HUB_PRISTINE_ACTIVATION_OPTION );
+		$legacy_upgrade      = 'yes' === get_option( self::FROM_V2_OPTION );
+		$non_default_choice  = 'gpt-4o-mini' !== $model;
+		if ( empty( $hub['provider_models'][ $provider ] ) || ( $pristine_activation && ( $legacy_upgrade || $non_default_choice ) ) ) {
+			$hub['provider_models'][ $provider ] = $model;
+		}
+
+		$current_provider = isset( $hub['default_provider'] ) ? sanitize_key( (string) $hub['default_provider'] ) : '';
+		if ( '' === $current_provider || empty( $hub[ $current_provider . '_api_key' ] ) ) {
+			$hub['default_provider'] = $provider;
+		}
+
+		update_option( 'ai_core_settings', $hub );
+
+		$stored = get_option( 'ai_core_settings', array() );
+		if ( ! is_array( $stored ) || empty( $stored['provider_models'][ $provider ] ) ) {
+			self::log( 'hub model hand-off: selected ' . $provider . ' model did not persist; leaving the flag unset so the next run retries.' );
+			return false;
+		}
+
+		update_option( self::HUB_MODEL_OPTION, self::HUB_MODEL_VERSION, false );
+		delete_option( self::HUB_PRISTINE_ACTIVATION_OPTION );
+		self::log( 'hub model hand-off: complete for ' . $provider . '.' );
 
 		return true;
 	}
