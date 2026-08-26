@@ -68,6 +68,7 @@ class AI_Scribe_Admin_Service {
 		$this->enqueue_style( 'ai-scribe-admin-pages', 'assets/css/admin-pages.css', array( 'ai-scribe-components' ) );
 		$this->enqueue_style( 'ai-scribe-admin-responsive', 'assets/css/admin-responsive.css', array( 'ai-scribe-admin-pages' ) );
 		$this->enqueue_style( 'ai-scribe-notification-centre', 'assets/css/notification-center.css', array( 'ai-scribe-admin-responsive' ) );
+		$this->enqueue_style( 'ai-scribe-opace-footer', 'assets/css/opace-footer.css', array( 'ai-scribe-admin-responsive' ) );
 
 		if ( $this->is_wizard_page( $hook ) ) {
 			$this->enqueue_style( 'ai-scribe-animations', 'assets/css/animations.css', array( 'ai-scribe-components' ) );

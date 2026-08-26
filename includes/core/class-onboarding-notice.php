@@ -369,6 +369,12 @@ class AI_Scribe_Onboarding_Notice {
 			array(),
 			AI_SCRIBE_VERSION
 		);
+		wp_enqueue_style(
+			'ai-scribe-opace-footer',
+			AI_SCRIBE_URL . 'assets/css/opace-footer.css',
+			array( 'ai-scribe-hub-setup' ),
+			AI_SCRIBE_VERSION
+		);
 		wp_enqueue_script(
 			'ai-scribe-hub-setup',
 			AI_SCRIBE_URL . 'assets/js/hub-setup.js',
@@ -445,6 +451,7 @@ class AI_Scribe_Onboarding_Notice {
 			</div>
 		</div>
 		<?php
+		AI_Scribe_Opace_Footer::render();
 	}
 
 	/**

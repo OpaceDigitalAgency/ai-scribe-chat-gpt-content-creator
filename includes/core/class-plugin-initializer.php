@@ -1029,6 +1029,7 @@ class AI_Scribe_Plugin_Initializer {
 	 */
 	public function render_main_page() {
 		include AI_SCRIBE_DIR . 'templates/create_template.php';
+		AI_Scribe_Opace_Footer::render();
 	}
 
 	/**
@@ -1038,6 +1039,7 @@ class AI_Scribe_Plugin_Initializer {
 	 */
 	public function render_generate_page() {
 		include AI_SCRIBE_DIR . 'templates/create_template.php';
+		AI_Scribe_Opace_Footer::render();
 	}
 
 	/**
@@ -1047,6 +1049,7 @@ class AI_Scribe_Plugin_Initializer {
 	 */
 	public function render_shortcodes_page() {
 		include AI_SCRIBE_DIR . 'templates/show_template.php';
+		AI_Scribe_Opace_Footer::render();
 	}
 
 	/**
@@ -1056,6 +1059,7 @@ class AI_Scribe_Plugin_Initializer {
 	 */
 	public function render_settings_page() {
 		include AI_SCRIBE_DIR . 'templates/settings_template.php';
+		AI_Scribe_Opace_Footer::render();
 	}
 
 	/**
@@ -1065,6 +1069,7 @@ class AI_Scribe_Plugin_Initializer {
 	 */
 	public function render_help_page() {
 		include AI_SCRIBE_DIR . 'templates/help_template.php';
+		AI_Scribe_Opace_Footer::render();
 	}
 
 	/**
