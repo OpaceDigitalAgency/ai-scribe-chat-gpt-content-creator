@@ -491,10 +491,19 @@ class AI_Scribe_Settings_Ajax_Controller {
 		foreach ( self::PROVIDERS as $provider ) {
 			$key                 = $this->config->get_api_key( $provider );
 			$key                 = is_string( $key ) ? $key : '';
+			$validated           = null;
+			if ( '' !== $key && class_exists( 'AI_Core_Settings' ) && method_exists( 'AI_Core_Settings', 'get_credential_validation_status' ) ) {
+				$hub_status = AI_Core_Settings::get_credential_validation_status( $provider );
+				$validated  = 'validated' === $hub_status ? true : ( 'invalid' === $hub_status ? false : null );
+			} elseif ( '' !== $key ) {
+				// Compatibility fallback for an older Hub without the explicit
+				// credential-state contract. Current Hub releases own this state.
+				$validated = $this->validate_provider_key( $provider, $key );
+			}
 			$status[ $provider ] = array(
 				'configured' => '' !== $key,
 				'masked'     => $this->mask_key( $key ),
-				'validated'  => '' === $key ? null : $this->validate_provider_key( $provider, $key ),
+				'validated'  => $validated,
 			);
 		}
 		return $status;

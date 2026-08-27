@@ -381,10 +381,19 @@ class SettingsView {
                     ? 'savedKeyInvalidSuffix'
                     : (state === 'missing' ? 'savedKeyMissingSuffix' : 'savedKeyUncheckedSuffix');
                 const suffixFallback = state === 'invalid'
-                    ? 'saved; retained key did not pass validation'
-                    : (state === 'missing' ? 'saved; provider key is missing' : 'saved; retained key could not be checked');
-                unavailableCurrent.selected = true;
-                unavailableCurrent.textContent += ` — ${SettingsView.i18n(suffixKey, suffixFallback)}`;
+                    ? 'saved but invalid'
+                    : (state === 'missing' ? 'saved; provider key is missing' : 'saved, not yet tested');
+                // Chrome can render a selected option inside a disabled
+                // optgroup as a visually blank select. Keep the catalogue
+                // entry disabled, but add a top-level selected status option
+                // so the retained model is always visible to the owner.
+                unavailableCurrent.selected = false;
+                const retained = document.createElement('option');
+                retained.value = currentValue;
+                retained.disabled = true;
+                retained.selected = true;
+                retained.textContent = `${unavailableCurrent.textContent} — ${SettingsView.i18n(suffixKey, suffixFallback)}`;
+                select.insertBefore(retained, select.firstChild);
                 selectedValue = currentValue;
                 this.savedUnavailable = {
                     model: currentValue,
@@ -699,10 +708,12 @@ class SettingsView {
         Object.keys(providers || {}).forEach((provider) => {
             const info = providers[provider] || {};
             const label = info.validated === true
-                ? 'Validated'
+                ? SettingsView.i18n('providerStatusValidated', 'Saved and validated')
                 : (info.validated === false
-                    ? 'Key invalid'
-                    : (info.configured ? 'Configured' : 'Not configured'));
+                    ? SettingsView.i18n('providerStatusInvalid', 'Saved but invalid')
+                    : (info.configured
+                        ? SettingsView.i18n('providerStatusUntested', 'Saved, not yet tested')
+                        : SettingsView.i18n('providerStatusMissing', 'Not configured')));
 
             const chip = this.root.querySelector(`[data-testid="provider-chip-${provider}"]`);
             if (chip) {
@@ -718,7 +729,7 @@ class SettingsView {
 
             const badge = this.root.querySelector(`[data-testid="key-status-${provider}"]`);
             if (badge) {
-                badge.textContent = info.configured ? label : 'Missing';
+                badge.textContent = info.configured ? label : SettingsView.i18n('providerStatusMissing', 'Not configured');
                 badge.classList.toggle('key-status-set', !!info.configured && info.validated !== false);
                 badge.classList.toggle('key-status-invalid', info.validated === false);
                 badge.classList.toggle('key-status-missing', !info.configured);

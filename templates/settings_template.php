@@ -108,7 +108,10 @@ $ai_scribe_temperature = isset( $ai_scribe_engine['temperature'] )
 	? (float) $ai_scribe_engine['temperature']
 	: ( isset( $ai_scribe_engine['temp'] ) ? (float) $ai_scribe_engine['temp'] : 0.5 );
 $ai_scribe_top_p       = isset( $ai_scribe_engine['top_p'] ) ? (float) $ai_scribe_engine['top_p'] : 1.0;
-$ai_scribe_model       = isset( $ai_scribe_engine['model'] ) ? (string) $ai_scribe_engine['model'] : '';
+$ai_scribe_saved_model = isset( $ai_scribe_engine['model'] ) ? (string) $ai_scribe_engine['model'] : '';
+$ai_scribe_model       = class_exists( 'AI_Scribe_Model_Resolver' )
+	? AI_Scribe_Model_Resolver::resolve( $ai_scribe_saved_model )
+	: $ai_scribe_saved_model;
 
 // Languages list — seeded exactly as 2.6.2 did (common/settings.php:200-240),
 // user-extendable via "Add New Language" (ai_scribe_languages, changelog 1.2.5).

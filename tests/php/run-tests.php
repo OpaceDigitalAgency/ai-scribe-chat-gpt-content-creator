@@ -1356,6 +1356,38 @@ test_assert_contains("false !== get_option( 'ai_core_settings', false )", $p9_no
 test_assert_contains('Previous Opace AI Hub data found.', $p9_notice_src, 'setup clearly identifies retained Hub data before activation');
 test_assert_contains('AI-Scribe will not overwrite that existing Hub data.', $p9_notice_src, 'setup explains the non-destructive precedence rule');
 test_assert_contains('data-testid="ai-scribe-retained-hub-data"', $p9_notice_src, 'retained Hub data warning has a stable browser-test target');
+test_assert_contains('Step 1: Install Opace AI Hub', $p9_notice_src, 'missing-Hub setup names the explicit installation step');
+test_assert_contains('Step 2: Activate Opace AI Hub', $p9_notice_src, 'missing-Hub setup names the explicit activation step');
+test_assert_contains('data-testid="ai-scribe-hub-manual-fallback"', $p9_notice_src, 'setup always provides a stable manual-install fallback');
+test_assert_contains('get_filesystem_method', $p9_notice_src, 'Hub mutation preflights the WordPress filesystem method');
+test_assert_contains('wp_is_writable( WP_PLUGIN_DIR )', $p9_notice_src, 'Hub installation preflights the plugin-directory write path');
+test_assert_contains('wp_safe_remote_get(', $p9_notice_src, 'Hub installation checks package connectivity before the upgrader runs');
+test_assert_contains('outbound HTTPS, DNS or a hosting firewall', $p9_notice_src, 'directory connectivity failures name actionable hosting causes');
+test_assert_contains('This site requires FTP or SSH credentials', $p9_notice_src, 'non-direct filesystem sites receive an explicit credential explanation');
+test_assert_contains('WordPress cannot write to the plugins directory', $p9_notice_src, 'unwritable plugin directories receive an actionable explanation');
+test_assert_contains('WordPress cannot write to its temporary upgrade directory', $p9_notice_src, 'unwritable existing upgrade directories receive an actionable explanation');
+test_assert_contains('WordPress cannot create its temporary upgrade directory', $p9_notice_src, 'unwritable wp-content receives an actionable explanation');
+test_assert_contains("'ai-scribe-plugin-update-refresh'", $p9_notice_src, '3.2.38 seeds a Plugins-screen refresh handler for later updates');
+$p9_update_refresh = file_get_contents(dirname(__DIR__, 2) . '/assets/js/plugin-update-refresh.js');
+test_assert_contains("'wp-plugin-update-success'", $p9_update_refresh, 'future refresh waits for WordPress core update success');
+test_assert_contains('window.location.reload()', $p9_update_refresh, 'future refresh reloads only after successful update');
+$p9_settings_ajax = file_get_contents(dirname(__DIR__, 2) . '/includes/ajax/class-settings-ajax-controller.php');
+test_assert_contains("AI_Core_Settings::get_credential_validation_status( \$provider )", $p9_settings_ajax, 'AI-Scribe reads the Hub credential-state contract rather than inferring validity from storage');
+$p9_settings_controller = file_get_contents(dirname(__DIR__, 2) . '/assets/js/controllers/SettingsController.js');
+test_assert_contains('Use Test Key in Opace AI Hub when you want to confirm it.', $p9_settings_controller, 'untested-key guidance remains optional because only explicit invalid state blocks generation');
+$p9_adapter_source = file_get_contents(dirname(__DIR__, 2) . '/includes/adapters/class-ai-core-adapter.php');
+test_assert_contains("'ai_core_key_invalid'", $p9_adapter_source, 'explicitly invalid Hub credentials block provider generation');
+$p9_step_view_source = file_get_contents(dirname(__DIR__, 2) . '/assets/js/views/steps/BaseStepView.js');
+test_assert_contains('data-testid="hub-key-resolution"', $p9_step_view_source, 'invalid-key generation errors include a direct Hub resolution action');
+test_assert_contains("this.t('openHubSettings')", $p9_step_view_source, 'invalid-key Hub resolution action uses the localised admin string');
+$p9_settings_template = file_get_contents(dirname(__DIR__, 2) . '/templates/settings_template.php');
+test_assert_contains('AI_Scribe_Model_Resolver::resolve( $ai_scribe_saved_model )', $p9_settings_template, 'settings screen displays the effective Hub-owned model when AI-Scribe storage is empty');
+$p9_settings_view = file_get_contents(dirname(__DIR__, 2) . '/assets/js/views/SettingsView.js');
+test_assert_contains('select.insertBefore(retained, select.firstChild)', $p9_settings_view, 'retained unavailable model uses a visible top-level selected status option');
+$p9_logger_source = file_get_contents(dirname(__DIR__, 2) . '/includes/core/class-logger.php');
+test_assert_contains('$this->file_logging_enabled = $this->ensure_log_directory()', $p9_logger_source, 'logger records whether its private directory is ready');
+test_assert_contains('if ( ! $this->file_logging_enabled )', $p9_logger_source, 'logger skips file writes when uploads are unavailable');
+test_assert_contains('@file_put_contents( $this->log_file_path', $p9_logger_source, 'best-effort file logging cannot emit a fresh filesystem warning');
 test_reset_options();
 
 // ---------------------------------------------------------------------------

@@ -66,6 +66,16 @@ class AI_Scribe_Logger {
 	private $log_file_path;
 
 	/**
+	 * Whether the private log directory is available and writable.
+	 *
+	 * File logging is best effort. A fresh or locked-down WordPress uploads
+	 * directory must never turn a successful admin request into a PHP warning.
+	 *
+	 * @var bool
+	 */
+	private $file_logging_enabled = false;
+
+	/**
 	 * Maximum log file size in bytes (5MB)
 	 *
 	 * @var int
@@ -90,7 +100,7 @@ class AI_Scribe_Logger {
 		$this->log_file_path = $this->get_log_file_path();
 
 		// Ensure log directory exists
-		$this->ensure_log_directory();
+		$this->file_logging_enabled = $this->ensure_log_directory();
 	}
 
 	/**
@@ -133,24 +143,32 @@ class AI_Scribe_Logger {
 	/**
 	 * Ensure log directory exists
 	 *
-	 * @return void
+	 * @return bool Whether the directory is ready for file logging.
 	 */
 	private function ensure_log_directory() {
 		$log_dir = dirname( $this->log_file_path );
 
-		if ( ! file_exists( $log_dir ) ) {
+		if ( ! is_dir( $log_dir ) ) {
 			// The plugin only ever runs inside WordPress, so wp_mkdir_p() is
 			// always available; if creation fails, logging stays disabled.
 			if ( ! wp_mkdir_p( $log_dir ) ) {
-				return;
-			}
-
-			// Create .htaccess to protect log files
-			$htaccess_file = $log_dir . '/.htaccess';
-			if ( ! file_exists( $htaccess_file ) ) {
-				file_put_contents( $htaccess_file, "Deny from all\n" );
+				return false;
 			}
 		}
+
+		if ( ! is_dir( $log_dir ) || ( function_exists( 'wp_is_writable' ) && ! wp_is_writable( $log_dir ) ) ) {
+			return false;
+		}
+
+		// Create .htaccess to protect log files. This remains best effort
+		// because logging must never emit another filesystem warning.
+		$htaccess_file = $log_dir . '/.htaccess';
+		if ( ! file_exists( $htaccess_file ) ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- A logger must degrade without emitting a new warning.
+			@file_put_contents( $htaccess_file, "Deny from all\n", LOCK_EX );
+		}
+
+		return true;
 	}
 
 	/**
@@ -281,14 +299,23 @@ class AI_Scribe_Logger {
 	 * @return void
 	 */
 	private function write_to_file( $log_entry ) {
+		if ( ! $this->file_logging_enabled ) {
+			return;
+		}
+
 		try {
 			// Check file size and rotate if necessary
 			$this->rotate_log_if_needed();
 
-			// Write to log file
-			file_put_contents( $this->log_file_path, $log_entry . PHP_EOL, FILE_APPEND | LOCK_EX );
+			// The directory can change between readiness and this write. Disable
+			// file logging rather than leaking PHP's warning into the admin UI.
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- A logger must degrade without emitting a new warning.
+			if ( false === @file_put_contents( $this->log_file_path, $log_entry . PHP_EOL, FILE_APPEND | LOCK_EX ) ) {
+				$this->file_logging_enabled = false;
+			}
 
 		} catch ( Exception $e ) {
+			$this->file_logging_enabled = false;
 			// Fallback to WordPress error log if file writing fails
 			if ( $this->debug_enabled ) {
 				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Explicitly gated by the plugin's debug setting.

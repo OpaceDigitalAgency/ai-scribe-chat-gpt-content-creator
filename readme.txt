@@ -4,7 +4,7 @@ Tags: AI Writer, Content Generator, Content Creator, AI, SEO
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 3.2.37
+Stable tag: 3.2.38
 License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://opace.agency/get-in-touch
@@ -266,6 +266,7 @@ Please add roadmap suggestions through the support forum rather than treating th
 
 == Changelog ==
 
+* **3.2.38:** Made the two-step Hub setup explicit; added actionable capability, filesystem and connectivity errors with manual fallbacks; clarified provider-key status; blocked generation for explicitly invalid keys; and seeded a post-update Plugins-screen refresh for upgrades that start from 3.2.38 or later.
 * **3.2.37:** Added a consistent, responsive More from Opace card to every AI-Scribe admin screen with clearly labelled WordPress plugin, GitHub, ChatGPT and Opace service links.
 * **3.2.36:** Corrected retained 2.6 admin links, key/model/prompt migration and saved-model status; added minimum-Hub updating and multisite network setup; warned before retained Hub data takes precedence; and made release ZIPs reproducible.
 * **3.2.35:** Added prominent links to Opace AI Hub on WordPress.org, the AI-Scribe GitHub repository and the AI-Scribe Custom GPT.
@@ -332,6 +333,10 @@ Please add roadmap suggestions through the support forum rather than treating th
 * **1.0.0:** Initial release.
 
 == Upgrade Notice ==
+
+= 3.2.38 =
+
+Clarifies Hub installation, activation, hosting errors and provider-key status. Existing settings and shared Hub data remain unchanged.
 
 = 3.2.37 =
 

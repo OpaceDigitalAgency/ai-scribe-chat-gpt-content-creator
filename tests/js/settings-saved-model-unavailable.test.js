@@ -25,6 +25,15 @@ class FakeElement {
     appendChild(child) {
         this.children.push(child);
     }
+
+    insertBefore(child, reference) {
+        const index = this.children.indexOf(reference);
+        this.children.splice(index < 0 ? 0 : index, 0, child);
+    }
+
+    get firstChild() {
+        return this.children[0] || null;
+    }
 }
 
 const root = { getAttribute: () => 'gpt-4o' };
@@ -35,7 +44,7 @@ global.document = {
 global.window = {
     ai_scribe: {
         i18n: {
-            savedKeyInvalidSuffix: 'saved; retained key did not pass validation',
+            savedKeyInvalidSuffix: 'saved but invalid',
         },
     },
 };
@@ -54,7 +63,7 @@ const retained = unavailableView.fillSelect(
     'gpt-4o',
     { openai: { configured: true, validated: false }, gemini: { configured: true, validated: false } }
 );
-const savedOption = unavailableSelect.children.flatMap((group) => group.children).find((option) => option.value === 'gpt-4o');
+const savedOption = unavailableSelect.children.find((option) => option.tag === 'option' && option.value === 'gpt-4o');
 assert.equal(retained, 'gpt-4o');
 assert.deepEqual(unavailableView.savedUnavailable, {
     model: 'gpt-4o',
@@ -64,7 +73,8 @@ assert.deepEqual(unavailableView.savedUnavailable, {
 });
 assert.equal(savedOption.selected, true);
 assert.equal(savedOption.disabled, true);
-assert.match(savedOption.textContent, /saved; retained key did not pass validation/);
+assert.match(savedOption.textContent, /saved but invalid/);
+assert.match(savedOption.textContent, /GPT-4o/);
 
 const textSelect = new FakeElement('select');
 const imageSelect = new FakeElement('select');

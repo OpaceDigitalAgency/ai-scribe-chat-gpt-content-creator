@@ -87,6 +87,69 @@
 	margin-bottom: 7px;
 }
 
+.ai-scribe-hub-setup__steps {
+	display: grid;
+	gap: 12px;
+	margin: 0 0 24px;
+	padding: 0;
+	list-style: none;
+}
+
+.ai-scribe-hub-setup__step {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 14px 16px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+}
+
+.ai-scribe-hub-setup__step.is-current {
+	background: #f0f6fc;
+	border-color: #2271b1;
+}
+
+.ai-scribe-hub-setup__step.is-complete {
+	background: #edfaef;
+	border-color: #00a32a;
+}
+
+.ai-scribe-hub-setup__step-number {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 28px;
+	width: 28px;
+	height: 28px;
+	background: #fff;
+	border: 2px solid currentColor;
+	border-radius: 50%;
+	color: #2271b1;
+	font-weight: 700;
+}
+
+.ai-scribe-hub-setup__step.is-complete .ai-scribe-hub-setup__step-number {
+	color: #008a20;
+}
+
+.ai-scribe-hub-setup__step small {
+	display: block;
+	margin-top: 3px;
+	color: #50575e;
+	line-height: 1.4;
+}
+
+.ai-scribe-hub-setup__manual {
+	margin-top: 22px;
+	padding-top: 18px;
+	border-top: 1px solid #dcdcde;
+}
+
+.ai-scribe-hub-setup__manual p {
+	margin: 5px 0 0;
+}
+
 .ai-scribe-hub-setup__status {
 	min-height: 22px;
 	margin: 14px 0 0;
@@ -145,6 +208,25 @@
 	}
 
 	.ai-scribe-hub-setup__retained-data p {
+		color: #c3c4c7;
+	}
+
+	.ai-scribe-hub-setup__step {
+		background: #2c3338;
+		border-color: #50575e;
+	}
+
+	.ai-scribe-hub-setup__step.is-current {
+		background: #1e2a33;
+		border-color: #72aee6;
+	}
+
+	.ai-scribe-hub-setup__step.is-complete {
+		background: #14351d;
+		border-color: #00a32a;
+	}
+
+	.ai-scribe-hub-setup__step small {
 		color: #c3c4c7;
 	}
 }

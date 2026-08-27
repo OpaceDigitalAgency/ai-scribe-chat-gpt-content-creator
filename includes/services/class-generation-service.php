@@ -139,8 +139,11 @@ class AI_Scribe_Generation_Service {
 
 		if ( is_wp_error( $result ) ) {
 			$message = $result->get_error_message();
-			$code    = ( stripos( $message, 'rate' ) !== false || stripos( $message, '429' ) !== false )
-				? 'rate_limited' : 'provider_error';
+			$source_code = $result->get_error_code();
+			$code        = 'ai_core_key_invalid' === $source_code
+				? 'ai_core_key_invalid'
+				: ( ( stripos( $message, 'rate' ) !== false || stripos( $message, '429' ) !== false ) ? 'rate_limited' : 'provider_error' );
+			$retryable   = 'ai_core_key_invalid' !== $code;
 			$this->conversations->record_step(
 				$conversation_id,
 				$step,
@@ -151,14 +154,14 @@ class AI_Scribe_Generation_Service {
 					'error'       => array(
 						'code'      => $code,
 						'message'   => $message,
-						'retryable' => true,
+						'retryable' => $retryable,
 					),
 				)
 			);
 			return $this->error(
 				$code,
 				$message,
-				true,
+				$retryable,
 				array(
 					'step'            => $step,
 					'conversation_id' => (int) $conversation_id,

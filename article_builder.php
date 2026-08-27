@@ -9,7 +9,7 @@
  * Author:              Opace Digital Agency
  * Requires at least:   6.5
  * Requires PHP:        7.4
- * Version:             3.2.37
+ * Version:             3.2.38
  * License:             GPL-3.0
  * License URI:         http://www.gnu.org/licenses/gpl-3.0.txt
  *
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'AI_SCRIBE_VERSION', '3.2.37' ); // Used for cache busting on every enqueue
+define( 'AI_SCRIBE_VERSION', '3.2.38' ); // Used for cache busting on every enqueue
 if ( ! defined( 'AI_SCRIBE_VER' ) ) {
 	define( 'AI_SCRIBE_VER', AI_SCRIBE_VERSION ); // Back-compat alias used by copied v4 services
 }

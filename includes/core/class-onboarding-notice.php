@@ -50,6 +50,9 @@ class AI_Scribe_Onboarding_Notice {
 	/** Public listing shown before the administrator consents to installation. */
 	const HUB_DIRECTORY_URL = 'https://wordpress.org/plugins/opace-ai-prompt-library-api-hub/';
 
+	/** WordPress-native manual upload fallback when automatic installation is unavailable. */
+	const HUB_UPLOAD_PAGE = 'plugin-install.php?tab=upload';
+
 	/**
 	 * Wire the notice into wp-admin. Called once from the bootstrap.
 	 */
@@ -59,7 +62,41 @@ class AI_Scribe_Onboarding_Notice {
 		}
 		add_action( 'admin_notices', array( __CLASS__, 'render_notices' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_plugin_update_refresh' ) );
 		add_action( 'wp_ajax_' . self::AJAX_ACTION, array( __CLASS__, 'handle_dismiss' ) );
+	}
+
+	/**
+	 * Refresh the Plugins screen after a successful AI-Scribe AJAX update.
+	 *
+	 * The handler is necessarily supplied by the version already running in
+	 * the browser. Introduced in 3.2.38, it can only improve an update that
+	 * starts from 3.2.38 or later. It cannot alter the already-open Plugins
+	 * screen during either a 2.6.2 -> 3.2.38 or 3.2.37 -> 3.2.38 update.
+	 *
+	 * @param string $hook Current admin page hook.
+	 * @return void
+	 */
+	public static function enqueue_plugin_update_refresh( $hook ) {
+		if ( 'plugins.php' !== $hook ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			'ai-scribe-plugin-update-refresh',
+			AI_SCRIBE_URL . 'assets/js/plugin-update-refresh.js',
+			array( 'jquery', 'updates' ),
+			AI_SCRIBE_VERSION,
+			true
+		);
+		wp_localize_script(
+			'ai-scribe-plugin-update-refresh',
+			'aiScribePluginUpdateRefresh',
+			array(
+				'pluginFile' => plugin_basename( AI_SCRIBE_FILE ),
+				'message'    => __( 'AI-Scribe update complete. Refreshing the Plugins screen…', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+			)
+		);
 	}
 
 	/**
@@ -411,6 +448,8 @@ class AI_Scribe_Onboarding_Notice {
 		$capability = 'activate' === $setup_action ? 'activate_plugins' : ( 'update' === $setup_action ? 'update_plugins' : 'install_plugins' );
 		$can_prepare = current_user_can( $capability );
 		$has_retained_hub_data = false !== get_option( 'ai_core_settings', false );
+		$install_complete = '' !== $hub_file;
+		$manual_upload_url = function_exists( 'self_admin_url' ) ? self_admin_url( self::HUB_UPLOAD_PAGE ) : admin_url( self::HUB_UPLOAD_PAGE );
 		?>
 		<div class="wrap ai-scribe-hub-setup" data-testid="ai-scribe-hub-setup">
 			<div class="ai-scribe-hub-setup__card">
@@ -440,14 +479,33 @@ class AI_Scribe_Onboarding_Notice {
 					<li><?php esc_html_e( 'Use WordPress Connectors optionally; separate provider plugins are not required for normal Hub use.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></li>
 				</ul>
 
+				<ol class="ai-scribe-hub-setup__steps" aria-label="<?php esc_attr_e( 'Opace AI Hub setup progress', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>">
+					<li class="ai-scribe-hub-setup__step <?php echo $install_complete ? 'is-complete' : 'is-current'; ?>" data-setup-step="install" <?php echo $install_complete ? '' : 'aria-current="step"'; ?>>
+						<span class="ai-scribe-hub-setup__step-number" aria-hidden="true"><?php echo $install_complete ? '&#10003;' : '1'; ?></span>
+						<span><strong><?php esc_html_e( 'Step 1: Install Opace AI Hub', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></strong><small><?php echo $install_complete ? esc_html__( 'Complete — Hub is installed.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) : esc_html__( 'AI-Scribe will download the free Hub from WordPress.org.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></small></span>
+					</li>
+					<li class="ai-scribe-hub-setup__step <?php echo $install_complete && 'activate' === $setup_action ? 'is-current' : 'is-pending'; ?>" data-setup-step="activate" <?php echo $install_complete && 'activate' === $setup_action ? 'aria-current="step"' : ''; ?>>
+						<span class="ai-scribe-hub-setup__step-number" aria-hidden="true">2</span>
+						<span><strong><?php esc_html_e( 'Step 2: Activate Opace AI Hub', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></strong><small><?php esc_html_e( 'WordPress requires your explicit approval before another plugin is activated.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></small></span>
+					</li>
+				</ol>
+
 				<?php if ( $can_prepare ) : ?>
 					<button type="button" class="button button-primary button-hero" id="ai-scribe-prepare-hub" data-action="<?php echo esc_attr( $setup_action ); ?>" data-testid="ai-scribe-prepare-hub">
-						<?php echo 'activate' === $setup_action ? esc_html__( 'Activate Opace AI Hub and continue', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) : ( 'update' === $setup_action ? esc_html__( 'Update Opace AI Hub and continue', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) : esc_html__( 'Install Opace AI Hub', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ); ?>
+						<?php echo 'activate' === $setup_action ? esc_html__( 'Step 2 of 2: Activate Opace AI Hub', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) : ( 'update' === $setup_action ? esc_html__( 'Update Opace AI Hub and continue', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) : esc_html__( 'Step 1 of 2: Install Opace AI Hub', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ); ?>
 					</button>
 				<?php else : ?>
 					<p class="ai-scribe-hub-setup__permissions"><?php esc_html_e( 'A site administrator with permission to install and activate plugins must complete this setup.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></p>
 				<?php endif; ?>
 				<p id="ai-scribe-hub-setup-status" class="ai-scribe-hub-setup__status" aria-live="polite"></p>
+				<div class="ai-scribe-hub-setup__manual" data-testid="ai-scribe-hub-manual-fallback">
+					<strong><?php esc_html_e( 'Automatic setup unavailable?', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></strong>
+					<p>
+						<a href="<?php echo esc_url( self::HUB_DIRECTORY_URL ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Download Opace AI Hub from WordPress.org', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></a>
+						<?php esc_html_e( 'then', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?>
+						<a href="<?php echo esc_url( $manual_upload_url ); ?>"><?php esc_html_e( 'open Upload Plugin', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ); ?></a>.
+					</p>
+				</div>
 			</div>
 		</div>
 		<?php
@@ -475,6 +533,12 @@ class AI_Scribe_Onboarding_Notice {
 		}
 
 		$hub_file = self::installed_hub_file();
+		if ( in_array( $setup_action, array( 'install', 'update' ), true ) ) {
+			$preflight = self::hub_filesystem_preflight();
+			if ( is_wp_error( $preflight ) ) {
+				wp_send_json_error( array( 'message' => $preflight->get_error_message() ), 503 );
+			}
+		}
 		if ( 'update' === $setup_action ) {
 			if ( ! current_user_can( 'update_plugins' ) ) {
 				wp_send_json_error( array( 'message' => __( 'You do not have permission to update Opace AI Hub.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ) ), 403 );
@@ -542,8 +606,38 @@ class AI_Scribe_Onboarding_Notice {
 				'fields' => array( 'sections' => false ),
 			) );
 			if ( is_wp_error( $api ) || empty( $api->download_link ) ) {
-				$message = is_wp_error( $api ) ? $api->get_error_message() : __( 'WordPress.org did not return the Opace AI Hub package.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' );
+				$message = is_wp_error( $api ) ? sprintf(
+					/* translators: %s: WordPress.org connection error. */
+					__( 'WordPress could not reach the WordPress.org plugin directory: %s. Check outbound HTTPS, DNS or a hosting firewall, then retry. You can also use the manual download and Upload Plugin links below.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					$api->get_error_message()
+				) : __( 'WordPress.org did not return the Opace AI Hub package. Retry shortly or use the manual download and Upload Plugin links below.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' );
 				wp_send_json_error( array( 'message' => $message ), 502 );
+			}
+
+			$package_check = wp_safe_remote_get(
+				$api->download_link,
+				array(
+					'timeout'             => 15,
+					'redirection'         => 5,
+					'limit_response_size' => 1,
+				)
+			);
+			if ( is_wp_error( $package_check ) || wp_remote_retrieve_response_code( $package_check ) < 200 || wp_remote_retrieve_response_code( $package_check ) >= 400 ) {
+				$detail = is_wp_error( $package_check ) ? $package_check->get_error_message() : sprintf(
+					/* translators: %d: HTTP response code. */
+					__( 'HTTP %d', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+					(int) wp_remote_retrieve_response_code( $package_check )
+				);
+				wp_send_json_error(
+					array(
+						'message' => sprintf(
+							/* translators: %s: package connectivity error. */
+							__( 'WordPress found Opace AI Hub but could not download its package: %s. Check outbound HTTPS or your hosting firewall, then retry. You can also install the ZIP with Upload Plugin below.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' ),
+							$detail
+						),
+					),
+					502
+				);
 			}
 
 			$skin = new WP_Ajax_Upgrader_Skin();
@@ -605,6 +699,48 @@ class AI_Scribe_Onboarding_Notice {
 				'redirect' => admin_url( 'admin.php?page=ai_scribe_settings&hub_setup=complete' ),
 			)
 		);
+	}
+
+	/**
+	 * Explain filesystem limitations before WordPress begins a mutation.
+	 *
+	 * AJAX cannot display the FTP/SSH credential form used by the normal
+	 * installer. Sites without direct write access therefore receive a clear
+	 * manual Upload Plugin path rather than an opaque upgrader error.
+	 *
+	 * @return true|WP_Error
+	 */
+	private static function hub_filesystem_preflight() {
+		if ( ! function_exists( 'get_filesystem_method' ) || ! function_exists( 'wp_is_writable' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+		$method = get_filesystem_method( array(), WP_PLUGIN_DIR );
+		if ( 'direct' !== $method ) {
+			return new WP_Error(
+				'ai_scribe_hub_filesystem_credentials',
+				__( 'This site requires FTP or SSH credentials before WordPress can change plugin files. Use the manual WordPress.org download and Upload Plugin links below, or ask your host to enable WordPress plugin installations.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' )
+			);
+		}
+		if ( ! wp_is_writable( WP_PLUGIN_DIR ) ) {
+			return new WP_Error(
+				'ai_scribe_hub_plugins_not_writable',
+				__( 'WordPress cannot write to the plugins directory. Ask your host to correct its ownership or permissions, then retry. You can also use the manual WordPress.org download and Upload Plugin links below when Upload Plugin is available.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' )
+			);
+		}
+		$upgrade_dir = WP_CONTENT_DIR . '/upgrade';
+		if ( is_dir( $upgrade_dir ) && ! wp_is_writable( $upgrade_dir ) ) {
+			return new WP_Error(
+				'ai_scribe_hub_upgrade_not_writable',
+				__( 'WordPress cannot write to its temporary upgrade directory. Ask your host to correct the ownership or permissions of wp-content/upgrade, then retry. You can also use the manual WordPress.org download and Upload Plugin links below when Upload Plugin is available.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' )
+			);
+		}
+		if ( ! is_dir( $upgrade_dir ) && ! wp_is_writable( WP_CONTENT_DIR ) ) {
+			return new WP_Error(
+				'ai_scribe_hub_content_not_writable',
+				__( 'WordPress cannot create its temporary upgrade directory. Ask your host to correct the ownership or permissions of wp-content, then retry. You can also use the manual WordPress.org download and Upload Plugin links below when Upload Plugin is available.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' )
+			);
+		}
+		return true;
 	}
 
 	/**

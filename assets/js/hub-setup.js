@@ -3,6 +3,8 @@
 
 	var button = document.getElementById( 'ai-scribe-prepare-hub' );
 	var status = document.getElementById( 'ai-scribe-hub-setup-status' );
+	var installStep = document.querySelector( '[data-setup-step="install"]' );
+	var activateStep = document.querySelector( '[data-setup-step="activate"]' );
 	if ( ! button || ! status || ! window.aiScribeHubSetup ) {
 		return;
 	}
@@ -41,6 +43,15 @@
 				status.classList.add( 'is-success' );
 				status.textContent = response.data.message;
 				if ( response.data.next_action ) {
+					if ( 'activate' === response.data.next_action && installStep && activateStep ) {
+						installStep.classList.remove( 'is-current' );
+						installStep.classList.add( 'is-complete' );
+						installStep.removeAttribute( 'aria-current' );
+						installStep.querySelector( '.ai-scribe-hub-setup__step-number' ).textContent = '✓';
+						activateStep.classList.remove( 'is-pending' );
+						activateStep.classList.add( 'is-current' );
+						activateStep.setAttribute( 'aria-current', 'step' );
+					}
 					button.setAttribute( 'data-action', response.data.next_action );
 					button.textContent = response.data.button_label;
 					button.disabled = false;

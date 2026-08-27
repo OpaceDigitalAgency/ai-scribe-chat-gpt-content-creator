@@ -84,11 +84,14 @@ class SettingsController {
 
             const selected = this.view.populateModelSelect(textModels, this.providers);
             this.view.populateImageModelSelect(imageModels, this.providers);
-            this.view.setModelListStatus('loaded', this.models.length, null, data && data.sources);
+			this.view.setModelListStatus('loaded', this.models.length, null, data && data.sources);
 			if (options.refresh) {
+				const i18n = (window.ai_scribe && window.ai_scribe.i18n) || {};
+				const loadedMessage = (i18n.modelsLoadedCatalogueOnly || '%d available models loaded. This refresh updates the catalogue only; key validation is shown separately.')
+					.replace('%d', String(this.models.length));
 				this.view.notify({
-					title: 'Model list refreshed',
-					message: `${this.models.length} available models loaded from your configured providers.`,
+					title: i18n.modelListRefreshed || 'Model list refreshed',
+					message: loadedMessage,
 					type: 'success',
 					announce: false,
 					key: 'models-refreshed'
@@ -117,10 +120,10 @@ class SettingsController {
                     ? 'savedModelKeyInvalid'
                     : (saved.state === 'missing' ? 'savedModelKeyMissing' : 'savedModelKeyUnchecked');
                 const fallback = saved.state === 'invalid'
-                    ? 'Saved model “%1$s” and its %2$s key were retained, but the key did not pass validation. Check it in Opace AI Hub before generating.'
+                    ? 'Saved model “%1$s” was retained. Its %2$s key is saved but invalid. Fix or replace it in Opace AI Hub before generating.'
                     : (saved.state === 'missing'
                         ? 'Saved model “%1$s” was retained, but its %2$s key is missing. Add the key in Opace AI Hub before generating.'
-                        : 'Saved model “%1$s” and its %2$s key were retained, but the provider could not complete validation. Check it in Opace AI Hub before generating.');
+                        : 'Saved model “%1$s” was retained. Its %2$s key is saved, but has not yet been tested. Use Test Key in Opace AI Hub when you want to confirm it.');
                 const message = (i18n[key] || fallback)
                     .replace('%1$s', saved.model)
                     .replace('%2$s', saved.providerLabel);

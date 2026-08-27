@@ -485,8 +485,19 @@ class BaseStepView {
         this.lastRetryHandler = typeof onRetry === 'function' ? onRetry : null;
 
         const box = this.ensureStateBox('error-state', 'alert-triangle');
-        box.querySelector('.state-box-message').textContent =
-            (error && error.message) ? error.message : this.t('genericError');
+        const message = box.querySelector('.state-box-message');
+        message.textContent = (error && error.message) ? error.message : this.t('genericError');
+
+		const oldResolution = box.querySelector('[data-testid="hub-key-resolution"]');
+		if (oldResolution) oldResolution.remove();
+		if (error && error.code === 'ai_core_key_invalid' && window.ai_scribe && window.ai_scribe.hubSettingsUrl) {
+			const resolution = document.createElement('a');
+			resolution.className = 'button button-secondary';
+			resolution.setAttribute('data-testid', 'hub-key-resolution');
+			resolution.href = window.ai_scribe.hubSettingsUrl;
+			resolution.textContent = this.t('openHubSettings');
+			message.insertAdjacentElement('afterend', resolution);
+		}
 
         const retryBtn = box.querySelector('[data-testid="step-retry"]');
         retryBtn.hidden = !this.lastRetryHandler;
@@ -497,7 +508,7 @@ class BaseStepView {
         this.announce(box.querySelector('.state-box-message').textContent);
 		if (window.aiScribeNotifications) {
 			window.aiScribeNotifications.show({
-				title: 'This step could not finish',
+				title: this.t('stepCouldNotFinish'),
 				message: box.querySelector('.state-box-message').textContent,
 				type: 'error',
 				announce: false,
@@ -729,7 +740,9 @@ class BaseStepView {
             qnaSetHint: 'Include this Q&A set in the article. Click anywhere on this card to select or deselect it.',
             genericError: 'Something went wrong. Your tokens were not wasted — retry re-renders the stored response.',
             retry: 'Retry',
-            tryAgain: 'Try again'
+            tryAgain: 'Try again',
+            openHubSettings: 'Open Opace AI Hub settings',
+            stepCouldNotFinish: 'This step could not finish'
         };
         return strings[key] || fallback[key] || key;
     }

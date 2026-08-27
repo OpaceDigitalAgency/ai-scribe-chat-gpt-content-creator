@@ -191,7 +191,7 @@ class AI_Scribe_AI_Core_Adapter {
 	 * @return array|WP_Error Raw Opace AI Hub response or error
 	 */
 	private function send_hub_text_request( $model, array $messages, array $options ) {
-		$hub_error = $this->require_configured_hub();
+		$hub_error = $this->require_configured_hub( $model );
 		if ( is_wp_error( $hub_error ) ) {
 			return $hub_error;
 		}
@@ -209,7 +209,7 @@ class AI_Scribe_AI_Core_Adapter {
 	 *
 	 * @return true|WP_Error True when requests can be sent
 	 */
-	private function require_configured_hub() {
+	private function require_configured_hub( $model = '' ) {
 		if ( ! function_exists( 'ai_core' ) ) {
 			return new WP_Error(
 				'ai_core_hub_missing',
@@ -222,6 +222,26 @@ class AI_Scribe_AI_Core_Adapter {
 				'ai_core_not_configured',
 				'No AI provider is configured. Add an API key under Opace AI Hub → Settings, then try again.'
 			);
+		}
+
+		if ( '' !== $model && class_exists( 'AI_Core_Settings' ) && method_exists( 'AI_Core_Settings', 'get_credential_validation_status' ) ) {
+			$provider = '';
+			if ( class_exists( 'AICore\\Registry\\ModelRegistry' ) ) {
+				try {
+					$provider = AICore\Registry\ModelRegistry::getProvider( $model );
+				} catch ( Exception $e ) {
+					$provider = '';
+				}
+			}
+			if ( ! $provider ) {
+				$provider = 0 === strpos( $model, 'claude' ) ? 'anthropic' : ( 0 === strpos( $model, 'gemini' ) ? 'gemini' : 'openai' );
+			}
+			if ( 'invalid' === AI_Core_Settings::get_credential_validation_status( $provider ) ) {
+				return new WP_Error(
+					'ai_core_key_invalid',
+					__( 'The saved provider key is invalid. Fix or replace it in Opace AI Hub before generating.', 'ai-scribe-the-chatgpt-powered-seo-content-creation-wizard' )
+				);
+			}
 		}
 
 		return true;
@@ -252,7 +272,7 @@ class AI_Scribe_AI_Core_Adapter {
 			// Route via the hub plugin — the only send path — so the request
 			// is recorded in Opace AI Hub's usage statistics (see
 			// send_hub_text_request for why no direct fallback exists).
-			$hub_error = $this->require_configured_hub();
+			$hub_error = $this->require_configured_hub( $model );
 			if ( is_wp_error( $hub_error ) ) {
 				return $hub_error;
 			}
