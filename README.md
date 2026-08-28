@@ -15,7 +15,8 @@
 </p>
 
 <p align="center">
-  <a href="https://wordpress.org/plugins/ai-scribe-the-chatgpt-powered-seo-content-creation-wizard/">WordPress.org</a>
+  <a href="https://opace.agency/tools/wordpress/ai-scribe-seo-content-creator-humanizer/">Opace product page</a>
+  · <a href="https://wordpress.org/plugins/ai-scribe-the-chatgpt-powered-seo-content-creation-wizard/">WordPress.org</a>
   · <a href="https://chatgpt.com/g/g-ZTkBnCIbA-gpt-seo-article-creator-writer-ai-scribe">Custom GPT</a>
   · <a href="https://github.com/OpaceDigitalAgency/ai-scribe-chat-gpt-content-creator/issues">Issues</a>
   · <a href="SECURITY.md">Security</a>
