@@ -1,7 +1,7 @@
 # Opace AI Scribe: SEO Content Creator & Humanizer for OpenAI, Anthropic & Gemini
 
 <p align="center">
-  <img src=".github/social-preview.png" width="960" alt="AI Scribe for WordPress — guided AI article creation with OpenAI, Anthropic and Google Gemini">
+  <img src=".github/banner-1544x500.png" width="960" alt="Opace AI Scribe: SEO Content Creator and Humanizer for WordPress">
 </p>
 
 <p align="center"><strong>SEO content creator and humaniser for WordPress, powered by OpenAI, Anthropic and Google Gemini.</strong></p>
